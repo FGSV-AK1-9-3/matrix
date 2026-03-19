@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veranstaltungs-Matrix</title>
+
+  <!-- Bootstrap 5 (CSS) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+
+  <style>
+    body { background:#f6f7fb; }
+    .tab-content { margin-top: 1rem; }
+    .form-label { font-weight: 600; }
+    .card { border:0; box-shadow:0 4px 20px rgba(0,0,0,.05); border-radius:16px; }
+  </style>
+</head>
+<body>
+
+<div class="container py-5">
+  <h1 class="mb-4">Veranstaltungs-Matrix Formular</h1>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-grunddaten" type="button">Grunddaten</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-gelaende" type="button">Veranstaltungsgelände</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-gestalt" type="button">Gestalt</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-verlauf" type="button">Veranstaltungsverlauf</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-wiederkehr" type="button">Wiederkehrende Veranstaltung</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-verhalten" type="button">Besuchendenverhalten</button></li>
+  </ul>
+
+  <form class="mt-4" id="matrixForm">
+    <div class="tab-content">
+
+      <!-- TAB: Grunddaten -->
+      <div class="tab-pane fade show active" id="tab-grunddaten">
+        <div class="card p-4">
+          <div class="mb-3">
+            <label class="form-label" for="grunddaten_veranstaltungsname">Veranstaltungsname</label>
+            <input id="grunddaten_veranstaltungsname" name="grunddaten_veranstaltungsname"
+                   class="form-control" type="text" placeholder="Bitte Name hier eintragen">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="grunddaten_personenzahl">Personenzahl</label>
+            <input id="grunddaten_personenzahl" name="grunddaten_personenzahl"
+                   type="number" class="form-control" min="0" value="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Veranstaltungsgelände -->
+      <div class="tab-pane fade" id="tab-gelaende">
+
+        <!-- Gruppe 1: Flächenverhältnis -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsgelaende_flaechenverhaeltnis">Flächenverhältnis</label>
+          <select id="veranstaltungsgelaende_flaechenverhaeltnis"
+                  name="veranstaltungsgelaende_flaechenverhaeltnis"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1">
+              Die zugängliche Veranstaltungsfläche entspricht der benötigten Kapazität bei 2 Pers./qm
+              und unterstützt einen geordneten Personenfluss.
+            </option>
+            <option value="0.9">
+              Die verfügbare Fläche ist um mehr als 20 % größer als rechnerisch notwendig; zusätzlicher
+              Bewegungsspielraum verringert potenzielle Engstellen.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 2: Personenverkehrsstärke (qs) -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsgelaende_verkehrsstaerke">Personenverkehrsstärke (qs)</label>
+          <select id="veranstaltungsgelaende_verkehrsstaerke"
+                  name="veranstaltungsgelaende_verkehrsstaerke"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="0.9">
+              Verkehrsstärke ≤ 0,7 Pers./ms; die Bewegung kann überwiegend störungsfrei erfolgen.
+            </option>
+            <option value="1">
+              Verkehrsstärke ≤ 1,3 Pers./ms; normale bis leicht erhöhte Auslastung.
+            </option>
+            <option value="1.4">
+              Verkehrsstärke > 1,3 Pers./ms; temporäre Verdichtungen sind möglich.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 3: Störungen auf Verkehrswegen -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsgelaende_stoerungen">Störungen auf Verkehrswegen</label>
+          <select id="veranstaltungsgelaende_stoerungen"
+                  name="veranstaltungsgelaende_stoerungen"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.2">
+              Störungen sind wahrscheinlich (z. B. gegenläufige Ströme, parallele Nutzungen).
+            </option>
+            <option value="1">
+              Störungen sind unwahrscheinlich; die Wegeführung dürfte ohne wesentliche Einschränkungen funktionieren.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 4: Wegführung -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsgelaende_wegfuehrung">Wegführung (baulich / topografisch)</label>
+          <select id="veranstaltungsgelaende_wegfuehrung"
+                  name="veranstaltungsgelaende_wegfuehrung"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.2">
+              Unübersichtliche Wegführung (bauliche/topografische Gegebenheiten erschweren Orientierung).
+            </option>
+            <option value="1">
+              Übersichtliche Wegführung; gute Orientierung und sicherer Personenfluss.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 5: Einlass/Auslass -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsgelaende_einlass_auslass">Einlass / Auslass - Trennung</label>
+          <select id="veranstaltungsgelaende_einlass_auslass"
+                  name="veranstaltungsgelaende_einlass_auslass"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.1">
+              Einlass und Auslass sind nicht getrennt; Begegnungsströme können den Ablauf verlangsamen.
+            </option>
+            <option value="1">
+              Einlass und Auslass sind räumlich getrennt; klare Strömungsrichtungen unterstützen den Ablauf.
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- TAB: Gestalt -->
+      <div class="tab-pane fade" id="tab-gestalt">
+
+        <!-- Gruppe 1: Grundform -->
+        <div class="mb-3">
+          <label class="form-label" for="gestalt_grundform">Grundform der Veranstaltungsfläche</label>
+          <select id="gestalt_grundform" name="gestalt_grundform" class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1">
+              Muster: Szenen- und Besuchendenfläche sind klar getrennt; das erleichtert die Besucherführung.
+            </option>
+            <option value="1.1">
+              Vieleck: mehrere Szenenflächen erzeugen wechselnde Ströme und komplexere Bewegungsmuster.
+            </option>
+            <option value="1.2">
+              Aufzug: die Szenenfläche verändert sich, Treffpunkte können sich im Verlauf verlagern.
+            </option>
+            <option value="1.3">
+              Marktplatz: keine Trennung; offene, frei gestaltete Bewegungsflächen entstehen.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 2: Entlastungsflächen -->
+        <div class="mb-3">
+          <label class="form-label" for="gestalt_entlastungsflaechen">Entlastungsflächen</label>
+          <select id="gestalt_entlastungsflaechen" name="gestalt_entlastungsflaechen" class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1">
+              Möglichkeit zur Einrichtung von Entlastungsflächen ist gegeben.
+            </option>
+            <option value="1.1">
+              Keine Möglichkeit zur Einrichtung von Entlastungsflächen; Ausweichräume sind begrenzt.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 3: Befestigung -->
+        <div class="mb-3">
+          <label class="form-label" for="gestalt_befestigung">Befestigung des Geländes</label>
+          <select id="gestalt_befestigung" name="gestalt_befestigung" class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1">
+              Befestigter Grund mit befahrbaren Wegen; Logistik/Einsatzfahrzeuge können sich zuverlässig bewegen.
+            </option>
+            <option value="1.1">
+              Kein befestigter Grund; Mobilität und Zugänglichkeit können eingeschränkt sein.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 4: Wetterlage -->
+        <div class="mb-3">
+          <label class="form-label" for="gestalt_wetterlage">Wetterabhängigkeit der Nutzbarkeit</label>
+          <select id="gestalt_wetterlage" name="gestalt_wetterlage" class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.3">
+              Die Wetterlage kann die Nutzbarkeit stark beeinflussen (z. B. Regen, Wind, Bodenbeschaffenheit).
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- TAB: Veranstaltungsverlauf -->
+      <div class="tab-pane fade" id="tab-verlauf">
+
+        <!-- Gruppe 1: Einlasskontrolle -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsverlauf_einlasskontrolle">Einlasskontrolle</label>
+          <select id="veranstaltungsverlauf_einlasskontrolle"
+                  name="veranstaltungsverlauf_einlasskontrolle"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.3">
+              Es erfolgt keine Einlasskontrolle; schnelleres Einströmen, jedoch weniger Steuerung.
+            </option>
+            <option value="1">
+              Es erfolgt eine Einlasskontrolle; geordneter Eintritt, potenziell Wartezonen.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 2: Zu-/Ablauf -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsverlauf_zuablauf">Zu- und Ablauf bei Ein- und Auslass</label>
+          <select id="veranstaltungsverlauf_zuablauf"
+                  name="veranstaltungsverlauf_zuablauf"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1">
+              Der Zu- und Ablauf erfolgt kontinuierlich; gleichmäßige Personenströme.
+            </option>
+            <option value="1.3">
+              Der Zu- und Ablauf erfolgt in Schüben; zeitweise Verdichtungen möglich.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 3: Attraktionen -->
+        <div class="mb-3">
+          <label class="form-label" for="veranstaltungsverlauf_attraktionen">Anzahl der Attraktionen / Bühnen</label>
+          <select id="veranstaltungsverlauf_attraktionen"
+                  name="veranstaltungsverlauf_attraktionen"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.2">
+              Es existieren mehrere Attraktionen/Bühnen; Ströme verteilen sich, bleiben dynamisch.
+            </option>
+            <option value="1">
+              Es existiert nur eine Attraktion/Bühne; der Personenfluss konzentriert sich stärker.
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- TAB: Wiederkehrende Veranstaltung -->
+      <div class="tab-pane fade" id="tab-wiederkehr">
+
+        <!-- Gruppe 1: Erfahrung -->
+        <div class="mb-3">
+          <label class="form-label" for="wiederkehrende_veranstaltung_erfahrung">Erfahrung der Veranstalter & Veranstaltungshistorie</label>
+          <select id="wiederkehrende_veranstaltung_erfahrung"
+                  name="wiederkehrende_veranstaltung_erfahrung"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="0">
+              Wiederkehrende Veranstaltung mit bekannten Abläufen; Prozesse sind erprobt.
+            </option>
+            <option value="5">
+              Erstmalig am Ort, aber Erfahrung mit vergleichbaren Veranstaltungen vorhanden.
+            </option>
+            <option value="10">
+              Erstmalig am Ort und keine einschlägige Erfahrung; höhere Unsicherheiten.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 2: Historische Störungen -->
+        <div class="mb-3">
+          <label class="form-label" for="wiederkehrende_veranstaltung_stoerungen">Störungen bei früheren Veranstaltungen</label>
+          <select id="wiederkehrende_veranstaltung_stoerungen"
+                  name="wiederkehrende_veranstaltung_stoerungen"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="0">
+              Keine dokumentierten Störungen; Einsatzzahlen entsprachen üblichen Werten.
+            </option>
+            <option value="5">
+              Dokumentierte Störungen; Einsatzzahlen wichen von üblichen Werten ab.
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- TAB: Besuchendenverhalten -->
+      <div class="tab-pane fade" id="tab-verhalten">
+
+        <!-- Gruppe 1: Ortskenntnis & Ablaufkenntnis -->
+        <div class="mb-3">
+          <label class="form-label" for="besuchendenverhalten_ort_ablauf">Ortskenntnis & Ablaufkenntnis</label>
+          <select id="besuchendenverhalten_ort_ablauf"
+                  name="besuchendenverhalten_ort_ablauf"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="0.8">
+              Mehrheit ist ortskundig und der Ablauf ist bekannt; sicheres Navigieren und zügige Bewegung.
+            </option>
+            <option value="1.2">
+              Mehrheit ist ortsunkundig; erhöhter Informationsbedarf.
+            </option>
+            <option value="1.3">
+              Mehrheit ist ortskundig, aber der Ablauf ist unbekannt; Informationsbedarf zum Programm.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 2: Involvement -->
+        <div class="mb-3">
+          <label class="form-label" for="besuchendenverhalten_involvement">Involvement der Besuchenden</label>
+          <select id="besuchendenverhalten_involvement"
+                  name="besuchendenverhalten_involvement"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.2">
+              Ein großer Teil der Besuchenden weist hohes Involvement auf; aktivere Bewegungsmuster möglich.
+            </option>
+            <option value="1">
+              Nur ein kleiner Teil hat hohes Involvement; Gesamtverhalten bleibt eher ruhig.
+            </option>
+          </select>
+        </div>
+
+        <!-- Gruppe 3: Soziale Gruppen & Mobilität -->
+        <div class="mb-3">
+          <label class="form-label" for="besuchendenverhalten_soziale_gruppen">Soziale Gruppen & Mobilität</label>
+          <select id="besuchendenverhalten_soziale_gruppen"
+                  name="besuchendenverhalten_soziale_gruppen"
+                  class="form-select">
+            <option value="">Bitte wählen...</option>
+            <option value="1.2">
+              Besondere soziale Gruppen (z. B. Jugendgruppen, Senioren, Familien) sind zu erwarten und
+              können die durchschnittliche Geschwindigkeit senken.
+            </option>
+            <option value="1">
+              Keine besonderen sozialen Gruppen zu erwarten; Bewegungsgeschwindigkeit bleibt voraussichtlich normal.
+            </option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+      <button class="btn btn-primary" type="submit">Absenden</button>
+      <button class="btn btn-outline-secondary" type="reset">Zurücksetzen</button>
+    </div>
+  </form>
+
+  <!-- Ergebnisfeld (statisch) -->
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Ergebnis</h5>
+      <div class="alert alert-info mb-0" id="ergebnis_feld">
+        <strong>0.00</strong>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<!-- Bootstrap 5 (JS Bundle) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<script>
+(() => {
+
+  const $id = (id) => document.getElementById(id);
+
+  /** Faktor aus <select> */
+  function f(id) {
+    const el = $id(id);
+    if (!el) return null;
+    const v = el.value;
+    if (v === "" || v === null) return null;
+    const p = parseFloat(v);
+    return Number.isFinite(p) ? p : null;
+  }
+
+  /** Produkt */
+  const prod = (ids) => ids.reduce((acc, id) => acc * (f(id) ?? 1), 1);
+
+  /** Summe */
+  const sum = (ids) => ids.reduce((acc, id) => acc + (f(id) ?? 0), 0);
+
+  /** Excel-Formel für P:
+      =WENN(C2=0;1;LOG(C2;2)) 
+  */
+  function getP() {
+    const persons = parseFloat($id("grunddaten_personenzahl").value) || 0;
+    return persons === 0 ? 1 : Math.log2(persons);
+  }
+
+  // IDs nach Kategorien, exakt wie dein HTML:
+  const VG_IDS = [
+    "veranstaltungsgelaende_flaechenverhaeltnis",
+    "veranstaltungsgelaende_verkehrsstaerke",
+    "veranstaltungsgelaende_stoerungen",
+    "veranstaltungsgelaende_wegfuehrung",
+    "veranstaltungsgelaende_einlass_auslass"
+  ];
+
+  const G_IDS = [
+    "gestalt_grundform"
+  ];
+
+  const B_IDS = [
+    "gestalt_entlastungsflaechen",
+    "gestalt_befestigung",
+    "gestalt_wetterlage"
+  ];
+
+  const VV_IDS = [
+    "veranstaltungsverlauf_einlasskontrolle",
+    "veranstaltungsverlauf_zuablauf",
+    "veranstaltungsverlauf_attraktionen"
+  ];
+
+  const BV_IDS = [
+    "besuchendenverhalten_ort_ablauf",
+    "besuchendenverhalten_involvement",
+    "besuchendenverhalten_soziale_gruppen"
+  ];
+
+  const EW_IDS = [
+    "wiederkehrende_veranstaltung_erfahrung",
+    "wiederkehrende_veranstaltung_stoerungen"
+  ];
+
+  /** Hauptberechnung */
+  function berechneAlles() {
+
+    const P  = getP();
+    const VG = prod(VG_IDS);
+    const G  = prod(G_IDS);
+    const B  = prod(B_IDS);
+    const VV = prod(VV_IDS);
+    const BV = prod(BV_IDS);
+    const EW = sum(EW_IDS);     // (E + W)
+
+    // Excel-Formel exakt:
+    const linkeSeite  = P * VG * G * B * VV;
+    const rechteSeite = EW * BV;
+
+    const endwert = linkeSeite + rechteSeite;
+
+    $id("ergebnis_feld").innerHTML = "<strong>" + endwert.toFixed(2) + "</strong>";
+
+    // Debug
+    console.log("[DEBUG]:",
+      { P, VG, G, B, VV, BV, EW, linkeSeite, rechteSeite, endwert }
+    );
+  }
+
+  /** Live-Tracking und optisches Feedback */
+  const form = $id("matrixForm");
+
+  form.addEventListener("change", (e) => {
+    if (e.target.tagName === "SELECT" || e.target.type === "number") {
+      const val = e.target.value;
+      e.target.classList.remove("is-valid", "is-invalid");
+      e.target.classList.add(val !== "" ? "is-valid" : "is-invalid");
+      berechneAlles();
+    }
+  });
+
+  /** Reset-Fix: Ergebnis zurücksetzen + Styles entfernen */
+  form.addEventListener("reset", () => {
+    $id("ergebnis_feld").innerHTML = "<strong>0.00</strong>";
+    document.querySelectorAll("select,input").forEach(el => {
+      el.classList.remove("is-valid","is-invalid");
+    });
+  });
+
+  // Initial berechnen
+  berechneAlles();
+
+})();
+</script>
+
+<!-- Optional: Prevent submit during testing -->
+<script>
+  document.getElementById('matrixForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const data = {};
+    for (const [k, v] of fd.entries()) {
+      if (k.endsWith('[]')) (data[k] ||= []).push(v); else data[k] = v;
+    }
+    console.log('Formular (Demo, kein Versand):', data);
+  });
+</script>
+
+</body>
+</html>
