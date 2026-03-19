@@ -721,5 +721,85 @@
         berechneAlles();
       })();
     </script>
+    <script>
+      const definitions = {
+        Attraktion:
+          "Angebot im Veranstaltungsverlauf oder Örtlichkeit auf dem Veranstaltungsgelände, das oder die einen größeren Anteil der Besuchenden anzieht.",
+        Beschaffenheit:
+          "Eigenschaften des Veranstaltungsgeländes, die für die Nutzbarkeit der Veranstaltung über den Veranstaltungsverlauf relevant sind.",
+        Besuchendenverhalten:
+          "Prognosen zu Merkmalen und Verhaltensweisen der Besuchenden.",
+        BOS: "Behörden und Organisation mit Sicherheitsaufgaben",
+        Einlasszeit:
+          "Zeitraum, in dem die Besuchenden Zugang zum Veranstaltungsgelände erhalten.",
+        Entlastungsfläche:
+          "Bereiche des Veranstaltungsgeländes und des angrenzenden Verkehrsraums, die zusätzlichen Platz bieten.",
+        "Erfahrung (der Veranstalter)":
+          "Erworbene Befähigung zur Planung und Umsetzung der Veranstaltung.",
+        "Erfahrung (der Besuchenden)":
+          "Kenntnisse über den Veranstaltungsverlauf und/oder das Gelände.",
+        Gestalt: "Räumliche Anordnung von Szenen- und Publikumsfläche.",
+        Involvement: "Grad der Bereitschaft, Inhalte als eigene zu betrachten.",
+        Mehrheit: "Mehr als ein Drittel der Besuchenden.",
+        Minderheit: "Weniger als ein Drittel der Besuchenden.",
+        Ortskunde: "Kenntnis der Besuchenden zum Gelände und dessen Struktur.",
+        Personenzahl:
+          "Maximal erwartete Anzahl gleichzeitig anwesender Personen.",
+        Programm: "Räumliche und zeitliche Planung von Showelementen.",
+        "Topographische Gegebenheiten":
+          "Verteilung, Beschaffenheit und Zugänglichkeit von Flächen.",
+        Veranstaltungsgelände: "Für die Veranstaltung gewidmete Fläche.",
+        Veranstaltungsverlauf: "Zeitliche Abfolge von Einlass bis Auslass.",
+        "Wiederkehrende Veranstaltung":
+          "Bereits mehrfach durchgeführte Veranstaltung.",
+        Auslass: "Geordnete Abreise von Publikumsflächen.",
+        Einlass: "Geordnete Anreise zu Publikumsflächen.",
+        Einlasskontrollstelle: "Ort der Zugangskontrolle.",
+        Publikumsfläche: "Zentraler Attraktionsbereich der Veranstaltung.",
+        Fußwegetappe: "Abschnitt eines Fußwegs zur oder von der Veranstaltung.",
+        Verkehrsstärke: "Anzahl von Verkehrselementen pro Zeiteinheit.",
+        "Bauliche Anlagen": "Mit dem Boden verbundene bauliche Strukturen.",
+      };
+
+      // Create tooltip element
+      const tooltip = document.createElement("div");
+      tooltip.className = "tooltip";
+      document.body.appendChild(tooltip);
+
+      // Build regex from terms
+      const terms = Object.keys(definitions).sort(
+        (a, b) => b.length - a.length,
+      );
+      const regex = new RegExp(`\\b(${terms.join("|")})\\b`, "g");
+
+      // Replace text nodes
+      function walk(node) {
+        if (node.nodeType === 3) {
+          if (regex.test(node.nodeValue)) {
+            const span = document.createElement("span");
+            span.innerHTML = node.nodeValue.replace(regex, (match) => {
+              return `<span class="help-term" data-bs-toggle="popover" data-bs-trigger="hover focus"
+                data-bs-content="${definitions[match]}">${match}</span>`;
+            });
+            node.replaceWith(span);
+          }
+        } else if (
+          node.nodeType === 1 &&
+          !["SCRIPT", "STYLE"].includes(node.tagName)
+        ) {
+          node.childNodes.forEach(walk);
+        }
+      }
+
+      walk(document.body);
+
+      // Initialize Bootstrap popovers
+      const popoverTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="popover"]',
+      );
+      popoverTriggerList.forEach((el) => {
+        new bootstrap.Popover(el);
+      });
+    </script>
   </body>
 </html>
