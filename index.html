@@ -508,27 +508,36 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-<!-- SCRIPT (Variante A + Wizard + Optik) -->
+<!-- Script -->
 <script>
 (() => {
-  const get = (id) => document.getElementById(id);
-  const $$  = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  function factor(id){
-    const v = parseFloat(get(id)?.value);
-    return Number.isFinite(v) ? v : null;
+  // Kleine Helpers
+  function $(id) {
+    return document.getElementById(id);
   }
 
-  const product = (ids) => ids.reduce((a,id)=>a*(factor(id) ?? 1), 1);
-  const sum     = (ids) => ids.reduce((a,id)=>a+(factor(id) ?? 0), 0);
+  function $all(selector, root = document) {
+    return Array.from(root.querySelectorAll(selector));
+  }
 
-  // Personenfaktor: 0 → 1, sonst log2(n)
-  function person(){
-    const n = parseFloat(get("grunddaten_personenzahl").value);
+  // Einzelne Select-/Number-Werte holen
+  function getFactor(id) {
+    const val = parseFloat($(id)?.value);
+    return Number.isFinite(val) ? val : null;
+  }
+
+  // Rechenhilfen
+  const multiply = (ids) => ids.reduce((acc, id) => acc * (getFactor(id) ?? 1), 1);
+  const add      = (ids) => ids.reduce((acc, id) => acc + (getFactor(id) ?? 0), 0);
+
+  // Personenfaktor: Zahlen <= 0 → 1; sonst log2
+  function calcPersons() {
+    const n = parseFloat($("grunddaten_personenzahl").value);
     return (!Number.isFinite(n) || n <= 0) ? 1 : Math.log2(n);
   }
 
-  // Kategorien
+  // Kategorien (IDs der Selects)
   const VG = [
     "veranstaltungsgelaende_flaechenverhaeltnis",
     "veranstaltungsgelaende_verkehrsstaerke",
@@ -536,63 +545,65 @@
     "veranstaltungsgelaende_wegfuehrung",
     "veranstaltungsgelaende_einlass_auslass"
   ];
-  const G  = [ "gestalt_grundform" ];
-  const B  = [ "beschaffenheit_entlastungsflaechen", "beschaffenheit_befestigung", "beschaffenheit_wetterlage" ];
-  const VV = [ "veranstaltungsverlauf_einlasskontrolle", "veranstaltungsverlauf_zuablauf", "veranstaltungsverlauf_attraktionen" ];
-  const BV = [ "besuchendenverhalten_ort_ablauf", "besuchendenverhalten_involvement", "besuchendenverhalten_soziale_gruppen" ];
-  const EW = [ "wiederkehrende_veranstaltung_erfahrung", "wiederkehrende_veranstaltung_stoerungen" ];
 
-  function calc(){
-    const left  = person() * product(VG) * product(G) * product(B) * product(VV);
-    const right = sum(EW) * product(BV);
-    const res   = left + right;
-    get("ergebnis_feld").textContent = res.toFixed(2);
+  const G  = ["gestalt_grundform"];
+  const B  = ["beschaffenheit_entlastungsflaechen", "beschaffenheit_befestigung", "beschaffenheit_wetterlage"];
+  const VV = ["veranstaltungsverlauf_einlasskontrolle", "veranstaltungsverlauf_zuablauf", "veranstaltungsverlauf_attraktionen"];
+  const BV = ["besuchendenverhalten_ort_ablauf", "besuchendenverhalten_involvement", "besuchendenverhalten_soziale_gruppen"];
+  const EW = ["wiederkehrende_veranstaltung_erfahrung", "wiederkehrende_veranstaltung_stoerungen"];
+
+  // Gesamtergebnis berechnen
+  function updateResult() {
+    const left  = calcPersons() * multiply(VG) * multiply(G) * multiply(B) * multiply(VV);
+    const right = add(EW) * multiply(BV);
+    $("ergebnis_feld").textContent = (left + right).toFixed(2);
   }
 
-  // Variante A: Number(0) = nicht ausgefüllt
-  function getMissing(){
-    const req = $$("select[required], input[required]");
-    return req.filter(el => {
-      if (el.tagName === "INPUT" && el.type === "number"){
-        const v = parseFloat(el.value);
-        return (!Number.isFinite(v) || v <= 0);
+  // Pflichtfelder prüfen
+  function getMissing() {
+    return $all("select[required], input[required]").filter((el) => {
+      if (el.type === "number") {
+        const n = parseFloat(el.value);
+        return (!Number.isFinite(n) || n <= 0);
       }
-      return (!el.value || el.value === "");
+      return !el.value;
     });
   }
 
-  function requiredFields(){
-    return $$("select[required], input[required]");
-  }
-
-  function updateProgress(){
-    const req = requiredFields();
+  // Fortschrittsanzeige aktualisieren
+  function updateProgress() {
+    const req     = $all("select[required], input[required]");
     const missing = getMissing();
-    const filled = req.length - missing.length;
-    const pct = req.length ? Math.round(100 * filled / req.length) : 0;
-    get("progress_bar").style.width = pct + "%";
-    get("progress_text").textContent = pct + "%";
+    const done    = req.length - missing.length;
+    const pct     = req.length ? Math.round(done * 100 / req.length) : 0;
+
+    $("progress_bar").style.width = pct + "%";
+    $("progress_text").textContent = pct + "%";
   }
 
-  function showMissingModal(missing){
-    const list = get("missingList");
+  // Liste fehlender Felder als Modal anzeigen
+  function showMissing(missing) {
+    const list = $("missingList");
     list.innerHTML = "";
+
     missing.forEach(el => {
-      const lab = document.querySelector(`label[for="${el.id}"]`)?.innerText || el.id;
-      const li = document.createElement("li");
-      li.textContent = lab.replace(/\s*\*$/, "").trim();
-      list.appendChild(li);
+      const lbl = document.querySelector(`label[for="${el.id}"]`)?.innerText || el.id;
+      const entry = document.createElement("li");
+      entry.textContent = lbl.replace("*", "").trim();
+      list.appendChild(entry);
     });
-    new bootstrap.Modal(get("validationModal")).show();
+
+    new bootstrap.Modal($("validationModal")).show();
   }
 
-  const form = get("matrixForm");
+  const form = $("matrixForm");
 
-  // Live calc + validation
+  // Validierung & Berechnung beim Ändern
   form.addEventListener("change", (e) => {
     if (e.target.tagName === "SELECT" || e.target.type === "number") {
       const v = e.target.value;
-      e.target.classList.remove("is-valid","is-invalid");
+
+      e.target.classList.remove("is-valid", "is-invalid");
 
       if (e.target.type === "number") {
         const n = parseFloat(v);
@@ -601,53 +612,70 @@
         e.target.classList.add(v ? "is-valid" : "is-invalid");
       }
 
-      calc();
+      updateResult();
       updateProgress();
     }
   });
 
-  // Ergebnis-Tab nur, wenn vollständig
-  get("mainTabs").addEventListener("show.bs.tab", (e) => {
-    const tgt = e.target.getAttribute("data-bs-target");
-    if (tgt === "#tab-ergebnis") {
+  // Ergebnis-Tab nur sichtbar, wenn komplett ausgefüllt
+  $("mainTabs").addEventListener("show.bs.tab", (e) => {
+    if (e.target.getAttribute("data-bs-target") === "#tab-ergebnis") {
       const missing = getMissing();
       if (missing.length > 0) {
         e.preventDefault();
-        showMissingModal(missing);
+        showMissing(missing);
       } else {
-        calc();
+        updateResult();
       }
     }
   });
 
-  // RESET — FIXED: 1-Klick, korrektes Reset
+  // Reset-Verhalten
   form.addEventListener("reset", () => {
+    $("ergebnis_feld").textContent = "0.00";
+    $all("select,input").forEach(el => el.classList.remove("is-valid","is-invalid"));
 
-    get("ergebnis_feld").textContent = "0.00";
-
-    document.querySelectorAll("select,input")
-      .forEach(el => el.classList.remove("is-valid","is-invalid"));
-
-    // Wichtig: erst nach Browser-Reset Fortschritt neu berechnen
-    setTimeout(() => {
-      updateProgress();
-    }, 0);
-
+    setTimeout(updateProgress, 0);
   });
 
-  // Tooltips
-  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+  // Absenden → JSON an LimeSurvey übergeben
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  // Initial
+    const data = {};
+
+    // Stammdaten
+    data.veranstaltungsname = $("grunddaten_veranstaltungsname").value || "";
+    data.personenzahl       = $("grunddaten_personenzahl").value || "";
+
+    // Werte aller Selects
+    $all("select").forEach(sel => {
+      const label = document.querySelector(`label[for="${sel.id}"]`)?.innerText || sel.id;
+
+      data[sel.id] = {
+        label: label.replace("*", "").trim(),
+        value: sel.value,
+        text: sel.options[sel.selectedIndex]?.text.trim() || ""
+      };
+    });
+
+    // Ergebnis hinzufügen
+    data.ergebnis = $("ergebnis_feld").textContent;
+
+    // JSON → URL
+    const json = encodeURIComponent(JSON.stringify(data));
+    const url  = "https://freiburg.limesurvey.net/577923?lang=de&G01Q01=" + json;
+
+    window.location.href = url;
+  });
+
+  // Tooltips startklar machen
+  $all('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+
+  // Fortschritt initial berechnen
   updateProgress();
-})();
-</script>
 
-<!-- Optional: Submit blockieren (Demo) -->
-<script>
-document.getElementById('matrixForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-});
+})();
 </script>
 
 </body>
