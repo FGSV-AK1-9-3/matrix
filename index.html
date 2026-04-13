@@ -44,6 +44,15 @@
     .result-value{font-size:3.25rem; font-weight:800; letter-spacing:.5px}
     .result-sub{color:var(--muted)}
     .missing-list{max-height:40vh; overflow:auto}
+    .tab-missing::after{
+      content:''; display:inline-block; width:8px; height:8px;
+      background:#dc3545; border-radius:50%; margin-left:6px;
+      vertical-align:middle; position:relative; top:-1px;
+    }
+    .tab-complete::after{
+      content:'\2713'; color:#198754; font-weight:700;
+      margin-left:5px; font-size:.85em;
+    }
   </style>
 </head>
 <body>
@@ -476,14 +485,21 @@
 
     </div>
 
-    <div class="d-flex gap-2 mt-3">
-      <button class="btn btn-outline-secondary btn-sm" type="reset">
-        <i class="bi bi-arrow-counterclockwise me-1"></i>Zurücksetzen
-      </button>
-      <button class="btn btn-primary ms-auto" type="submit">
-        <i class="bi bi-check2-circle me-1"></i>Absenden
-      </button>
-    </div>
+      <!-- Buttons unter dem Formular -->
+      <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-outline-secondary btn-sm" type="reset">
+              <i class="bi bi-arrow-counterclockwise me-1"></i>Zurücksetzen
+          </button>
+
+          <button class="btn btn-secondary ms-auto" type="button" id="nextStepBtn">
+              <i class="bi bi-arrow-right-circle me-1"></i>Nächster Schritt
+          </button>
+
+          <button class="btn btn-primary ms-auto d-none" type="submit" id="submitBtn">
+              <i class="bi bi-check2-circle me-1"></i>Absenden
+          </button>
+      </div>
+
   </form>
 </div>
 
@@ -598,27 +614,101 @@
   }
 
   const form = $("matrixForm");
+  const nextStepBtn = $("nextStepBtn");
+  const submitBtn = $("submitBtn");  // Validierung & Berechnung beim Ändern
 
-  // Validierung & Berechnung beim Ändern
-  form.addEventListener("change", (e) => {
-    if (e.target.tagName === "SELECT" || e.target.type === "number") {
-      const v = e.target.value;
+    // Validierung & Berechnung beim Ändern
+    form.addEventListener("change", (e) => {
+        if (e.target.tagName === "SELECT" || e.target.type === "number") {
+            const v = e.target.value;
 
-      e.target.classList.remove("is-valid", "is-invalid");
+            e.target.classList.remove("is-valid", "is-invalid");
 
-      if (e.target.type === "number") {
-        const n = parseFloat(v);
-        e.target.classList.add(n > 0 ? "is-valid" : "is-invalid");
-      } else {
-        e.target.classList.add(v ? "is-valid" : "is-invalid");
-      }
+            if (e.target.type === "number") {
+                const n = parseFloat(v);
+                e.target.classList.add(n > 0 ? "is-valid" : "is-invalid");
+            } else {
+                e.target.classList.add(v ? "is-valid" : "is-invalid");
+            }
 
-      updateResult();
-      updateProgress();
+            updateResult();
+            updateProgress();
+            updateSubmitState();
+        }
+    });
+
+    // Funktion prüft, ob alle Pflichtfelder ausgefüllt sind
+    function allRequiredFilled() {
+        return getMissing().length === 0;
     }
-  });
 
-  // Ergebnis-Tab nur sichtbar, wenn komplett ausgefüllt
+    function updateSubmitState() {
+        const complete = allRequiredFilled();
+        submitBtn.classList.toggle("d-none", !complete);
+        nextStepBtn.classList.toggle("d-none", complete);
+    }
+
+    // Fortschrittsanzeige aktualisiert ebenfalls den Button-Status
+    function updateProgress() {
+        const req     = $all("select[required], input[required]");
+        const missing = getMissing();
+        const done    = req.length - missing.length;
+        const pct     = req.length ? Math.round(done * 100 / req.length) : 0;
+
+        $("progress_bar").style.width = pct + "%";
+        $("progress_text").textContent = pct + "%";
+
+        updateSubmitState();
+        updateTabIndicators();
+    }
+
+    // Indikatoren auf Tabs aktualisieren
+    function updateTabIndicators() {
+        $all('#mainTabs button[data-bs-toggle="tab"]').forEach(tab => {
+            const targetId = tab.getAttribute("data-bs-target").replace("#", "");
+            const pane = $(targetId);
+            if (!pane) return;
+            const required = $all("select[required], input[required]", pane);
+            if (required.length === 0) return; // Ergebnis-Tab überspringen
+            const hasMissing = required.some(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+            tab.classList.toggle("tab-missing", hasMissing);
+            tab.classList.toggle("tab-complete", !hasMissing);
+        });
+    }
+
+    // Nächster-Schritt-Button
+    nextStepBtn.addEventListener("click", () => {
+        const tabs = $all('#mainTabs button[data-bs-toggle="tab"]');
+        const activeIndex = tabs.findIndex(tab => tab.classList.contains('active'));
+
+        // Prüfe, ob noch fehlende Felder im aktuellen Schritt sind:
+        const currentTab = document.querySelector(".tab-pane.active");
+        const missingInTab = $all("select[required], input[required]", currentTab)
+            .filter((el) => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+
+        if (missingInTab.length > 0) {
+            showMissing(missingInTab);
+            return;
+        }
+
+        // Nächsten Tab aktivieren
+        if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
+            const next = tabs[activeIndex + 1];
+            const tab = new bootstrap.Tab(next);
+            tab.show();
+        }
+    });
+
+    // Reset-Verhalten
+    form.addEventListener("reset", () => {
+        $("ergebnis_feld").textContent = "0.00";
+        $all("select,input").forEach(el => el.classList.remove("is-valid","is-invalid"));
+        submitBtn.classList.add("d-none");
+        nextStepBtn.classList.remove("d-none");
+        setTimeout(updateProgress, 0);
+    });
+
+    // Ergebnis-Tab nur sichtbar, wenn komplett ausgefüllt
   $("mainTabs").addEventListener("show.bs.tab", (e) => {
     if (e.target.getAttribute("data-bs-target") === "#tab-ergebnis") {
       const missing = getMissing();
