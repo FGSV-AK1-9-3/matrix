@@ -495,8 +495,13 @@
               <i class="bi bi-arrow-right-circle me-1"></i>Nächster Schritt
           </button>
 
-          <button class="btn btn-primary ms-auto d-none" type="submit" id="submitBtn">
-              <i class="bi bi-check2-circle me-1"></i>Absenden
+          <button class="btn btn-primary ms-auto d-none" type="submit" id="submitBtn"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="hover focus"
+                  data-bs-placement="top"
+                  data-bs-title="Daten spenden"
+                  data-bs-content="Ihre anonymisierten Eingaben werden an ein Formular weitergeleitet und helfen dabei, die Bewertungsmatrix kontinuierlich zu verbessern. Es werden keine personenbezogenen Daten übertragen.">
+              <i class="bi bi-heart me-1"></i>Daten spenden
           </button>
       </div>
 
@@ -642,10 +647,15 @@
         return getMissing().length === 0;
     }
 
+    function isErgebnisTabActive() {
+        const activeTab = document.querySelector('#mainTabs button[data-bs-toggle="tab"].active');
+        return activeTab && activeTab.getAttribute("data-bs-target") === "#tab-ergebnis";
+    }
+
     function updateSubmitState() {
-        const complete = allRequiredFilled();
-        submitBtn.classList.toggle("d-none", !complete);
-        nextStepBtn.classList.toggle("d-none", complete);
+        const onErgebnis = isErgebnisTabActive();
+        submitBtn.classList.toggle("d-none", !onErgebnis);
+        nextStepBtn.classList.toggle("d-none", onErgebnis);
     }
 
     // Fortschrittsanzeige aktualisiert ebenfalls den Button-Status
@@ -713,7 +723,12 @@
         setTimeout(updateProgress, 0);
     });
 
-    // Ergebnis-Tab nur sichtbar, wenn komplett ausgefüllt
+    // Buttons je nach aktivem Tab umschalten
+  $("mainTabs").addEventListener("shown.bs.tab", () => {
+    updateSubmitState();
+  });
+
+  // Ergebnis-Tab nur sichtbar, wenn komplett ausgefüllt
   $("mainTabs").addEventListener("show.bs.tab", (e) => {
     if (e.target.getAttribute("data-bs-target") === "#tab-ergebnis") {
       const missing = getMissing();
@@ -734,39 +749,70 @@
     setTimeout(updateProgress, 0);
   });
 
-  // Absenden → JSON an LimeSurvey übergeben
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
+  // JSON-Daten zusammenbauen (wiederverwendbar)
+  function buildData() {
     const data = {};
-
-    // Stammdaten
     data.veranstaltungsname = $("grunddaten_veranstaltungsname").value || "";
     data.personenzahl       = $("grunddaten_personenzahl").value || "";
-
-    // Werte aller Selects
     $all("select").forEach(sel => {
       const label = document.querySelector(`label[for="${sel.id}"]`)?.innerText || sel.id;
-
       data[sel.id] = {
         label: label.replace("*", "").trim(),
         value: sel.value,
         text: sel.options[sel.selectedIndex]?.text.trim() || ""
       };
     });
-
-    // Ergebnis hinzufügen
     data.ergebnis = $("ergebnis_feld").textContent;
+    return data;
+  }
 
-    // JSON → URL
-    const json = encodeURIComponent(JSON.stringify(data));
-    const url  = "https://freiburg.limesurvey.net/577923?lang=de&G01Q01=" + json;
+  // Daten spenden → JSON in Zwischenablage + Weiterleitung
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
+    const data = buildData();
+    const json = JSON.stringify(data);
+
+    // JSON in Zwischenablage kopieren
+    try {
+      await navigator.clipboard.writeText(json);
+    } catch (err) {
+      console.warn("Clipboard nicht verfügbar:", err);
+    }
+
+    // Weiterleitung zu LimeSurvey
+    const url = "https://freiburg.limesurvey.net/577923?lang=de&G01Q01=" + encodeURIComponent(json);
     window.location.href = url;
   });
 
-  // Tooltips startklar machen
+  // ── Debug-Hilfsfunktion (Konsole) ────────────────────────────────────────
+  // Aufruf: window.SCENIC.fillRandom()
+  window.SCENIC = {
+    fillRandom() {
+      // Personenzahl
+      const personenfeld = $("grunddaten_personenzahl");
+      personenfeld.value = Math.floor(Math.random() * 9900 + 100); // 100–10000
+      personenfeld.dispatchEvent(new Event("change", { bubbles: true }));
+
+      // Alle Selects mit zufälliger Option (keine leere Option)
+      $all("select").forEach(sel => {
+        const opts = Array.from(sel.options).filter(o => o.value !== "");
+        if (opts.length === 0) return;
+        sel.value = opts[Math.floor(Math.random() * opts.length)].value;
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+
+      console.log("✅ SCENIC.fillRandom() – alle Felder zufällig befüllt.");
+    },
+
+    getJSON() {
+      console.log(JSON.stringify(buildData(), null, 2));
+    }
+  };
+
+  // Tooltips & Popovers startklar machen
   $all('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+  $all('[data-bs-toggle="popover"]').forEach(el => new bootstrap.Popover(el));
 
   // Fortschritt initial berechnen
   updateProgress();
