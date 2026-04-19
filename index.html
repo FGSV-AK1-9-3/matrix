@@ -111,8 +111,8 @@
       </button>
     </li>
     <li class="nav-item ms-auto">
-      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-ergebnis" type="button">
-        <i class="bi bi-graph-up-arrow me-1"></i>Ergebnis
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-donate" type="button">
+        <i class="bi bi-send me-1"></i>Daten spenden
       </button>
     </li>
   </ul>
@@ -473,12 +473,19 @@
         </div>
       </div>
 
-      <!-- ERGEBNIS -->
-      <div class="tab-pane fade" id="tab-ergebnis">
+      <!-- DATEN SPENDEN -->
+      <div class="tab-pane fade" id="tab-donate">
         <div class="result-hero">
           <div class="result-box">
-            <div class="result-sub mb-2">Berechnetes Ergebnis</div>
-            <div class="result-value" id="ergebnis_feld">0.00</div>
+            <i class="bi bi-database-add text-primary" style="font-size:3rem"></i>
+            <h3 class="mt-3 mb-2" style="font-weight:800">Daten spenden</h3>
+            <p class="result-sub mb-4">
+              Alle Pflichtfelder sind ausgefüllt. Mit einem Klick auf „Absenden" übermitteln Sie
+              Ihre anonymisierten Angaben zur wissenschaftlichen Auswertung.
+            </p>
+            <button class="btn btn-primary btn-lg w-100" type="submit" id="submitBtn">
+              <i class="bi bi-check2-circle me-2"></i>Absenden
+            </button>
           </div>
         </div>
       </div>
@@ -495,9 +502,6 @@
               <i class="bi bi-arrow-right-circle me-1"></i>Nächster Schritt
           </button>
 
-          <button class="btn btn-primary ms-auto d-none" type="submit" id="submitBtn">
-              <i class="bi bi-check2-circle me-1"></i>Absenden
-          </button>
       </div>
 
   </form>
@@ -529,56 +533,51 @@
 <script>
 (() => {
 
-  // Kleine Helpers
-  function $(id) {
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  const form        = document.getElementById("matrixForm");
+  const nextStepBtn = document.getElementById("nextStepBtn");
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function getById(id) {
     return document.getElementById(id);
   }
 
-  function $all(selector, root = document) {
+  function queryAll(selector, root = document) {
     return Array.from(root.querySelectorAll(selector));
   }
 
-  // Einzelne Select-/Number-Werte holen
+  // ── Factor helpers ────────────────────────────────────────────────────────
   function getFactor(id) {
-    const val = parseFloat($(id)?.value);
+    const val = parseFloat(getById(id)?.value);
     return Number.isFinite(val) ? val : null;
   }
 
-  // Rechenhilfen
-  const multiply = (ids) => ids.reduce((acc, id) => acc * (getFactor(id) ?? 1), 1);
-  const add      = (ids) => ids.reduce((acc, id) => acc + (getFactor(id) ?? 0), 0);
+  const multiplyFactors = (ids) => ids.reduce((acc, id) => acc * (getFactor(id) ?? 1), 1);
+  const addFactors      = (ids) => ids.reduce((acc, id) => acc + (getFactor(id) ?? 0), 0);
 
-  // Personenfaktor: Zahlen <= 0 → 1; sonst log2
-  function calcPersons() {
-    const n = parseFloat($("grunddaten_personenzahl").value);
+  // Person count factor: values <= 0 → 1; otherwise log2
+  function calcPersonFactor() {
+    const n = parseFloat(getById("grunddaten_personenzahl").value);
     return (!Number.isFinite(n) || n <= 0) ? 1 : Math.log2(n);
   }
 
-  // Kategorien (IDs der Selects)
-  const VG = [
+  // ── Field group IDs ───────────────────────────────────────────────────────
+  const IDS_VENUE = [
     "veranstaltungsgelaende_flaechenverhaeltnis",
     "veranstaltungsgelaende_verkehrsstaerke",
     "veranstaltungsgelaende_stoerungen",
     "veranstaltungsgelaende_wegfuehrung",
     "veranstaltungsgelaende_einlass_auslass"
   ];
+  const IDS_SHAPE    = ["gestalt_grundform"];
+  const IDS_COND     = ["beschaffenheit_entlastungsflaechen", "beschaffenheit_befestigung", "beschaffenheit_wetterlage"];
+  const IDS_FLOW     = ["veranstaltungsverlauf_einlasskontrolle", "veranstaltungsverlauf_zuablauf", "veranstaltungsverlauf_attraktionen"];
+  const IDS_RECUR    = ["wiederkehrende_veranstaltung_erfahrung", "wiederkehrende_veranstaltung_stoerungen"];
+  const IDS_BEHAVIOR = ["besuchendenverhalten_ort_ablauf", "besuchendenverhalten_involvement", "besuchendenverhalten_soziale_gruppen"];
 
-  const G  = ["gestalt_grundform"];
-  const B  = ["beschaffenheit_entlastungsflaechen", "beschaffenheit_befestigung", "beschaffenheit_wetterlage"];
-  const VV = ["veranstaltungsverlauf_einlasskontrolle", "veranstaltungsverlauf_zuablauf", "veranstaltungsverlauf_attraktionen"];
-  const BV = ["besuchendenverhalten_ort_ablauf", "besuchendenverhalten_involvement", "besuchendenverhalten_soziale_gruppen"];
-  const EW = ["wiederkehrende_veranstaltung_erfahrung", "wiederkehrende_veranstaltung_stoerungen"];
-
-  // Gesamtergebnis berechnen
-  function updateResult() {
-    const left  = calcPersons() * multiply(VG) * multiply(G) * multiply(B) * multiply(VV);
-    const right = add(EW) * multiply(BV);
-    $("ergebnis_feld").textContent = (left + right).toFixed(2);
-  }
-
-  // Pflichtfelder prüfen
-  function getMissing() {
-    return $all("select[required], input[required]").filter((el) => {
+  // ── Validation ────────────────────────────────────────────────────────────
+  function getMissingFields() {
+    return queryAll("select[required], input[required]").filter((el) => {
       if (el.type === "number") {
         const n = parseFloat(el.value);
         return (!Number.isFinite(n) || n <= 0);
@@ -587,192 +586,157 @@
     });
   }
 
-  // Fortschrittsanzeige aktualisieren
-  function updateProgress() {
-    const req     = $all("select[required], input[required]");
-    const missing = getMissing();
-    const done    = req.length - missing.length;
-    const pct     = req.length ? Math.round(done * 100 / req.length) : 0;
-
-    $("progress_bar").style.width = pct + "%";
-    $("progress_text").textContent = pct + "%";
+  function allRequiredFilled() {
+    return getMissingFields().length === 0;
   }
 
-  // Liste fehlender Felder als Modal anzeigen
-  function showMissing(missing) {
-    const list = $("missingList");
+  function showMissingModal(missing) {
+    const list = getById("missingList");
     list.innerHTML = "";
-
     missing.forEach(el => {
       const lbl = document.querySelector(`label[for="${el.id}"]`)?.innerText || el.id;
       const entry = document.createElement("li");
       entry.textContent = lbl.replace("*", "").trim();
       list.appendChild(entry);
     });
-
-    new bootstrap.Modal($("validationModal")).show();
+    new bootstrap.Modal(getById("validationModal")).show();
   }
 
-  const form = $("matrixForm");
-  const nextStepBtn = $("nextStepBtn");
-  const submitBtn = $("submitBtn");  // Validierung & Berechnung beim Ändern
-
-    // Validierung & Berechnung beim Ändern
-    form.addEventListener("change", (e) => {
-        if (e.target.tagName === "SELECT" || e.target.type === "number") {
-            const v = e.target.value;
-
-            e.target.classList.remove("is-valid", "is-invalid");
-
-            if (e.target.type === "number") {
-                const n = parseFloat(v);
-                e.target.classList.add(n > 0 ? "is-valid" : "is-invalid");
-            } else {
-                e.target.classList.add(v ? "is-valid" : "is-invalid");
-            }
-
-            updateResult();
-            updateProgress();
-            updateSubmitState();
-        }
+  // ── Progress & tab indicators ─────────────────────────────────────────────
+  function updateTabIndicators() {
+    queryAll('#mainTabs button[data-bs-toggle="tab"]').forEach(tab => {
+      const targetId = tab.getAttribute("data-bs-target").replace("#", "");
+      const pane = getById(targetId);
+      if (!pane) return;
+      const required = queryAll("select[required], input[required]", pane);
+      if (required.length === 0) return; // skip donate tab
+      const hasMissing = required.some(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+      tab.classList.toggle("tab-missing", hasMissing);
+      tab.classList.toggle("tab-complete", !hasMissing);
     });
+  }
 
-    // Funktion prüft, ob alle Pflichtfelder ausgefüllt sind
-    function allRequiredFilled() {
-        return getMissing().length === 0;
+  function updateProgress() {
+    const req     = queryAll("select[required], input[required]");
+    const missing = getMissingFields();
+    const done    = req.length - missing.length;
+    const pct     = req.length ? Math.round(done * 100 / req.length) : 0;
+
+    getById("progress_bar").style.width = pct + "%";
+    getById("progress_text").textContent = pct + "%";
+
+    updateNextStepVisibility();
+    updateTabIndicators();
+  }
+
+  // ── Next-step button ──────────────────────────────────────────────────────
+  function updateNextStepVisibility() {
+    const complete = allRequiredFilled();
+    nextStepBtn.classList.toggle("d-none", complete);
+  }
+
+  nextStepBtn.addEventListener("click", () => {
+    const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+    const activeIndex = tabs.findIndex(tab => tab.classList.contains("active"));
+
+    const currentPane = document.querySelector(".tab-pane.active");
+    const missingInTab = queryAll("select[required], input[required]", currentPane)
+      .filter((el) => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+
+    if (missingInTab.length > 0) {
+      showMissingModal(missingInTab);
+      return;
     }
 
-    function updateSubmitState() {
-        const complete = allRequiredFilled();
-        submitBtn.classList.toggle("d-none", !complete);
-        nextStepBtn.classList.toggle("d-none", complete);
+    if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
+      new bootstrap.Tab(tabs[activeIndex + 1]).show();
     }
+  });
 
-    // Fortschrittsanzeige aktualisiert ebenfalls den Button-Status
-    function updateProgress() {
-        const req     = $all("select[required], input[required]");
-        const missing = getMissing();
-        const done    = req.length - missing.length;
-        const pct     = req.length ? Math.round(done * 100 / req.length) : 0;
+  // ── Tab navigation guard ──────────────────────────────────────────────────
+  // Block forward navigation unless all fields in every preceding tab are filled.
+  getById("mainTabs").addEventListener("show.bs.tab", (e) => {
+    const tabs      = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+    const targetIdx = tabs.indexOf(e.target);
+    const activeIdx = tabs.findIndex(t => t.classList.contains("active"));
 
-        $("progress_bar").style.width = pct + "%";
-        $("progress_text").textContent = pct + "%";
+    // Only restrict forward navigation
+    if (targetIdx <= activeIdx) return;
 
-        updateSubmitState();
-        updateTabIndicators();
-    }
-
-    // Indikatoren auf Tabs aktualisieren
-    function updateTabIndicators() {
-        $all('#mainTabs button[data-bs-toggle="tab"]').forEach(tab => {
-            const targetId = tab.getAttribute("data-bs-target").replace("#", "");
-            const pane = $(targetId);
-            if (!pane) return;
-            const required = $all("select[required], input[required]", pane);
-            if (required.length === 0) return; // Ergebnis-Tab überspringen
-            const hasMissing = required.some(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
-            tab.classList.toggle("tab-missing", hasMissing);
-            tab.classList.toggle("tab-complete", !hasMissing);
-        });
-    }
-
-    // Nächster-Schritt-Button
-    nextStepBtn.addEventListener("click", () => {
-        const tabs = $all('#mainTabs button[data-bs-toggle="tab"]');
-        const activeIndex = tabs.findIndex(tab => tab.classList.contains('active'));
-
-        // Prüfe, ob noch fehlende Felder im aktuellen Schritt sind:
-        const currentTab = document.querySelector(".tab-pane.active");
-        const missingInTab = $all("select[required], input[required]", currentTab)
-            .filter((el) => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
-
-        if (missingInTab.length > 0) {
-            showMissing(missingInTab);
-            return;
-        }
-
-        // Nächsten Tab aktivieren
-        if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
-            const next = tabs[activeIndex + 1];
-            const tab = new bootstrap.Tab(next);
-            tab.show();
-        }
-    });
-
-    // Reset-Verhalten
-    form.addEventListener("reset", (e) => {
-        if (!confirm("Möchten Sie das Formular zurücksetzen?")) {
-          e.preventDefault();
-          return;
-        }
-
-        $("ergebnis_feld").textContent = "0.00";
-        $all("select,input").forEach(el => el.classList.remove("is-valid","is-invalid"));
-        submitBtn.classList.add("d-none");
-        nextStepBtn.classList.remove("d-none");
-        setTimeout(updateProgress, 0);
-    });
-
-    // Ergebnis-Tab nur sichtbar, wenn komplett ausgefüllt
-  $("mainTabs").addEventListener("show.bs.tab", (e) => {
-    if (e.target.getAttribute("data-bs-target") === "#tab-ergebnis") {
-      const missing = getMissing();
+    // Check all tabs up to (but not including) the target for missing fields
+    for (let i = 0; i < targetIdx; i++) {
+      const paneId  = tabs[i].getAttribute("data-bs-target").replace("#", "");
+      const pane    = getById(paneId);
+      if (!pane) continue;
+      const missing = queryAll("select[required], input[required]", pane)
+        .filter(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
       if (missing.length > 0) {
         e.preventDefault();
-        showMissing(missing);
-      } else {
-        updateResult();
+        showMissingModal(missing);
+        return;
       }
     }
   });
 
-  // Reset-Verhalten
-  form.addEventListener("reset", () => {
-    $("ergebnis_feld").textContent = "0.00";
-    $all("select,input").forEach(el => el.classList.remove("is-valid","is-invalid"));
+  // ── Field change handler ──────────────────────────────────────────────────
+  form.addEventListener("change", (e) => {
+    if (e.target.tagName === "SELECT" || e.target.type === "number") {
+      const v = e.target.value;
+      e.target.classList.remove("is-valid", "is-invalid");
+      if (e.target.type === "number") {
+        const n = parseFloat(v);
+        e.target.classList.add(n > 0 ? "is-valid" : "is-invalid");
+      } else {
+        e.target.classList.add(v ? "is-valid" : "is-invalid");
+      }
+      updateProgress();
+    }
+  });
 
+  // ── Reset ─────────────────────────────────────────────────────────────────
+  form.addEventListener("reset", (e) => {
+    if (!confirm("Möchten Sie das Formular zurücksetzen?")) {
+      e.preventDefault();
+      return;
+    }
+    queryAll("select,input").forEach(el => el.classList.remove("is-valid", "is-invalid"));
+    nextStepBtn.classList.remove("d-none");
     setTimeout(updateProgress, 0);
   });
 
-  // Absenden → JSON an LimeSurvey übergeben
+  // ── Submit → forward JSON to LimeSurvey ───────────────────────────────────
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const data = {};
+    data.veranstaltungsname = getById("grunddaten_veranstaltungsname").value || "";
+    data.personenzahl       = getById("grunddaten_personenzahl").value || "";
 
-    // Stammdaten
-    data.veranstaltungsname = $("grunddaten_veranstaltungsname").value || "";
-    data.personenzahl       = $("grunddaten_personenzahl").value || "";
-
-    // Werte aller Selects
-    $all("select").forEach(sel => {
+    queryAll("select").forEach(sel => {
       const label = document.querySelector(`label[for="${sel.id}"]`)?.innerText || sel.id;
-
       data[sel.id] = {
         label: label.replace("*", "").trim(),
         value: sel.value,
-        text: sel.options[sel.selectedIndex]?.text.trim() || ""
+        text:  sel.options[sel.selectedIndex]?.text.trim() || ""
       };
     });
 
-    // Ergebnis hinzufügen
-    data.ergebnis = $("ergebnis_feld").textContent;
+    // Compute result for submission (not displayed to user)
+    const left  = calcPersonFactor() * multiplyFactors(IDS_VENUE) * multiplyFactors(IDS_SHAPE) * multiplyFactors(IDS_COND) * multiplyFactors(IDS_FLOW);
+    const right = addFactors(IDS_RECUR) * multiplyFactors(IDS_BEHAVIOR);
+    data.ergebnis = (left + right).toFixed(2);
 
-    // JSON → URL
     const json = encodeURIComponent(JSON.stringify(data));
     const url  = "https://freiburg.limesurvey.net/577923?lang=de&G01Q01=" + json;
-
     window.location.href = url;
   });
 
-  // Tooltips startklar machen
-  $all('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
-
-  // Fortschritt initial berechnen
+  // ── Init ──────────────────────────────────────────────────────────────────
+  queryAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
   updateProgress();
 
 })();
 </script>
 
 </body>
-</html> 
+</html>
