@@ -12,138 +12,13 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet" />
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <style>
-        :root {
-            --brand: #0d6efd;
-            --bg: #eef1f5;
-            --card-bg: #fff;
-            --text: #223047;
-            --muted: #6b7a90;
-            --shadow: 0 4px 20px rgba(0, 0, 0, .06);
-        }
-
-        html,
-        body {
-            height: 100%
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text)
-        }
-
-        .container {
-            max-width: 1100px
-        }
-
-        .form-label {
-            font-weight: 600
-        }
-
-        .app-title {
-            font-weight: 800;
-            letter-spacing: .2px
-        }
-
-        .card {
-            border: 0;
-            border-radius: 16px;
-            background: var(--card-bg);
-            box-shadow: var(--shadow)
-        }
-
-        .card-header {
-            border-bottom: 0;
-            padding: 1.5rem
-        }
-
-        .card-body {
-            padding: 1.5rem
-        }
-
-        .card-title {
-            font-weight: 700;
-            font-size: 1.25rem
-        }
-
-        .btn {
-            font-weight: 600;
-            letter-spacing: .5px
-        }
-
-        .btn-primary {
-            background: var(--brand);
-            border-color: var(--brand)
-        }
-
-        .btn-primary:hover {
-            background: #0b5ed7;
-            border-color: #0a58ca
-        }
-
-        .form-control {
-            padding: .5rem .75rem
-        }
-
-        .form-control:focus {
-            border-color: var(--brand);
-            box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25)
-        }
-
-        .navbar {
-            background: var(--card-bg);
-            box-shadow: var(--shadow)
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--brand)
-        }
-
-        .nav-link {
-            font-weight: 600;
-            color: var(--text)
-        }
-
-        .nav-link:hover {
-            color: var(--brand)
-        }
-
-        .footer {
-            background: var(--card-bg);
-            padding: 1rem 0;
-            margin-top: 2rem
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
-            margin: 1rem 0;
-        }
-
-        /* Responsive typography */
-        h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
-        h2 { font-size: clamp(1.2rem, 3vw, 1.75rem); }
-
-        /* Tighter container padding on small screens */
-        @media (max-width: 576px) {
-            .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-            .card-header,
-            .card-body {
-                padding: 1rem;
-            }
-        }
-    </style>
+    <link href="custom.css" rel="stylesheet" />
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="index.html">
                 SCENIC
             </a>
             <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
@@ -160,7 +35,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="about.html">
-                            Dokumentation
+                            Hintergrund
                         </a>
                     </li>
                 </ul>
@@ -180,7 +55,7 @@
         <p>Personenstromsimulationen sind eine geeignete Methode, um die Bewegung von Menschen in einer definierten
             räumlichen Umgebung zu analysieren, unter anderem im Kontext des Brandschutzes und der
             Veranstaltungsplanung. Sie können dazu eingesetzt werden, Schutzziele zu überprüfen z. B. über
-            Leistungskriterien, wie in der DIN18009-2 im Rahmen des Brandschutzingenieurwesen beschrieben, oder Abläufe
+            Leistungskriterien, wie in der DIN18009-2 <a href="#ref1" class="footnote">[1]</a> im Rahmen des Brandschutzingenieurwesen beschrieben, oder Abläufe
             zu testen wie bspw. bei Ein- und Auslasssituationen. Sie bieten die Möglichkeit, planerisch verschiedene
             Szenarien zu testen und besser zu verstehen, wie sich die Dynamik von Menschenmengen, also von
             Personenströmen, unter bestimmten Bedingungen entwickeln kann. Dabei wird die Veranstaltung in einem Modell
@@ -203,7 +78,7 @@
         <h2>Allgemeine Definition von Simulationen</h2>
         <p>Unter Simulation versteht man laut VDI: „Nachbildung eines dynamischen Prozesses in einem System mithilfe
             eines experimentierfähigen Modells, um zu Erkenntnissen zu gelangen, die auf die Wirklichkeit übertragbar
-            sind”. Das bedeutet, dass eine Simulation die für die Fragestellung relevanten Prozesse möglichst
+            sind”. <a href="#ref2" class="footnote">[2]</a> Das bedeutet, dass eine Simulation die für die Fragestellung relevanten Prozesse möglichst
             realitätsnah abbilden soll. Simulationen ersetzen nicht die Realität, sondern ermöglichen Rückschlüsse auf
             die Realität.</p>
         <p>Der Einsatz von Simulationen zur Untersuchung von Personenströmen, oder kurz Personenstromsimulation, ist
@@ -219,10 +94,10 @@
             unter bestimmten Bedingungen aufgezeigt werden. Abbildung 1 zeigt ein Beispiel für die Visualisierung einer
             Simulation.</p>
         <img src='image_3.png'>
-        <p>Abbildung Beispiel für eine Simulation: Jeder blaue Punkt entspricht einer simulierten Person.</p>
+        <figcaption><b>Abbildung 1:</b> Beispiel für eine Simulation: Jeder blaue Punkt entspricht einer simulierten Person. <a href="#ref3" class="footnote">[3]</a></figcaption>
         <h2>Grundlagenwissen</h2>
         <p>Mit Personenstromsimulationen wird die Dynamik von Menschenmengen abgebildet. Es wird zwischen
-            makroskopischen und mikroskopischen Modellen unterschieden. Handrechenverfahren, wie im EVC beschrieben
+            makroskopischen und mikroskopischen Modellen unterschieden. Handrechenverfahren, wie im EVC <a href="#ref4" class="footnote">[4]</a> beschrieben
             zählen zu den makroskopischen Modellen und rechnen mit Durchschnittswerten. Mit ihnen können Zielgrößen wie
             Räumungszeiten oder erreichbare Personenverkehrsstärken ohne Softwareunterstützung überschlagsweise
             berechnet werden. Mikroskopische Modelle können nur mit Hilfe von Software angewendet werden und betrachten
@@ -230,7 +105,7 @@
             Interaktionen mit umgebenden Personen und mit der „baulichen“ Umgebung (Wände, Hindernisse, etc.). </p>
         <p>Der Einsatz von mikroskopischen Personenstromsimulationen im Räumungskontext ist im Brandschutz ein weit
             verbreiteter Ansatz zur Bewertung von Flucht- und Rettungswegen. Hier existieren bereits Normen und
-            Richtlinien wie die DIN 18009-2 oder RiMEA, die Hinweise zum Einsatz von Simulationen in diesem Bereich
+            Richtlinien wie die DIN 18009-2 oder RiMEA <a href="#ref5" class="footnote">[5]</a>, die Hinweise zum Einsatz von Simulationen in diesem Bereich
             geben. Diese Hinweise können nicht 1:1 auf zu simulierende Veranstaltungsabläufe, z. B. eine Einlass- oder
             Auslasssituation, übertragen werden, sondern müssen für den Veranstaltungskontext erweitert und angepasst
             werden. Beispielsweise muss bei einer Auslasssituation im Gegensatz zur Räumungssituation eine andere
@@ -263,8 +138,8 @@
             ein matschiger Boden im Veranstaltungsszenario eine reduzierte Geschwindigkeit im Simulationsszenario).
             Dieser Vorgang erfordert sowohl Veranstaltungs- als auch Modellierungswissen.</p>
         <img src='image_2.png'>
-        <p>Abbildung Schematische Illustration der Abstraktion, die durch das Übersetzen der Realität in ein
-            simulierbares System erfolgt in Anlehnung an Benjamin Schröder (Vortrag RiMEA).</p>
+        <figcaption><b>Abbildung 2:</b> Schematische Illustration der Abstraktion, die durch das Übersetzen der Realität in ein
+            simulierbares System erfolgt in Anlehnung an Benjamin Schröder (Vortrag RiMEA). <a href="#ref6" class="footnote">[6]</a></figcaption>
         <p>Simulationsmodelle sind vereinfachte Darstellungen der Realität, was bedeutet, dass sie nur prüfen können, ob
             die in der Veranstaltungsplanung definierten Schutzziele grundsätzlich eingehalten werden können. Verhalten
             von Besuchern, das unkooperativ oder aggressiv ist, oder auch seltene, unvorhergesehene äußere Einflüsse
@@ -310,7 +185,7 @@
             System. Der Bewegungsfluss sinkt und es entsteht ein Stau. Für weiterführende Informationen wird auf die
             EVC, insbesondere Anhang D, verwiesen.</p>
         <img src='image_1.png'>
-        <p>Abbildung Schematische Darstellung des Fundamentaldiagramms mit verschiedenen Vekehrszuständen. </p>
+        <figcaption><b>Abbildung 3:</b> Schematische Darstellung des Fundamentaldiagramms mit verschiedenen Vekehrszuständen. <a href="#ref7" class="footnote">[7]</a></figcaption>
         <p>Die konkrete Ausprägung des Fundamentaldiagramms für Fußgänger ist das Ergebnis jahrzehntelanger Forschung im
             Bereich der Fußgängerdynamik. Hierfür wurden u. a. Experimente mit unterschiedlichen Rahmenbedingungen (wie
             Anzahl an Personen, bauliche Umgebung, etc.) durchgeführt und analysiert. Die empirischen Erkenntnisse aus
@@ -329,8 +204,8 @@
             Zweirichtungsverkehr (siehe Abbildung 4).</p>
         <img src='image_5.png'>
         <img src='image_4.png'>
-        <p>Abbildung Aufnahmen von Fußgängerexperimenten, die die Bildung von Stauungen vor Engstellen (links) und
-            Bahnen in einem bidirektionalen Strom (rechts) zeigen.</p>
+        <figcaption><b>Abbildung 4:</b> Aufnahmen von Fußgängerexperimenten, die die Bildung von Stauungen vor Engstellen (links) und
+            Bahnen in einem bidirektionalen Strom (rechts) zeigen. <a href="#ref8" class="footnote">[8]</a></figcaption>
         <p>Die Standards entbinden die Anwender aber nicht von der Pflicht, sich Gedanken über die grundlegenden
             Annahmen der Bewegung der Personenströme zu machen, wie z. B. Anzahl und individuelle Eigenschaften, Start-
             und Zielort der Agenten oder Wegwahl zum Ziel. Simulationen sind also im hohen Maße von der Qualität der
@@ -443,6 +318,33 @@
             Aussagekraft hängt maßgeblich von der Qualität der Eingabedaten ab. Simulationen sind daher nur dann
             sinnvoll, wenn die Annahmen realistisch gewählt werden. Dazu gehört sowohl ein Verständnis der grundlegenden
             Simulationsmethodik als auch eine kritische Prüfung der Eingangsparameter, um Verzerrungen zu vermeiden.</p>
+        <h2>Referenzen</h2>
+        <ol>
+            <li id="ref1">
+                DIN 18009-2:2022-08, <i>Brandschutzingenieurwesen - Teil 2: Räumungssimulation und Personensicherheit</i>. Berlin: DIN Deutsches Institut für Normung e. V.
+            </li>
+            <li id="ref2">
+                VDI 3633 Blatt 1:2014-12 <i>Simulation von Logistik-, Materialfluss- und Produktionssystemen – Grundlagen</i>. Berlin: Beuth Verlag.
+            </li>
+            <li id="ref3">
+                Quelle: Simulationsscreenshot der Software crowd:it, accu:rate GmbH.
+            </li>
+            <li id="ref4">
+                FGSV (2022): <i>Empfehlungen zum Verkehrs- und Crowdmanagement für Veranstaltungen (EVC)</i>. Ausgabe 2022. Köln: FGSV Verlag.
+            </li>
+            <li id="ref5">
+                RiMEA e.V. (2025): <i>Richtlinien für Mikroskopische Entfluchtungsanalysen</i>. Version 4.1.0. <a href="https://rimea.de/">https://rimea.de/</a>
+            </li>
+            <li id="ref6">
+                Eigene Darstellung in Anlehnung an die Darstellung von Benjamin Schröder im Vortrag zur DIN 18009-2 am 27.05.2021 im RiMEA Webinar.
+            </li>
+            <li id="ref7">
+                Die Grafik basiert auf Bild 106 des EVC und wurde angepasst.
+            </li>
+            <li id="ref8">
+                Boltes, M., et al. (2018). <i>Empirical Results of Pedestrian and Evacuation Dynamics</i>. In: Meyers, R. (eds) Encyclopedia of Complexity and Systems Science. Springer, Berlin, Heidelberg. <a href="https://doi.org/10.1007/978-3-642-27737-5_706-1">https://doi.org/10.1007/978-3-642-27737-5_706-1</a>
+            </li>
+        </ol>
     </div>
 
     <!-- Bootstrap 5 JS Bundle with Popper -->
