@@ -152,6 +152,32 @@
       padding: 1rem 0;
       margin-top: 2rem
     }
+
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: help;
+      margin-left: 5px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .help-icon:hover {
+      background: #0a58ca;
+      color: #fff;
+    }
   </style>
 </head>
 
@@ -256,9 +282,10 @@
                   type="text">
               </div>
               <div class="col-md-6">
-                <label class="form-label required" for="grunddaten_personenzahl" data-bs-toggle="tooltip"
-                  title="Erwartete Anzahl gleichzeitig anwesender Personen auf dem Veranstaltungsgelände">
+                <label class="form-label required" for="grunddaten_personenzahl">
                   Personenzahl
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Erwartete Anzahl der gleichzeitig maximal anwesenden Personen auf dem Veranstaltungsgelände.">?</span>
                 </label>
                 <input id="grunddaten_personenzahl" name="grunddaten_personenzahl" class="form-control" type="number"
                   min="0" value="0" required>
@@ -274,7 +301,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required"
-                  for="veranstaltungsgelaende_flaechenverhaeltnis">Flächenverhältnis</label>
+                  for="veranstaltungsgelaende_flaechenverhaeltnis">Flächenverhältnis
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Verhältnis der für Besuchende zugänglichen Fläche auf dem Veranstaltungsgelände zur erwarteten Besucherzahl.">?</span>
+                </label>
                 <select id="veranstaltungsgelaende_flaechenverhaeltnis" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.0">
@@ -290,7 +320,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="veranstaltungsgelaende_verkehrsstaerke">Personenverkehrsstärke
-                  (qs)</label>
+                  (qs)
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Verkehrsstärke: Anzahl der Verkehrselemente eines Verkehrsstromes je Zeiteinheit an einem Querschnitt einer Strecke oder an einem Knotenpunkt.">?</span>
+                </label>
                 <select id="veranstaltungsgelaende_verkehrsstaerke" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="0.9">
@@ -310,7 +343,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="veranstaltungsgelaende_stoerungen">Störungen auf Flucht‑ und
-                  Rettungswegen</label>
+                  Rettungswegen
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Störungen durch z. B. gegenläufige Ströme, parallele Nutzungen oder Änderungen im Veranstaltungsverlauf, die Flucht- und Rettungswege beeinträchtigen können.">?</span>
+                </label>
                 <select id="veranstaltungsgelaende_stoerungen" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.2">
@@ -325,7 +361,10 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsgelaende_wegfuehrung">Wegführung</label>
+                <label class="form-label required" for="veranstaltungsgelaende_wegfuehrung">Wegführung
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Topographische Gegebenheiten: Verteilung, Beschaffenheit und Zugänglichkeit von Teilflächen und Örtlichkeiten auf dem Veranstaltungsgelände, die eine übersichtliche oder unübersichtliche Orientierung bedingen.">?</span>
+                </label>
                 <select id="veranstaltungsgelaende_wegfuehrung" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.2">
@@ -341,7 +380,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="veranstaltungsgelaende_einlass_auslass">Einlass /
-                  Auslass</label>
+                  Auslass
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Einlass: Vorgang zur Gewährung einer geordneten Anreise von den Publikumsflächen. Auslass: Vorgang zur Gewährung einer geordneten Abreise von den Publikumsflächen.">?</span>
+                </label>
                 <select id="veranstaltungsgelaende_einlass_auslass" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.0">
@@ -364,7 +406,10 @@
           <div class="card step-card">
             <div class="row form-grid">
               <div class="col-md-6">
-                <label class="form-label required" for="gestalt_grundform">Grundform der Veranstaltungsfläche</label>
+                <label class="form-label required" for="gestalt_grundform">Grundform der Veranstaltungsfläche
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Gestalt: Räumliche Anordnung von Szenen- und Publikumsfläche auf dem Veranstaltungsgelände.">?</span>
+                </label>
                 <select id="gestalt_grundform" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.0">
@@ -395,9 +440,10 @@
             <div class="row form-grid">
 
               <div class="col-md-6">
-                <label class="form-label required" for="beschaffenheit_entlastungsflaechen" data-bs-toggle="tooltip"
-                  title="Zusätzliche Flächen, auf die sich Besuchendenströme bei Bedarf verteilen können.">
+                <label class="form-label required" for="beschaffenheit_entlastungsflaechen">
                   Möglichkeit zur Einrichtung von Entlastungsflächen
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Entlastungsflächen: Bereiche des Veranstaltungsgeländes und des angrenzenden Verkehrsraums, die zusätzlichen Platz für die Verteilung von Besuchenden bieten.">?</span>
                 </label>
                 <select id="beschaffenheit_entlastungsflaechen" class="form-select" required>
                   <option value="">Bitte wählen…</option>
@@ -413,9 +459,10 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label required" for="beschaffenheit_befestigung" data-bs-toggle="tooltip"
-                  title="Relevanz für Zugänglichkeit, Logistik und Einsatzfahrzeuge.">
+                <label class="form-label required" for="beschaffenheit_befestigung">
                   Befestigter Grund mit befahrbaren Wegen
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Beschaffenheit: Eigenschaften des Veranstaltungsgeländes, die für die Nutzbarkeit der Veranstaltung über den Veranstaltungsverlauf relevant sind (Untergrund, Zugänglichkeit, Befahrbarkeit).">?</span>
                 </label>
                 <select id="beschaffenheit_befestigung" class="form-select" required>
                   <option value="">Bitte wählen…</option>
@@ -431,9 +478,10 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label required" for="beschaffenheit_wetterlage" data-bs-toggle="tooltip"
-                  title="Einfluss von Regen, Wind, Bodenbeschaffenheit u. Ä.">
+                <label class="form-label required" for="beschaffenheit_wetterlage">
                   Wetterlage
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Beschaffenheit: Einfluss von Regen, Wind, Bodenbeschaffenheit u. Ä. auf die Nutzbarkeit des Veranstaltungsgeländes.">?</span>
                 </label>
                 <select id="beschaffenheit_wetterlage" class="form-select" required>
                   <option value="">Bitte wählen…</option>
@@ -457,7 +505,10 @@
             <div class="row form-grid">
 
               <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsverlauf_einlasskontrolle">Einlasskontrolle</label>
+                <label class="form-label required" for="veranstaltungsverlauf_einlasskontrolle">Einlasskontrolle
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Einlasskontrollstelle: Örtlichkeit der Kontrolle anreisender Personen auf Einlassberechtigung oder mitgebrachte Gegenstände.">?</span>
+                </label>
                 <select id="veranstaltungsverlauf_einlasskontrolle" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.3">
@@ -473,7 +524,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="veranstaltungsverlauf_zuablauf">Zu‑ und Ablauf bei
-                  Ein‑/Auslass</label>
+                  Ein‑/Auslass
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Einlasszeit: Zeitraum, in dem die Besuchenden Zugang zum Veranstaltungsgelände erhalten. Der Zu- und Ablauf beschreibt den zeitlichen Verlauf von Ein- und Ausreise.">?</span>
+                </label>
                 <select id="veranstaltungsverlauf_zuablauf" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.0">
@@ -488,7 +542,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="veranstaltungsverlauf_attraktionen">Attraktionen /
-                  Bühnen</label>
+                  Bühnen
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Attraktion: Angebot im Veranstaltungsverlauf oder Örtlichkeit auf dem Veranstaltungsgelände, das oder die einen größeren Anteil der Besuchenden anzieht.">?</span>
+                </label>
                 <select id="veranstaltungsverlauf_attraktionen" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.2">
@@ -513,7 +570,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="wiederkehrende_veranstaltung_erfahrung">Erfahrung des
-                  Veranstaltenden</label>
+                  Veranstaltenden
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Erfahrung (der Veranstalter): Aus Wahrnehmen und Lernen erworbene Befähigung des Veranstaltenden und der eingesetzten Beschäftigten zur Planung und Umsetzung der Veranstaltung.">?</span>
+                </label>
                 <select id="wiederkehrende_veranstaltung_erfahrung" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.0">
@@ -533,7 +593,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="wiederkehrende_veranstaltung_stoerungen">Historische
-                  Störungen</label>
+                  Störungen
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Wiederkehrende Veranstaltung: Mit vergleichbarem Veranstaltungsverlauf bereits durchgeführte Veranstaltung. Historische Störungen beziehen sich auf dokumentierte Vorfälle früherer Veranstaltungen.">?</span>
+                </label>
                 <select id="wiederkehrende_veranstaltung_stoerungen" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="0.0">
@@ -558,7 +621,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="besuchendenverhalten_ort_ablauf">Ortskenntnis &
-                  Ablaufkenntnis</label>
+                  Ablaufkenntnis
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Ortskunde: Kenntnis der Besuchenden zum Veranstaltungsgelände sowie zur räumlichen Verteilung der Bewegungsflächen und Angebote.">?</span>
+                </label>
                 <select id="besuchendenverhalten_ort_ablauf" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="0.8">
@@ -577,7 +643,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="besuchendenverhalten_involvement">Involvement
-                  (Bindung/Engagement)</label>
+                  (Bindung/Engagement)
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Involvement: Grad der Bereitschaft, Inhalte und Ideen einer Veranstaltung als die eigenen und das Miteinander auf einer Veranstaltung als erstrebenswerte Gemeinschaft zu betrachten.">?</span>
+                </label>
                 <select id="besuchendenverhalten_involvement" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.2">
@@ -593,7 +662,10 @@
 
               <div class="col-md-6">
                 <label class="form-label required" for="besuchendenverhalten_soziale_gruppen">Besondere soziale
-                  Gruppen</label>
+                  Gruppen
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Besuchendenverhalten: Prognosen zu Merkmalen und Verhaltensweisen der Besuchenden, insbesondere bei besonderen sozialen Gruppen (z. B. Jugendgruppen, Senior:innen, Familien), die die durchschnittliche Bewegungsgeschwindigkeit verändern können.">?</span>
+                </label>
                 <select id="besuchendenverhalten_soziale_gruppen" class="form-select" required>
                   <option value="">Bitte wählen…</option>
                   <option value="1.2">
