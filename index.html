@@ -652,8 +652,11 @@
 
       // ── Next-step button ──────────────────────────────────────────────────────
       function updateNextStepVisibility() {
-        const complete = allRequiredFilled();
-        nextStepBtn.classList.toggle("d-none", complete);
+        const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+        const activeIndex = tabs.findIndex(tab => tab.classList.contains("active"));
+        // Hide "Next step" only when on the very last tab (Daten spenden)
+        const onLastTab = activeIndex === tabs.length - 1;
+        nextStepBtn.classList.toggle("d-none", onLastTab);
       }
 
       nextStepBtn.addEventListener("click", () => {
@@ -699,6 +702,10 @@
         }
       });
 
+      getById("mainTabs").addEventListener("shown.bs.tab", () => {
+        updateNextStepVisibility();
+      });
+
       // ── Field change handler ──────────────────────────────────────────────────
       form.addEventListener("change", (e) => {
         if (e.target.tagName === "SELECT" || e.target.type === "number") {
@@ -734,12 +741,7 @@
         data.personenzahl = getById("grunddaten_personenzahl").value || "";
 
         queryAll("select").forEach(sel => {
-          const label = document.querySelector(`label[for="${sel.id}"]`)?.innerText || sel.id;
-          data[sel.id] = {
-            label: label.replace("*", "").trim(),
-            value: sel.value,
-            text: sel.options[sel.selectedIndex]?.text.trim() || ""
-          };
+          data[sel.id] = sel.value;
         });
 
         // Compute result for submission (not displayed to user)

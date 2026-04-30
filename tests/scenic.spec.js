@@ -1,16 +1,3 @@
-/**
- * scenic.spec.js
- * Playwright end-to-end tests for the SCENIC form (index.html)
- *
- * Setup:
- *   npm install --save-dev @playwright/test
- *   npm install --save-dev serve          # static file server
- *   npx playwright install chromium
- *   npx playwright test
- *
- * The playwright.config.js starts `serve . -p 3000` automatically.
- */
-
 import { test, expect } from '@playwright/test';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -254,9 +241,13 @@ test.describe('Progress bar', () => {
     await expect(page.locator('#progress_bar')).toHaveAttribute('style', /width:\s*100%/);
   });
 
-  test('"Nächster Schritt" button hides when form is complete', async ({ page }) => {
+  test('"Nächster Schritt" button hides only when on the last tab', async ({ page }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
+    // After fillAllFields we are on tab 7 (Verhalten) — button should still be visible
+    await expect(page.locator('#nextStepBtn')).not.toHaveClass(/d-none/);
+    // Navigating to the donate tab should hide it
+    await goToTab(page, '#tab-donate');
     await expect(page.locator('#nextStepBtn')).toHaveClass(/d-none/);
   });
 
