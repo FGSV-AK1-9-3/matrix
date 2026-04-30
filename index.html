@@ -86,18 +86,13 @@
           <div class="card step-card">
             <div class="row form-grid">
               <div class="col-md-6">
-                <label class="form-label" for="grunddaten_veranstaltungsname">Veranstaltungsname</label>
-                <input id="grunddaten_veranstaltungsname" name="grunddaten_veranstaltungsname" class="form-control"
-                  type="text">
-              </div>
-              <div class="col-md-6">
                 <label class="form-label required" for="grunddaten_personenzahl">
                   Personenzahl
                   <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Erwartete Anzahl der gleichzeitig maximal anwesenden Personen auf dem Veranstaltungsgelände.">?</span>
                 </label>
                 <input id="grunddaten_personenzahl" name="grunddaten_personenzahl" class="form-control" type="number"
-                  min="0" value="0" required>
+                  min="0" step="1" value="0" required>
               </div>
             </div>
           </div>
@@ -601,7 +596,7 @@
         return queryAll("select[required], input[required]").filter((el) => {
           if (el.type === "number") {
             const n = parseFloat(el.value);
-            return (!Number.isFinite(n) || n <= 0);
+            return (!Number.isFinite(n) || n <= 0 || !Number.isInteger(n));
           }
           return !el.value;
         });
@@ -631,7 +626,7 @@
           if (!pane) return;
           const required = queryAll("select[required], input[required]", pane);
           if (required.length === 0) return; // skip donate tab
-          const hasMissing = required.some(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+          const hasMissing = required.some(el => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
           tab.classList.toggle("tab-missing", hasMissing);
           tab.classList.toggle("tab-complete", !hasMissing);
         });
@@ -665,7 +660,7 @@
 
         const currentPane = document.querySelector(".tab-pane.active");
         const missingInTab = queryAll("select[required], input[required]", currentPane)
-          .filter((el) => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+          .filter((el) => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
 
         if (missingInTab.length > 0) {
           showMissingModal(missingInTab);
@@ -693,7 +688,7 @@
           const pane = getById(paneId);
           if (!pane) continue;
           const missing = queryAll("select[required], input[required]", pane)
-            .filter(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+            .filter(el => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
           if (missing.length > 0) {
             e.preventDefault();
             showMissingModal(missing);
@@ -713,7 +708,7 @@
           e.target.classList.remove("is-valid", "is-invalid");
           if (e.target.type === "number") {
             const n = parseFloat(v);
-            e.target.classList.add(n > 0 ? "is-valid" : "is-invalid");
+            e.target.classList.add(n > 0 && Number.isInteger(n) ? "is-valid" : "is-invalid");
           } else {
             e.target.classList.add(v ? "is-valid" : "is-invalid");
           }
@@ -737,7 +732,6 @@
         e.preventDefault();
 
         const data = {};
-        data.veranstaltungsname = getById("grunddaten_veranstaltungsname").value || "";
         data.personenzahl = getById("grunddaten_personenzahl").value || "";
 
         queryAll("select").forEach(sel => {
