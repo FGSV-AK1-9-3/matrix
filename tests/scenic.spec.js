@@ -449,7 +449,7 @@ test.describe('Form submission', () => {
    */
   async function captureSubmitUrl(page) {
     return new Promise((resolve) => {
-      page.route('**/limesurvey**', async (route) => {
+      page.route('https://freiburg.limesurvey.net/**', async (route) => {
         resolve(route.request().url());
         await route.abort(); // prevent actually leaving the page
       });
@@ -459,6 +459,7 @@ test.describe('Form submission', () => {
   test('submit redirects to LimeSurvey URL with JSON payload', async ({ page }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
+    await goToTab(page, '#tab-donate');
 
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
@@ -498,6 +499,7 @@ test.describe('Form submission', () => {
     await page.selectOption('#besuchendenverhalten_ort_ablauf',      '0.8');
     await page.selectOption('#besuchendenverhalten_involvement',     '1.0');
     await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
+    await goToTab(page, '#tab-donate');
 
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
@@ -513,6 +515,7 @@ test.describe('Form submission', () => {
   test('submitted payload contains ergebnis (computed result)', async ({ page }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
+    await goToTab(page, '#tab-donate');
 
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
@@ -529,6 +532,7 @@ test.describe('Form submission', () => {
     // Fill name on tab 1 before navigating away
     await page.fill('#grunddaten_veranstaltungsname', 'Karneval 2026');
     await fillAllFields(page);
+    await goToTab(page, '#tab-donate');
 
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
@@ -555,7 +559,9 @@ test.describe('Tooltips', () => {
     await page.goto('/index.html');
     const icons = await page.locator('.help-icon').all();
     for (const icon of icons) {
-      const title = await icon.getAttribute('title');
+      // Bootstrap 5 moves `title` to `data-bs-original-title` after tooltip init
+      const title = await icon.getAttribute('title')
+        ?? await icon.getAttribute('data-bs-original-title');
       expect(title).toBeTruthy();
     }
   });
