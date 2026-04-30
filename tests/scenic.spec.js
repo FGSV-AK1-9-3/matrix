@@ -17,89 +17,130 @@ import { test, expect } from '@playwright/test';
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Fill every required field so the whole form is valid. */
+/**
+ * Fill every required field so the whole form is valid.
+ * Each tab must be active before its fields can be interacted with,
+ * because Playwright refuses to act on elements inside hidden tab panes.
+ */
 async function fillAllFields(page) {
+  // Tab 1 — Grunddaten (active by default)
   await page.fill('#grunddaten_personenzahl', '1000');
+  await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
 
-  const selectors = {
-    '#veranstaltungsgelaende_flaechenverhaeltnis': '1.0',
-    '#veranstaltungsgelaende_verkehrsstaerke':      '1.0',
-    '#veranstaltungsgelaende_stoerungen':           '1.0',
-    '#veranstaltungsgelaende_wegfuehrung':          '1.0',
-    '#veranstaltungsgelaende_einlass_auslass':      '1.0',
-    '#gestalt_grundform':                           '1.0',
-    '#beschaffenheit_entlastungsflaechen':          '1.0',
-    '#beschaffenheit_befestigung':                  '1.0',
-    '#beschaffenheit_wetterlage':                   '1.0',
-    '#veranstaltungsverlauf_einlasskontrolle':      '1.0',
-    '#veranstaltungsverlauf_zuablauf':              '1.0',
-    '#veranstaltungsverlauf_attraktionen':          '1.0',
-    '#wiederkehrende_veranstaltung_erfahrung':      '1.0',
-    '#wiederkehrende_veranstaltung_stoerungen':     '0.0',
-    '#besuchendenverhalten_ort_ablauf':             '1.0',
-    '#besuchendenverhalten_involvement':            '1.0',
-    '#besuchendenverhalten_soziale_gruppen':        '1.0',
-  };
+  // Tab 2 — Veranstaltungsgelände
+  await goToTab(page, '#tab-gelaende');
+  await page.selectOption('#veranstaltungsgelaende_flaechenverhaeltnis', '1.0');
+  await page.selectOption('#veranstaltungsgelaende_verkehrsstaerke',     '1.0');
+  await page.selectOption('#veranstaltungsgelaende_stoerungen',          '1.0');
+  await page.selectOption('#veranstaltungsgelaende_wegfuehrung',         '1.0');
+  await page.selectOption('#veranstaltungsgelaende_einlass_auslass',     '1.0');
 
-  for (const [selector, value] of Object.entries(selectors)) {
-    await page.selectOption(selector, value);
-  }
+  // Tab 3 — Gestalt
+  await goToTab(page, '#tab-gestalt');
+  await page.selectOption('#gestalt_grundform', '1.0');
+
+  // Tab 4 — Beschaffenheit
+  await goToTab(page, '#tab-beschaffenheit');
+  await page.selectOption('#beschaffenheit_entlastungsflaechen', '1.0');
+  await page.selectOption('#beschaffenheit_befestigung',         '1.0');
+  await page.selectOption('#beschaffenheit_wetterlage',          '1.0');
+
+  // Tab 5 — Veranstaltungsverlauf
+  await goToTab(page, '#tab-verlauf');
+  await page.selectOption('#veranstaltungsverlauf_einlasskontrolle', '1.0');
+  await page.selectOption('#veranstaltungsverlauf_zuablauf',         '1.0');
+  await page.selectOption('#veranstaltungsverlauf_attraktionen',     '1.0');
+
+  // Tab 6 — Wiederkehr
+  await goToTab(page, '#tab-wiederkehr');
+  await page.selectOption('#wiederkehrende_veranstaltung_erfahrung',  '1.0');
+  await page.selectOption('#wiederkehrende_veranstaltung_stoerungen', '0.0');
+
+  // Tab 7 — Besuchendenverhalten
+  await goToTab(page, '#tab-verhalten');
+  await page.selectOption('#besuchendenverhalten_ort_ablauf',      '0.8');
+  await page.selectOption('#besuchendenverhalten_involvement',     '1.0');
+  await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
 }
 
-/** Navigate to a tab by its data-bs-target value, e.g. '#tab-gelaende'. */
+/**
+ * Navigate to a tab by its data-bs-target value, e.g. '#tab-gelaende'.
+ * Waits for the tab *pane* div (not the button) to become active.
+ * Caller must ensure all preceding tabs are filled, otherwise Bootstrap
+ * will call e.preventDefault() and the pane will never become active.
+ */
 async function goToTab(page, target) {
   await page.click(`[data-bs-target="${target}"]`);
-  await page.waitForSelector(`${target}.active`);
+  // The pane div gets both "active" and "show" classes (order varies by Bootstrap version).
+  await page.waitForSelector(`${target}.show.active`);
 }
 
-/** Fill all required fields that appear before (but not including) the given tab. */
+/**
+ * Fill all required fields up to (but not including) the given tab,
+ * activating each tab pane before interacting with its fields.
+ */
 async function fillTabsUpTo(page, tabTarget) {
-  const tabOrder = [
-    '#tab-grunddaten',
-    '#tab-gelaende',
-    '#tab-gestalt',
-    '#tab-beschaffenheit',
-    '#tab-verlauf',
-    '#tab-wiederkehr',
-    '#tab-verhalten',
-    '#tab-donate',
+  const steps = [
+    {
+      pane: '#tab-grunddaten',
+      fill: async () => {
+        await page.fill('#grunddaten_personenzahl', '500');
+        await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
+      },
+    },
+    {
+      pane: '#tab-gelaende',
+      fill: async () => {
+        await page.selectOption('#veranstaltungsgelaende_flaechenverhaeltnis', '1.0');
+        await page.selectOption('#veranstaltungsgelaende_verkehrsstaerke',     '1.0');
+        await page.selectOption('#veranstaltungsgelaende_stoerungen',          '1.0');
+        await page.selectOption('#veranstaltungsgelaende_wegfuehrung',         '1.0');
+        await page.selectOption('#veranstaltungsgelaende_einlass_auslass',     '1.0');
+      },
+    },
+    {
+      pane: '#tab-gestalt',
+      fill: async () => { await page.selectOption('#gestalt_grundform', '1.0'); },
+    },
+    {
+      pane: '#tab-beschaffenheit',
+      fill: async () => {
+        await page.selectOption('#beschaffenheit_entlastungsflaechen', '1.0');
+        await page.selectOption('#beschaffenheit_befestigung',         '1.0');
+        await page.selectOption('#beschaffenheit_wetterlage',          '1.0');
+      },
+    },
+    {
+      pane: '#tab-verlauf',
+      fill: async () => {
+        await page.selectOption('#veranstaltungsverlauf_einlasskontrolle', '1.0');
+        await page.selectOption('#veranstaltungsverlauf_zuablauf',         '1.0');
+        await page.selectOption('#veranstaltungsverlauf_attraktionen',     '1.0');
+      },
+    },
+    {
+      pane: '#tab-wiederkehr',
+      fill: async () => {
+        await page.selectOption('#wiederkehrende_veranstaltung_erfahrung',  '1.0');
+        await page.selectOption('#wiederkehrende_veranstaltung_stoerungen', '0.0');
+      },
+    },
+    {
+      pane: '#tab-verhalten',
+      fill: async () => {
+        await page.selectOption('#besuchendenverhalten_ort_ablauf',      '0.8');
+        await page.selectOption('#besuchendenverhalten_involvement',     '1.0');
+        await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
+      },
+    },
   ];
-  const stopIdx = tabOrder.indexOf(tabTarget);
 
-  const fieldsByTab = {
-    '#tab-grunddaten':   async () => { await page.fill('#grunddaten_personenzahl', '500'); },
-    '#tab-gelaende':     async () => {
-      await page.selectOption('#veranstaltungsgelaende_flaechenverhaeltnis', '1.0');
-      await page.selectOption('#veranstaltungsgelaende_verkehrsstaerke',      '1.0');
-      await page.selectOption('#veranstaltungsgelaende_stoerungen',           '1.0');
-      await page.selectOption('#veranstaltungsgelaende_wegfuehrung',          '1.0');
-      await page.selectOption('#veranstaltungsgelaende_einlass_auslass',      '1.0');
-    },
-    '#tab-gestalt':      async () => { await page.selectOption('#gestalt_grundform', '1.0'); },
-    '#tab-beschaffenheit': async () => {
-      await page.selectOption('#beschaffenheit_entlastungsflaechen', '1.0');
-      await page.selectOption('#beschaffenheit_befestigung',         '1.0');
-      await page.selectOption('#beschaffenheit_wetterlage',          '1.0');
-    },
-    '#tab-verlauf':      async () => {
-      await page.selectOption('#veranstaltungsverlauf_einlasskontrolle', '1.0');
-      await page.selectOption('#veranstaltungsverlauf_zuablauf',         '1.0');
-      await page.selectOption('#veranstaltungsverlauf_attraktionen',     '1.0');
-    },
-    '#tab-wiederkehr':   async () => {
-      await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '1.0');
-      await page.selectOption('#wiederkehrende_veranstaltung_stoerungen','0.0');
-    },
-    '#tab-verhalten':    async () => {
-      await page.selectOption('#besuchendenverhalten_ort_ablauf',      '1.0');
-      await page.selectOption('#besuchendenverhalten_involvement',     '1.0');
-      await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
-    },
-  };
-
-  for (let i = 0; i < stopIdx; i++) {
-    const tab = tabOrder[i];
-    if (fieldsByTab[tab]) await fieldsByTab[tab]();
+  for (const step of steps) {
+    if (step.pane === tabTarget) break;
+    // Activate the pane (first tab is already active on load)
+    const isActive = await page.locator(`${step.pane}.show.active`).isVisible().catch(() => false);
+    if (!isActive) await goToTab(page, step.pane);
+    await step.fill();
   }
 }
 
@@ -115,7 +156,7 @@ test.describe('Page load', () => {
 
   test('Grunddaten tab is active by default', async ({ page }) => {
     await page.goto('/index.html');
-    await expect(page.locator('#tab-grunddaten')).toHaveClass(/show active/);
+    await expect(page.locator('#tab-grunddaten')).toHaveClass(/\bshow\b/);
   });
 
   test('progress bar starts at 0%', async ({ page }) => {
@@ -176,6 +217,9 @@ test.describe('Grunddaten — Personenzahl', () => {
 test.describe('Select field validation feedback', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/index.html');
+    // Grunddaten must be filled before Bootstrap allows forward navigation
+    await page.fill('#grunddaten_personenzahl', '500');
+    await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
     await goToTab(page, '#tab-gelaende');
   });
 
@@ -245,7 +289,7 @@ test.describe('Nächster Schritt button', () => {
     await page.fill('#grunddaten_personenzahl', '500');
     await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
     await page.click('#nextStepBtn');
-    await expect(page.locator('#tab-gelaende')).toHaveClass(/show active/);
+    await expect(page.locator('#tab-gelaende')).toHaveClass(/\bshow\b/);
   });
 
   test('missing fields are listed in the validation modal', async ({ page }) => {
@@ -280,18 +324,20 @@ test.describe('Tab navigation guard', () => {
     await page.fill('#grunddaten_personenzahl', '300');
     await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
     await page.click('#nextStepBtn');
-    await expect(page.locator('#tab-gelaende')).toHaveClass(/show active/);
+    await expect(page.locator('#tab-gelaende')).toHaveClass(/\bshow\b/);
 
     // Navigate back to Grunddaten — should not show modal
     await page.click('[data-bs-target="#tab-grunddaten"]');
     await expect(page.locator('#validationModal')).toBeHidden();
-    await expect(page.locator('#tab-grunddaten')).toHaveClass(/show active/);
+    await expect(page.locator('#tab-grunddaten')).toHaveClass(/\bshow\b/);
   });
 
   test('can navigate to tab 3 after filling tabs 1 and 2', async ({ page }) => {
     await fillTabsUpTo(page, '#tab-gestalt');
+    // fillTabsUpTo fills field values but doesn't click through tabs,
+    // so we navigate directly — Bootstrap checks field values, not active tab history.
     await page.click('[data-bs-target="#tab-gestalt"]');
-    await expect(page.locator('#tab-gestalt')).toHaveClass(/show active/);
+    await expect(page.locator('#tab-gestalt')).toHaveClass(/\bshow\b/);
   });
 });
 
@@ -395,37 +441,69 @@ test.describe('Validation modal', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test.describe('Form submission', () => {
+  /**
+   * The form submits via window.location.href = url (a full page navigation),
+   * not a fetch/XHR. waitForRequest() only catches sub-resource requests, so
+   * we intercept the navigation itself with page.route() and abort it after
+   * capturing the destination URL.
+   */
+  async function captureSubmitUrl(page) {
+    return new Promise((resolve) => {
+      page.route('**/limesurvey**', async (route) => {
+        resolve(route.request().url());
+        await route.abort(); // prevent actually leaving the page
+      });
+    });
+  }
+
   test('submit redirects to LimeSurvey URL with JSON payload', async ({ page }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
 
-    // Navigate to the donate tab
-    await fillTabsUpTo(page, '#tab-donate');
-    await goToTab(page, '#tab-donate');
+    const urlPromise = captureSubmitUrl(page);
+    await page.click('#submitBtn');
+    const url = await urlPromise;
 
-    // Intercept navigation instead of following it
-    const [request] = await Promise.all([
-      page.waitForRequest(req => req.url().includes('limesurvey')),
-      page.click('#submitBtn'),
-    ]);
-
-    expect(request.url()).toContain('freiburg.limesurvey.net');
-    expect(request.url()).toContain('577923');
-    expect(request.url()).toContain('G01Q01=');
+    expect(url).toContain('freiburg.limesurvey.net');
+    expect(url).toContain('577923');
+    expect(url).toContain('G01Q01=');
   });
 
   test('submitted URL contains encoded JSON with personenzahl', async ({ page }) => {
     await page.goto('/index.html');
-    await fillAllFields(page);
+    // Fill tab 1 with the specific value we want to assert on
     await page.fill('#grunddaten_personenzahl', '2500');
-    await goToTab(page, '#tab-donate');
+    await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
+    // Fill remaining tabs (goToTab handles navigation guard)
+    await goToTab(page, '#tab-gelaende');
+    await page.selectOption('#veranstaltungsgelaende_flaechenverhaeltnis', '1.0');
+    await page.selectOption('#veranstaltungsgelaende_verkehrsstaerke',     '1.0');
+    await page.selectOption('#veranstaltungsgelaende_stoerungen',          '1.0');
+    await page.selectOption('#veranstaltungsgelaende_wegfuehrung',         '1.0');
+    await page.selectOption('#veranstaltungsgelaende_einlass_auslass',     '1.0');
+    await goToTab(page, '#tab-gestalt');
+    await page.selectOption('#gestalt_grundform', '1.0');
+    await goToTab(page, '#tab-beschaffenheit');
+    await page.selectOption('#beschaffenheit_entlastungsflaechen', '1.0');
+    await page.selectOption('#beschaffenheit_befestigung',         '1.0');
+    await page.selectOption('#beschaffenheit_wetterlage',          '1.0');
+    await goToTab(page, '#tab-verlauf');
+    await page.selectOption('#veranstaltungsverlauf_einlasskontrolle', '1.0');
+    await page.selectOption('#veranstaltungsverlauf_zuablauf',         '1.0');
+    await page.selectOption('#veranstaltungsverlauf_attraktionen',     '1.0');
+    await goToTab(page, '#tab-wiederkehr');
+    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung',  '1.0');
+    await page.selectOption('#wiederkehrende_veranstaltung_stoerungen', '0.0');
+    await goToTab(page, '#tab-verhalten');
+    await page.selectOption('#besuchendenverhalten_ort_ablauf',      '0.8');
+    await page.selectOption('#besuchendenverhalten_involvement',     '1.0');
+    await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
 
-    const [request] = await Promise.all([
-      page.waitForRequest(req => req.url().includes('limesurvey')),
-      page.click('#submitBtn'),
-    ]);
+    const urlPromise = captureSubmitUrl(page);
+    await page.click('#submitBtn');
+    const rawUrl = await urlPromise;
 
-    const url = decodeURIComponent(request.url());
+    const url = decodeURIComponent(rawUrl);
     const jsonMatch = url.match(/G01Q01=(.+)/);
     expect(jsonMatch).toBeTruthy();
     const payload = JSON.parse(jsonMatch[1]);
@@ -435,14 +513,12 @@ test.describe('Form submission', () => {
   test('submitted payload contains ergebnis (computed result)', async ({ page }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
-    await goToTab(page, '#tab-donate');
 
-    const [request] = await Promise.all([
-      page.waitForRequest(req => req.url().includes('limesurvey')),
-      page.click('#submitBtn'),
-    ]);
+    const urlPromise = captureSubmitUrl(page);
+    await page.click('#submitBtn');
+    const rawUrl = await urlPromise;
 
-    const url = decodeURIComponent(request.url());
+    const url = decodeURIComponent(rawUrl);
     const payload = JSON.parse(url.match(/G01Q01=(.+)/)[1]);
     expect(payload).toHaveProperty('ergebnis');
     expect(parseFloat(payload.ergebnis)).toBeGreaterThan(0);
@@ -450,16 +526,15 @@ test.describe('Form submission', () => {
 
   test('submitted payload includes Veranstaltungsname when provided', async ({ page }) => {
     await page.goto('/index.html');
-    await fillAllFields(page);
+    // Fill name on tab 1 before navigating away
     await page.fill('#grunddaten_veranstaltungsname', 'Karneval 2026');
-    await goToTab(page, '#tab-donate');
+    await fillAllFields(page);
 
-    const [request] = await Promise.all([
-      page.waitForRequest(req => req.url().includes('limesurvey')),
-      page.click('#submitBtn'),
-    ]);
+    const urlPromise = captureSubmitUrl(page);
+    await page.click('#submitBtn');
+    const rawUrl = await urlPromise;
 
-    const url = decodeURIComponent(request.url());
+    const url = decodeURIComponent(rawUrl);
     const payload = JSON.parse(url.match(/G01Q01=(.+)/)[1]);
     expect(payload.veranstaltungsname).toBe('Karneval 2026');
   });
