@@ -609,37 +609,37 @@ test.describe('Form submission', () => {
 
     const summary = parseSummary(rawUrl);
     expect(summary).toBeTruthy();
-    expect(summary).toContain('n=2500');
+    expect(summary).toContain('"personenzahl":2500');
   });
 
-  test('submitted summary contains all 17 question codes', async ({ page }) => {
+  test('submitted summary contains all 17 question fields', async ({
+    page,
+  }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
     await goToTab(page, '#tab-donate');
-
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
     const rawUrl = await urlPromise;
+    const summary = JSON.parse(`{${parseSummary(rawUrl)}}`);
 
-    const summary = parseSummary(rawUrl);
-    for (let i = 1; i <= 17; i++) {
-      expect(summary).toMatch(new RegExp(`\\b${i}[a-z]`));
-    }
+    expect(Object.keys(summary).length).toBeGreaterThanOrEqual(17);
   });
 
-  test('submitted summary contains computed result (E=)', async ({ page }) => {
+  test('submitted summary contains computed result (ergebnis)', async ({
+    page,
+  }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
     await goToTab(page, '#tab-donate');
-
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
     const rawUrl = await urlPromise;
+    const summary = JSON.parse(`{${parseSummary(rawUrl)}}`);
 
-    const summary = parseSummary(rawUrl);
-    const match = summary.match(/E=([\d.]+)/);
-    expect(match).toBeTruthy();
-    expect(parseFloat(match[1])).toBeGreaterThan(0);
+    expect(summary).toHaveProperty('ergebnis');
+    expect(typeof summary.ergebnis).toBe('number');
+    expect(summary.ergebnis).toBeGreaterThan(0);
   });
 });
 
