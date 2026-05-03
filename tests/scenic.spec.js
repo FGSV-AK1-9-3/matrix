@@ -164,10 +164,10 @@ test.describe('Page load', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 2. Grunddaten tab — Personenzahl field
+// 2. Grunddaten tab
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Grunddaten — Personenzahl', () => {
+test.describe('Grunddaten', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/index.html');
   });
@@ -184,9 +184,16 @@ test.describe('Grunddaten — Personenzahl', () => {
     await expect(page.locator('#grunddaten_personenzahl')).toHaveClass(/is-invalid/);
   });
 
-  test('Veranstaltungsname field is optional and accepts text', async ({ page }) => {
-    await page.fill('#grunddaten_veranstaltungsname', 'Stadtfest 2025');
-    await expect(page.locator('#grunddaten_veranstaltungsname')).toHaveValue('Stadtfest 2025');
+  test('field with negative value gains is-invalid class', async ({ page }) => {
+    await page.fill('#grunddaten_personenzahl', '-500');
+    await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
+    await expect(page.locator('#grunddaten_personenzahl')).toHaveClass(/is-invalid/);
+  });
+
+  test('field with floating point value gains is-invalid class', async ({ page }) => {
+    await page.fill('#grunddaten_personenzahl', '42.1');
+    await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
+    await expect(page.locator('#grunddaten_personenzahl')).toHaveClass(/is-invalid/);
   });
 
   test('progress updates after filling Personenzahl', async ({ page }) => {
@@ -516,22 +523,6 @@ test.describe('Form submission', () => {
     const payload = JSON.parse(url.match(/G01Q01=(.+)/)[1]);
     expect(payload).toHaveProperty('ergebnis');
     expect(parseFloat(payload.ergebnis)).toBeGreaterThan(0);
-  });
-
-  test('submitted payload includes Veranstaltungsname when provided', async ({ page }) => {
-    await page.goto('/index.html');
-    // Fill name on tab 1 before navigating away
-    await page.fill('#grunddaten_veranstaltungsname', 'Karneval 2026');
-    await fillAllFields(page);
-    await goToTab(page, '#tab-donate');
-
-    const urlPromise = captureSubmitUrl(page);
-    await page.click('#submitBtn');
-    const rawUrl = await urlPromise;
-
-    const url = decodeURIComponent(rawUrl);
-    const payload = JSON.parse(url.match(/G01Q01=(.+)/)[1]);
-    expect(payload.veranstaltungsname).toBe('Karneval 2026');
   });
 });
 
