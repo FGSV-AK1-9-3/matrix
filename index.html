@@ -1,760 +1,1121 @@
 <!doctype html>
 <html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      SCENIC - Simulation Check for Events and Infrastructure Complexity
+    </title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SCENIC - Simulation Check for Events and Infrastructure Complexity</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
 
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="custom.css" rel="stylesheet" />
+  </head>
 
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="custom.css" rel="stylesheet" />
-</head>
+  <body>
+    <script src="navbar.js"></script>
 
-<body>
-<script src="navbar.js"></script>
+    <div class="container py-5">
+      <h1 class="app-title mb-2">
+        <i class="bi bi-grid-3x3-gap-fill me-2 text-primary"></i>SCENIC
+      </h1>
+      <h2>Simulation Check for Events and Infrastructure Complexity</h2>
+      <p class="text-muted mb-4">
+        Bitte nacheinander alle Felder ausfüllen. Das Ergebnis wird am Ende
+        angezeigt.
+      </p>
 
-  <div class="container py-5">
-    <h1 class="app-title mb-2"><i class="bi bi-grid-3x3-gap-fill me-2 text-primary"></i>SCENIC </h1>
-    <h2>Simulation Check for Events and Infrastructure Complexity</h2>
-    <p class="text-muted mb-4">Bitte nacheinander alle Felder ausfüllen. Das Ergebnis wird am Ende angezeigt.</p>
-
-    <!-- Fortschritt -->
-    <div class="mb-3">
-      <div class="d-flex justify-content-between small mb-1">
-        <span class="text-muted">Fortschritt</span>
-        <span class="text-muted" id="progress_text">0%</span>
+      <!-- Fortschritt -->
+      <div class="mb-3">
+        <div class="d-flex justify-content-between small mb-1">
+          <span class="text-muted">Fortschritt</span>
+          <span class="text-muted" id="progress_text">0%</span>
+        </div>
+        <div class="progress">
+          <div
+            class="progress-bar bg-primary"
+            role="progressbar"
+            id="progress_bar"
+            style="width: 0%"
+          ></div>
+        </div>
       </div>
-      <div class="progress">
-        <div class="progress-bar bg-primary" role="progressbar" id="progress_bar" style="width:0%"></div>
+
+      <!-- Tabs mit Icons -->
+      <ul class="nav nav-tabs mt-4" id="mainTabs" role="tablist">
+        <li class="nav-item">
+          <button
+            class="nav-link active"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-grunddaten"
+            type="button"
+          >
+            <i class="bi bi-clipboard2 me-1"></i>Grunddaten
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-gelaende"
+            type="button"
+          >
+            <i class="bi bi-geo me-1"></i>Veranstaltungsgelände
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-gestalt"
+            type="button"
+          >
+            <i class="bi bi-diagram-3 me-1"></i>Gestalt
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-beschaffenheit"
+            type="button"
+          >
+            <i class="bi bi-building-gear me-1"></i>Beschaffenheit
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-verlauf"
+            type="button"
+          >
+            <i class="bi bi-clock-history me-1"></i>Veranstaltungsverlauf
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-wiederkehr"
+            type="button"
+          >
+            <i class="bi bi-arrow-repeat me-1"></i>Wiederkehr
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-verhalten"
+            type="button"
+          >
+            <i class="bi bi-people me-1"></i>Besuchendenverhalten
+          </button>
+        </li>
+        <li class="nav-item ms-auto">
+          <button
+            class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-donate"
+            type="button"
+          >
+            <i class="bi bi-send me-1"></i>Daten spenden
+          </button>
+        </li>
+      </ul>
+
+      <form class="mt-4" id="matrixForm">
+        <div class="tab-content">
+          <!-- GRUNDDATEN -->
+          <div class="tab-pane fade show active" id="tab-grunddaten">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="grunddaten_personenzahl"
+                  >
+                    Personenzahl
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Erwartete Anzahl der gleichzeitig maximal anwesenden Personen auf dem Veranstaltungsgelände."
+                      >?</span
+                    >
+                  </label>
+                  <input
+                    id="grunddaten_personenzahl"
+                    name="grunddaten_personenzahl"
+                    class="form-control"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value="0"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VERANSTALTUNGSGELÄNDE -->
+          <div class="tab-pane fade" id="tab-gelaende">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsgelaende_flaechenverhaeltnis"
+                    >Flächenverhältnis
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Verhältnis der für Besuchende zugänglichen Fläche auf dem Veranstaltungsgelände zur erwarteten Besucherzahl."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsgelaende_flaechenverhaeltnis"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Die für Besuchenden zugängliche Fläche entspricht der
+                      erwarteten Besucherzahl bei einer Belegungsdichte von 2
+                      Personen pro Quadratmeter; geordneter Personenfluss.
+                    </option>
+                    <option value="0.9">
+                      Die zugängliche Fläche ist um mehr als 20 % größer als die
+                      bei 2 Pers./m² erforderliche Fläche; mehr
+                      Bewegungsfreiheit, weniger Verdichtung.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsgelaende_verkehrsstaerke"
+                    >Personenverkehrsstärke (qs)
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Verkehrsstärke: Anzahl der Verkehrselemente eines Verkehrsstromes je Zeiteinheit an einem Querschnitt einer Strecke oder an einem Knotenpunkt."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsgelaende_verkehrsstaerke"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="0.9">
+                      Die erwartete spezifische Personenverkehrsstärke (qs)
+                      beträgt ≤ 0,7 Pers./ms (z. B. auf An-/Abreisewegen oder
+                      Teilflächen). Überwiegend störungsfrei.
+                    </option>
+                    <option value="1.0">
+                      Die erwartete spezifische Personenverkehrsstärke (qs)
+                      beträgt ≤ 1,3 Pers./ms. Normale bis leicht erhöhte
+                      Auslastung.
+                    </option>
+                    <option value="1.1">
+                      Die erwartete spezifische Personenverkehrsstärke (qs)
+                      überschreitet 1,3 Pers./ms. Temporäre Verdichtungen
+                      möglich.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsgelaende_stoerungen"
+                    >Störungen auf Flucht‑ und Rettungswegen
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Störungen durch z. B. gegenläufige Ströme, parallele Nutzungen oder Änderungen im Veranstaltungsverlauf, die Flucht- und Rettungswege beeinträchtigen können."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsgelaende_stoerungen"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.2">
+                      Störungen (z. B. gegenläufige Ströme, parallele Nutzungen
+                      oder Änderungen im Veranstaltungsverlauf) sind
+                      wahrscheinlich.
+                    </option>
+                    <option value="1.0">
+                      Störungen auf den Flucht‑ und Rettungswegen sind
+                      unwahrscheinlich; die Wegeführung dürfte ohne wesentliche
+                      Einschränkungen funktionieren.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsgelaende_wegfuehrung"
+                    >Wegführung
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Topographische Gegebenheiten: Verteilung, Beschaffenheit und Zugänglichkeit von Teilflächen und Örtlichkeiten auf dem Veranstaltungsgelände, die eine übersichtliche oder unübersichtliche Orientierung bedingen."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsgelaende_wegfuehrung"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.2">
+                      Bauliche Anlagen und/oder topografische Gegebenheiten
+                      bedingen eine unübersichtliche Wegführung; Orientierung
+                      erschwert.
+                    </option>
+                    <option value="1.0">
+                      Bauliche Anlagen und/oder topografische Gegebenheiten
+                      erlauben eine übersichtliche Wegführung; gute
+                      Orientierung.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsgelaende_einlass_auslass"
+                    >Einlass / Auslass
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Einlass: Vorgang zur Gewährung einer geordneten Anreise von den Publikumsflächen. Auslass: Vorgang zur Gewährung einer geordneten Abreise von den Publikumsflächen."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsgelaende_einlass_auslass"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Ein‑ und Auslass sind räumlich getrennt; klare
+                      Strömungsrichtungen unterstützen einen geordneten Ablauf.
+                    </option>
+                    <option value="1.1">
+                      Ein‑ und Auslass sind räumlich nicht getrennt;
+                      Begegnungsströme können den Ablauf verlangsamen.
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GESTALT -->
+          <div class="tab-pane fade" id="tab-gestalt">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label class="form-label required" for="gestalt_grundform"
+                    >Grundform der Veranstaltungsfläche
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Gestalt: Räumliche Anordnung von Szenen- und Publikumsfläche auf dem Veranstaltungsgelände."
+                      >?</span
+                    >
+                  </label>
+                  <select id="gestalt_grundform" class="form-select" required>
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Muster: Szenen‑/Attraktionsfläche und Publikumsfläche sind
+                      getrennt; das unterstützt eine geordnete Besucherführung.
+                    </option>
+                    <option value="1.1">
+                      Vieleck: mehrere Szenen/Attraktionen mit wechselnden
+                      Besucherströmen; komplexere Bewegungsmuster möglich.
+                    </option>
+                    <option value="1.2">
+                      Aufzug: veränderliche Szenenfläche/Attraktion bei
+                      überwiegend statischer Publikumsfläche; Treffpunkte können
+                      sich im Verlauf verlagern.
+                    </option>
+                    <option value="1.3">
+                      Marktplatz: keine Trennung von Szenen‑/Attraktionsfläche
+                      und Publikumsfläche; offene, frei gestaltete
+                      Bewegungsflächen.
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BESCHAFFENHEIT -->
+          <div class="tab-pane fade" id="tab-beschaffenheit">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="beschaffenheit_entlastungsflaechen"
+                  >
+                    Möglichkeit zur Einrichtung von Entlastungsflächen
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Entlastungsflächen: Bereiche des Veranstaltungsgeländes und des angrenzenden Verkehrsraums, die zusätzlichen Platz für die Verteilung von Besuchenden bieten."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="beschaffenheit_entlastungsflaechen"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Es bestehen Möglichkeiten zur Einrichtung von
+                      Entlastungsflächen; dadurch können Besuchendenströme im
+                      Bedarfsfall gezielt entzerrt werden.
+                    </option>
+                    <option value="1.1">
+                      Es bestehen keine realistischen Möglichkeiten für
+                      Entlastungsflächen; Ausweichräume sind begrenzt.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="beschaffenheit_befestigung"
+                  >
+                    Befestigter Grund mit befahrbaren Wegen
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Beschaffenheit: Eigenschaften des Veranstaltungsgeländes, die für die Nutzbarkeit der Veranstaltung über den Veranstaltungsverlauf relevant sind (Untergrund, Zugänglichkeit, Befahrbarkeit)."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="beschaffenheit_befestigung"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Der Untergrund ist befestigt und befahrbar; Logistik und
+                      Einsatzfahrzeuge können sich zuverlässig bewegen.
+                    </option>
+                    <option value="1.1">
+                      Der Untergrund ist nicht befestigt; Mobilität und
+                      Zugänglichkeit können eingeschränkt sein (insbesondere bei
+                      Nässe).
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="beschaffenheit_wetterlage"
+                  >
+                    Wetterlage
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Beschaffenheit: Einfluss von Regen, Wind, Bodenbeschaffenheit u. Ä. auf die Nutzbarkeit des Veranstaltungsgeländes."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="beschaffenheit_wetterlage"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.3">
+                      Die Wetterlage kann die Nutzbarkeit des Geländes stark
+                      beeinflussen (z. B. durch Regen, Wind oder aufgeweichten
+                      Boden).
+                    </option>
+                    <option value="1.0">
+                      Die Wetterlage beeinflusst die Nutzbarkeit des Geländes
+                      nicht in relevantem Maß.
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VERANSTALTUNGSVERLAUF -->
+          <div class="tab-pane fade" id="tab-verlauf">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsverlauf_einlasskontrolle"
+                    >Einlasskontrolle
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Einlasskontrollstelle: Örtlichkeit der Kontrolle anreisender Personen auf Einlassberechtigung oder mitgebrachte Gegenstände."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsverlauf_einlasskontrolle"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.3">
+                      Es erfolgt keine Einlasskontrolle; der Zugang ist frei und
+                      unreguliert (schnelleres Einströmen, jedoch weniger
+                      Steuerung).
+                    </option>
+                    <option value="1.0">
+                      Es erfolgt eine Einlasskontrolle; der Eintritt ist
+                      geordnet, zeitweise können Wartezonen entstehen.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsverlauf_zuablauf"
+                    >Zu‑ und Ablauf bei Ein‑/Auslass
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Einlasszeit: Zeitraum, in dem die Besuchenden Zugang zum Veranstaltungsgelände erhalten. Der Zu- und Ablauf beschreibt den zeitlichen Verlauf von Ein- und Ausreise."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsverlauf_zuablauf"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Der Zu‑ und Ablauf erfolgt kontinuierlich; gleichmäßige
+                      Personenströme sind zu erwarten.
+                    </option>
+                    <option value="1.3">
+                      Der Zu‑ und Ablauf erfolgt in einem oder mehreren Schüben;
+                      zeitweise Verdichtungen sind möglich.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="veranstaltungsverlauf_attraktionen"
+                    >Attraktionen / Bühnen
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Attraktion: Angebot im Veranstaltungsverlauf oder Örtlichkeit auf dem Veranstaltungsgelände, das oder die einen größeren Anteil der Besuchenden anzieht."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="veranstaltungsverlauf_attraktionen"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.2">
+                      Es existieren mehrere Attraktionen bzw. Bühnen; die Ströme
+                      verteilen sich, bleiben aber dynamisch.
+                    </option>
+                    <option value="1.0">
+                      Es existiert nur eine Attraktion bzw. Bühne; der
+                      Personenfluss konzentriert sich stärker auf einen Bereich.
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WIEDERKEHR -->
+          <div class="tab-pane fade" id="tab-wiederkehr">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="wiederkehrende_veranstaltung_erfahrung"
+                    >Erfahrung des Veranstaltenden
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Erfahrung (der Veranstalter): Aus Wahrnehmen und Lernen erworbene Befähigung des Veranstaltenden und der eingesetzten Beschäftigten zur Planung und Umsetzung der Veranstaltung."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="wiederkehrende_veranstaltung_erfahrung"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.0">
+                      Die Veranstaltung ist wiederkehrend; Veranstaltende,
+                      Veranstaltungsort und Veranstaltungsablauf sind
+                      gleichbleibend (Prozesse sind erprobt).
+                    </option>
+                    <option value="5.0">
+                      Die Veranstaltung findet mit dem aktuellen Ablauf
+                      erstmalig an diesem Ort statt; Veranstaltende verfügen
+                      über Erfahrung mit vergleichbaren Veranstaltungen.
+                    </option>
+                    <option value="10.0">
+                      Die Veranstaltung findet erstmalig an diesem Ort statt;
+                      Veranstaltende verfügen bislang nicht über vergleichbare
+                      Erfahrung.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="wiederkehrende_veranstaltung_stoerungen"
+                    >Historische Störungen
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Wiederkehrende Veranstaltung: Mit vergleichbarem Veranstaltungsverlauf bereits durchgeführte Veranstaltung. Historische Störungen beziehen sich auf dokumentierte Vorfälle früherer Veranstaltungen."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="wiederkehrende_veranstaltung_stoerungen"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="0.0">
+                      Bei früheren Veranstaltungen kam es zu keinen
+                      dokumentierten Störungen. Anzahl und Umfang der Einsätze
+                      entsprachen den gängigen Einsatzzahlen.
+                    </option>
+                    <option value="5.0">
+                      Bei früheren Veranstaltungen kam es zu dokumentierten
+                      Störungen. Anzahl und Umfang der Einsätze entsprachen
+                      nicht den gängigen Einsatzzahlen.
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BESUCHENDENVERHALTEN -->
+          <div class="tab-pane fade" id="tab-verhalten">
+            <div class="card step-card">
+              <div class="row form-grid">
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="besuchendenverhalten_ort_ablauf"
+                    >Ortskenntnis & Ablaufkenntnis
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Ortskunde: Kenntnis der Besuchenden zum Veranstaltungsgelände sowie zur räumlichen Verteilung der Bewegungsflächen und Angebote."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="besuchendenverhalten_ort_ablauf"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="0.8">
+                      Die Mehrheit der erwarteten Besuchenden ist ortskundig;
+                      der Veranstaltungsablauf ist den Besuchenden bekannt.
+                    </option>
+                    <option value="1.2">
+                      Die Mehrheit der erwarteten Besuchenden ist ortsunkundig.
+                    </option>
+                    <option value="1.3">
+                      Die Mehrheit der erwarteten Besuchenden ist ortskundig;
+                      der Veranstaltungsablauf ist den Besuchenden unbekannt.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="besuchendenverhalten_involvement"
+                    >Involvement (Bindung/Engagement)
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Involvement: Grad der Bereitschaft, Inhalte und Ideen einer Veranstaltung als die eigenen und das Miteinander auf einer Veranstaltung als erstrebenswerte Gemeinschaft zu betrachten."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="besuchendenverhalten_involvement"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.2">
+                      Ein größerer Anteil der erwarteten Besuchenden hat ein
+                      hohes Involvement (aktivere Teilnahme/Bewegung möglich).
+                    </option>
+                    <option value="1.0">
+                      Nur ein kleiner Anteil der erwarteten Besuchenden hat ein
+                      hohes Involvement; das Gesamtverhalten bleibt eher ruhig.
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    class="form-label required"
+                    for="besuchendenverhalten_soziale_gruppen"
+                    >Besondere soziale Gruppen
+                    <span
+                      class="help-icon"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="Besuchendenverhalten: Prognosen zu Merkmalen und Verhaltensweisen der Besuchenden, insbesondere bei besonderen sozialen Gruppen (z. B. Jugendgruppen, Senior:innen, Familien), die die durchschnittliche Bewegungsgeschwindigkeit verändern können."
+                      >?</span
+                    >
+                  </label>
+                  <select
+                    id="besuchendenverhalten_soziale_gruppen"
+                    class="form-select"
+                    required
+                  >
+                    <option value="">Bitte wählen…</option>
+                    <option value="1.2">
+                      Besondere soziale Gruppen sind zu erwarten, die die
+                      durchschnittliche Bewegungsgeschwindigkeit verändern
+                      (z. B. Jugendgruppen, Senior:innen, Familien).
+                    </option>
+                    <option value="1.0">
+                      Es sind keine besonderen sozialen Gruppen zu erwarten; die
+                      durchschnittliche Bewegungsgeschwindigkeit bleibt
+                      voraussichtlich normal.
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DATEN SPENDEN -->
+          <div class="tab-pane fade" id="tab-donate">
+            <div class="result-hero">
+              <div class="result-box">
+                <i
+                  class="bi bi-database-add text-primary"
+                  style="font-size: 3rem"
+                ></i>
+                <h3 class="mt-3 mb-2" style="font-weight: 800">
+                  Daten spenden
+                </h3>
+                <p class="result-sub mb-4">
+                  Alle Pflichtfelder sind ausgefüllt. Mit einem Klick auf
+                  „Absenden" übermitteln Sie Ihre anonymisierten Angaben zur
+                  wissenschaftlichen Auswertung.
+                </p>
+                <button
+                  class="btn btn-primary btn-lg w-100"
+                  type="submit"
+                  id="submitBtn"
+                >
+                  <i class="bi bi-check2-circle me-2"></i>Absenden
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons unter dem Formular -->
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-outline-secondary btn-sm" type="reset">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>Zurücksetzen
+          </button>
+
+          <button
+            class="btn btn-secondary ms-auto"
+            type="button"
+            id="nextStepBtn"
+          >
+            <i class="bi bi-arrow-right-circle me-1"></i>Nächster Schritt
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal Fehlende Angaben -->
+    <div
+      class="modal fade"
+      id="validationModal"
+      tabindex="-1"
+      aria-labelledby="validationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="validationModalLabel">
+              Es fehlen Angaben
+            </h5>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Schließen"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Bitte treffen Sie zunächst in allen Pflichtfeldern eine Auswahl:
+            <ul class="missing-list mt-3" id="missingList"></ul>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Tabs mit Icons -->
-    <ul class="nav nav-tabs mt-4" id="mainTabs" role="tablist">
-      <li class="nav-item">
-        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-grunddaten" type="button">
-          <i class="bi bi-clipboard2 me-1"></i>Grunddaten
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-gelaende" type="button">
-          <i class="bi bi-geo me-1"></i>Veranstaltungsgelände
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-gestalt" type="button">
-          <i class="bi bi-diagram-3 me-1"></i>Gestalt
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-beschaffenheit" type="button">
-          <i class="bi bi-building-gear me-1"></i>Beschaffenheit
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-verlauf" type="button">
-          <i class="bi bi-clock-history me-1"></i>Veranstaltungsverlauf
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-wiederkehr" type="button">
-          <i class="bi bi-arrow-repeat me-1"></i>Wiederkehr
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-verhalten" type="button">
-          <i class="bi bi-people me-1"></i>Besuchendenverhalten
-        </button>
-      </li>
-      <li class="nav-item ms-auto">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-donate" type="button">
-          <i class="bi bi-send me-1"></i>Daten spenden
-        </button>
-      </li>
-    </ul>
+    <!-- Bootstrap 5 JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
 
-    <form class="mt-4" id="matrixForm">
-      <div class="tab-content">
+    <!-- Script -->
+    <script>
+      (() => {
+        // ── DOM refs ──────────────────────────────────────────────────────────────
+        const form = document.getElementById('matrixForm');
+        const nextStepBtn = document.getElementById('nextStepBtn');
 
-        <!-- GRUNDDATEN -->
-        <div class="tab-pane fade show active" id="tab-grunddaten">
-          <div class="card step-card">
-            <div class="row form-grid">
-              <div class="col-md-6">
-                <label class="form-label required" for="grunddaten_personenzahl">
-                  Personenzahl
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Erwartete Anzahl der gleichzeitig maximal anwesenden Personen auf dem Veranstaltungsgelände.">?</span>
-                </label>
-                <input id="grunddaten_personenzahl" name="grunddaten_personenzahl" class="form-control" type="number"
-                  min="0" step="1" value="0" required>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- VERANSTALTUNGSGELÄNDE -->
-        <div class="tab-pane fade" id="tab-gelaende">
-          <div class="card step-card">
-            <div class="row form-grid">
-
-              <div class="col-md-6">
-                <label class="form-label required"
-                  for="veranstaltungsgelaende_flaechenverhaeltnis">Flächenverhältnis
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Verhältnis der für Besuchende zugänglichen Fläche auf dem Veranstaltungsgelände zur erwarteten Besucherzahl.">?</span>
-                </label>
-                <select id="veranstaltungsgelaende_flaechenverhaeltnis" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Die für Besuchenden zugängliche Fläche entspricht der erwarteten Besucherzahl
-                    bei einer Belegungsdichte von 2 Personen pro Quadratmeter; geordneter Personenfluss.
-                  </option>
-                  <option value="0.9">
-                    Die zugängliche Fläche ist um mehr als 20 % größer als die bei 2 Pers./m²
-                    erforderliche Fläche; mehr Bewegungsfreiheit, weniger Verdichtung.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsgelaende_verkehrsstaerke">Personenverkehrsstärke
-                  (qs)
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Verkehrsstärke: Anzahl der Verkehrselemente eines Verkehrsstromes je Zeiteinheit an einem Querschnitt einer Strecke oder an einem Knotenpunkt.">?</span>
-                </label>
-                <select id="veranstaltungsgelaende_verkehrsstaerke" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="0.9">
-                    Die erwartete spezifische Personenverkehrsstärke (qs) beträgt ≤ 0,7 Pers./ms
-                    (z. B. auf An-/Abreisewegen oder Teilflächen). Überwiegend störungsfrei.
-                  </option>
-                  <option value="1.0">
-                    Die erwartete spezifische Personenverkehrsstärke (qs) beträgt ≤ 1,3 Pers./ms.
-                    Normale bis leicht erhöhte Auslastung.
-                  </option>
-                  <option value="1.1">
-                    Die erwartete spezifische Personenverkehrsstärke (qs) überschreitet 1,3 Pers./ms.
-                    Temporäre Verdichtungen möglich.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsgelaende_stoerungen">Störungen auf Flucht‑ und
-                  Rettungswegen
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Störungen durch z. B. gegenläufige Ströme, parallele Nutzungen oder Änderungen im Veranstaltungsverlauf, die Flucht- und Rettungswege beeinträchtigen können.">?</span>
-                </label>
-                <select id="veranstaltungsgelaende_stoerungen" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.2">
-                    Störungen (z. B. gegenläufige Ströme, parallele Nutzungen oder Änderungen
-                    im Veranstaltungsverlauf) sind wahrscheinlich.
-                  </option>
-                  <option value="1.0">
-                    Störungen auf den Flucht‑ und Rettungswegen sind unwahrscheinlich; die
-                    Wegeführung dürfte ohne wesentliche Einschränkungen funktionieren.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsgelaende_wegfuehrung">Wegführung
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Topographische Gegebenheiten: Verteilung, Beschaffenheit und Zugänglichkeit von Teilflächen und Örtlichkeiten auf dem Veranstaltungsgelände, die eine übersichtliche oder unübersichtliche Orientierung bedingen.">?</span>
-                </label>
-                <select id="veranstaltungsgelaende_wegfuehrung" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.2">
-                    Bauliche Anlagen und/oder topografische Gegebenheiten bedingen eine
-                    unübersichtliche Wegführung; Orientierung erschwert.
-                  </option>
-                  <option value="1.0">
-                    Bauliche Anlagen und/oder topografische Gegebenheiten erlauben eine
-                    übersichtliche Wegführung; gute Orientierung.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsgelaende_einlass_auslass">Einlass /
-                  Auslass
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Einlass: Vorgang zur Gewährung einer geordneten Anreise von den Publikumsflächen. Auslass: Vorgang zur Gewährung einer geordneten Abreise von den Publikumsflächen.">?</span>
-                </label>
-                <select id="veranstaltungsgelaende_einlass_auslass" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Ein‑ und Auslass sind räumlich getrennt; klare Strömungsrichtungen
-                    unterstützen einen geordneten Ablauf.
-                  </option>
-                  <option value="1.1">
-                    Ein‑ und Auslass sind räumlich nicht getrennt; Begegnungsströme können
-                    den Ablauf verlangsamen.
-                  </option>
-                </select>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- GESTALT -->
-        <div class="tab-pane fade" id="tab-gestalt">
-          <div class="card step-card">
-            <div class="row form-grid">
-              <div class="col-md-6">
-                <label class="form-label required" for="gestalt_grundform">Grundform der Veranstaltungsfläche
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Gestalt: Räumliche Anordnung von Szenen- und Publikumsfläche auf dem Veranstaltungsgelände.">?</span>
-                </label>
-                <select id="gestalt_grundform" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Muster: Szenen‑/Attraktionsfläche und Publikumsfläche sind getrennt;
-                    das unterstützt eine geordnete Besucherführung.
-                  </option>
-                  <option value="1.1">
-                    Vieleck: mehrere Szenen/Attraktionen mit wechselnden Besucherströmen;
-                    komplexere Bewegungsmuster möglich.
-                  </option>
-                  <option value="1.2">
-                    Aufzug: veränderliche Szenenfläche/Attraktion bei überwiegend statischer
-                    Publikumsfläche; Treffpunkte können sich im Verlauf verlagern.
-                  </option>
-                  <option value="1.3">
-                    Marktplatz: keine Trennung von Szenen‑/Attraktionsfläche und Publikumsfläche;
-                    offene, frei gestaltete Bewegungsflächen.
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BESCHAFFENHEIT -->
-        <div class="tab-pane fade" id="tab-beschaffenheit">
-          <div class="card step-card">
-            <div class="row form-grid">
-
-              <div class="col-md-6">
-                <label class="form-label required" for="beschaffenheit_entlastungsflaechen">
-                  Möglichkeit zur Einrichtung von Entlastungsflächen
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Entlastungsflächen: Bereiche des Veranstaltungsgeländes und des angrenzenden Verkehrsraums, die zusätzlichen Platz für die Verteilung von Besuchenden bieten.">?</span>
-                </label>
-                <select id="beschaffenheit_entlastungsflaechen" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Es bestehen Möglichkeiten zur Einrichtung von Entlastungsflächen; dadurch können
-                    Besuchendenströme im Bedarfsfall gezielt entzerrt werden.
-                  </option>
-                  <option value="1.1">
-                    Es bestehen keine realistischen Möglichkeiten für Entlastungsflächen; Ausweichräume
-                    sind begrenzt.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="beschaffenheit_befestigung">
-                  Befestigter Grund mit befahrbaren Wegen
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Beschaffenheit: Eigenschaften des Veranstaltungsgeländes, die für die Nutzbarkeit der Veranstaltung über den Veranstaltungsverlauf relevant sind (Untergrund, Zugänglichkeit, Befahrbarkeit).">?</span>
-                </label>
-                <select id="beschaffenheit_befestigung" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Der Untergrund ist befestigt und befahrbar; Logistik und Einsatzfahrzeuge
-                    können sich zuverlässig bewegen.
-                  </option>
-                  <option value="1.1">
-                    Der Untergrund ist nicht befestigt; Mobilität und Zugänglichkeit können
-                    eingeschränkt sein (insbesondere bei Nässe).
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="beschaffenheit_wetterlage">
-                  Wetterlage
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Beschaffenheit: Einfluss von Regen, Wind, Bodenbeschaffenheit u. Ä. auf die Nutzbarkeit des Veranstaltungsgeländes.">?</span>
-                </label>
-                <select id="beschaffenheit_wetterlage" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.3">
-                    Die Wetterlage kann die Nutzbarkeit des Geländes stark beeinflussen
-                    (z. B. durch Regen, Wind oder aufgeweichten Boden).
-                  </option>
-                  <option value="1.0">
-                    Die Wetterlage beeinflusst die Nutzbarkeit des Geländes nicht in relevantem Maß.
-                  </option>
-                </select>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- VERANSTALTUNGSVERLAUF -->
-        <div class="tab-pane fade" id="tab-verlauf">
-          <div class="card step-card">
-            <div class="row form-grid">
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsverlauf_einlasskontrolle">Einlasskontrolle
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Einlasskontrollstelle: Örtlichkeit der Kontrolle anreisender Personen auf Einlassberechtigung oder mitgebrachte Gegenstände.">?</span>
-                </label>
-                <select id="veranstaltungsverlauf_einlasskontrolle" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.3">
-                    Es erfolgt keine Einlasskontrolle; der Zugang ist frei und unreguliert
-                    (schnelleres Einströmen, jedoch weniger Steuerung).
-                  </option>
-                  <option value="1.0">
-                    Es erfolgt eine Einlasskontrolle; der Eintritt ist geordnet, zeitweise können
-                    Wartezonen entstehen.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsverlauf_zuablauf">Zu‑ und Ablauf bei
-                  Ein‑/Auslass
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Einlasszeit: Zeitraum, in dem die Besuchenden Zugang zum Veranstaltungsgelände erhalten. Der Zu- und Ablauf beschreibt den zeitlichen Verlauf von Ein- und Ausreise.">?</span>
-                </label>
-                <select id="veranstaltungsverlauf_zuablauf" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Der Zu‑ und Ablauf erfolgt kontinuierlich; gleichmäßige Personenströme sind zu erwarten.
-                  </option>
-                  <option value="1.3">
-                    Der Zu‑ und Ablauf erfolgt in einem oder mehreren Schüben; zeitweise Verdichtungen
-                    sind möglich.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="veranstaltungsverlauf_attraktionen">Attraktionen /
-                  Bühnen
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Attraktion: Angebot im Veranstaltungsverlauf oder Örtlichkeit auf dem Veranstaltungsgelände, das oder die einen größeren Anteil der Besuchenden anzieht.">?</span>
-                </label>
-                <select id="veranstaltungsverlauf_attraktionen" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.2">
-                    Es existieren mehrere Attraktionen bzw. Bühnen; die Ströme verteilen sich,
-                    bleiben aber dynamisch.
-                  </option>
-                  <option value="1.0">
-                    Es existiert nur eine Attraktion bzw. Bühne; der Personenfluss konzentriert sich
-                    stärker auf einen Bereich.
-                  </option>
-                </select>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- WIEDERKEHR -->
-        <div class="tab-pane fade" id="tab-wiederkehr">
-          <div class="card step-card">
-            <div class="row form-grid">
-
-              <div class="col-md-6">
-                <label class="form-label required" for="wiederkehrende_veranstaltung_erfahrung">Erfahrung des
-                  Veranstaltenden
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Erfahrung (der Veranstalter): Aus Wahrnehmen und Lernen erworbene Befähigung des Veranstaltenden und der eingesetzten Beschäftigten zur Planung und Umsetzung der Veranstaltung.">?</span>
-                </label>
-                <select id="wiederkehrende_veranstaltung_erfahrung" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.0">
-                    Die Veranstaltung ist wiederkehrend; Veranstaltende, Veranstaltungsort und
-                    Veranstaltungsablauf sind gleichbleibend (Prozesse sind erprobt).
-                  </option>
-                  <option value="5.0">
-                    Die Veranstaltung findet mit dem aktuellen Ablauf erstmalig an diesem Ort statt;
-                    Veranstaltende verfügen über Erfahrung mit vergleichbaren Veranstaltungen.
-                  </option>
-                  <option value="10.0">
-                    Die Veranstaltung findet erstmalig an diesem Ort statt; Veranstaltende verfügen
-                    bislang nicht über vergleichbare Erfahrung.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="wiederkehrende_veranstaltung_stoerungen">Historische
-                  Störungen
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Wiederkehrende Veranstaltung: Mit vergleichbarem Veranstaltungsverlauf bereits durchgeführte Veranstaltung. Historische Störungen beziehen sich auf dokumentierte Vorfälle früherer Veranstaltungen.">?</span>
-                </label>
-                <select id="wiederkehrende_veranstaltung_stoerungen" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="0.0">
-                    Bei früheren Veranstaltungen kam es zu keinen dokumentierten Störungen.
-                    Anzahl und Umfang der Einsätze entsprachen den gängigen Einsatzzahlen.
-                  </option>
-                  <option value="5.0">
-                    Bei früheren Veranstaltungen kam es zu dokumentierten Störungen.
-                    Anzahl und Umfang der Einsätze entsprachen nicht den gängigen Einsatzzahlen.
-                  </option>
-                </select>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- BESUCHENDENVERHALTEN -->
-        <div class="tab-pane fade" id="tab-verhalten">
-          <div class="card step-card">
-            <div class="row form-grid">
-
-              <div class="col-md-6">
-                <label class="form-label required" for="besuchendenverhalten_ort_ablauf">Ortskenntnis &
-                  Ablaufkenntnis
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Ortskunde: Kenntnis der Besuchenden zum Veranstaltungsgelände sowie zur räumlichen Verteilung der Bewegungsflächen und Angebote.">?</span>
-                </label>
-                <select id="besuchendenverhalten_ort_ablauf" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="0.8">
-                    Die Mehrheit der erwarteten Besuchenden ist ortskundig; der Veranstaltungsablauf
-                    ist den Besuchenden bekannt.
-                  </option>
-                  <option value="1.2">
-                    Die Mehrheit der erwarteten Besuchenden ist ortsunkundig.
-                  </option>
-                  <option value="1.3">
-                    Die Mehrheit der erwarteten Besuchenden ist ortskundig; der Veranstaltungsablauf
-                    ist den Besuchenden unbekannt.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="besuchendenverhalten_involvement">Involvement
-                  (Bindung/Engagement)
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Involvement: Grad der Bereitschaft, Inhalte und Ideen einer Veranstaltung als die eigenen und das Miteinander auf einer Veranstaltung als erstrebenswerte Gemeinschaft zu betrachten.">?</span>
-                </label>
-                <select id="besuchendenverhalten_involvement" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.2">
-                    Ein größerer Anteil der erwarteten Besuchenden hat ein hohes Involvement
-                    (aktivere Teilnahme/Bewegung möglich).
-                  </option>
-                  <option value="1.0">
-                    Nur ein kleiner Anteil der erwarteten Besuchenden hat ein hohes Involvement;
-                    das Gesamtverhalten bleibt eher ruhig.
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label required" for="besuchendenverhalten_soziale_gruppen">Besondere soziale
-                  Gruppen
-                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Besuchendenverhalten: Prognosen zu Merkmalen und Verhaltensweisen der Besuchenden, insbesondere bei besonderen sozialen Gruppen (z. B. Jugendgruppen, Senior:innen, Familien), die die durchschnittliche Bewegungsgeschwindigkeit verändern können.">?</span>
-                </label>
-                <select id="besuchendenverhalten_soziale_gruppen" class="form-select" required>
-                  <option value="">Bitte wählen…</option>
-                  <option value="1.2">
-                    Besondere soziale Gruppen sind zu erwarten, die die durchschnittliche
-                    Bewegungsgeschwindigkeit verändern (z. B. Jugendgruppen, Senior:innen, Familien).
-                  </option>
-                  <option value="1.0">
-                    Es sind keine besonderen sozialen Gruppen zu erwarten; die durchschnittliche
-                    Bewegungsgeschwindigkeit bleibt voraussichtlich normal.
-                  </option>
-                </select>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- DATEN SPENDEN -->
-        <div class="tab-pane fade" id="tab-donate">
-          <div class="result-hero">
-            <div class="result-box">
-              <i class="bi bi-database-add text-primary" style="font-size:3rem"></i>
-              <h3 class="mt-3 mb-2" style="font-weight:800">Daten spenden</h3>
-              <p class="result-sub mb-4">
-                Alle Pflichtfelder sind ausgefüllt. Mit einem Klick auf „Absenden" übermitteln Sie
-                Ihre anonymisierten Angaben zur wissenschaftlichen Auswertung.
-              </p>
-              <button class="btn btn-primary btn-lg w-100" type="submit" id="submitBtn">
-                <i class="bi bi-check2-circle me-2"></i>Absenden
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Buttons unter dem Formular -->
-      <div class="d-flex gap-2 mt-3">
-        <button class="btn btn-outline-secondary btn-sm" type="reset">
-          <i class="bi bi-arrow-counterclockwise me-1"></i>Zurücksetzen
-        </button>
-
-        <button class="btn btn-secondary ms-auto" type="button" id="nextStepBtn">
-          <i class="bi bi-arrow-right-circle me-1"></i>Nächster Schritt
-        </button>
-
-      </div>
-
-    </form>
-  </div>
-
-  <!-- Modal Fehlende Angaben -->
-  <div class="modal fade" id="validationModal" tabindex="-1" aria-labelledby="validationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="validationModalLabel">Es fehlen Angaben</h5>
-          <button class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
-        </div>
-        <div class="modal-body">
-          Bitte treffen Sie zunächst in allen Pflichtfeldern eine Auswahl:
-          <ul class="missing-list mt-3" id="missingList"></ul>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap 5 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-
-  <!-- Script -->
-  <script>
-    (() => {
-
-      // ── DOM refs ──────────────────────────────────────────────────────────────
-      const form = document.getElementById("matrixForm");
-      const nextStepBtn = document.getElementById("nextStepBtn");
-
-      // ── Helpers ──────────────────────────────────────────────────────────────
-      function getById(id) {
-        return document.getElementById(id);
-      }
-
-      function queryAll(selector, root = document) {
-        return Array.from(root.querySelectorAll(selector));
-      }
-
-      // ── Factor helpers ────────────────────────────────────────────────────────
-      function getFactor(id) {
-        const val = parseFloat(getById(id)?.value);
-        return Number.isFinite(val) ? val : null;
-      }
-
-      const multiplyFactors = (ids) => ids.reduce((acc, id) => acc * (getFactor(id) ?? 1), 1);
-      const addFactors = (ids) => ids.reduce((acc, id) => acc + (getFactor(id) ?? 0), 0);
-
-      // Person count factor: values <= 0 → 1; otherwise log2
-      function calcPersonFactor() {
-        const n = parseFloat(getById("grunddaten_personenzahl").value);
-        return (!Number.isFinite(n) || n <= 0) ? 1 : Math.log2(n);
-      }
-
-      // ── Field group IDs ───────────────────────────────────────────────────────
-      const IDS_VENUE = [
-        "veranstaltungsgelaende_flaechenverhaeltnis",
-        "veranstaltungsgelaende_verkehrsstaerke",
-        "veranstaltungsgelaende_stoerungen",
-        "veranstaltungsgelaende_wegfuehrung",
-        "veranstaltungsgelaende_einlass_auslass"
-      ];
-      const IDS_SHAPE = ["gestalt_grundform"];
-      const IDS_COND = ["beschaffenheit_entlastungsflaechen", "beschaffenheit_befestigung", "beschaffenheit_wetterlage"];
-      const IDS_FLOW = ["veranstaltungsverlauf_einlasskontrolle", "veranstaltungsverlauf_zuablauf", "veranstaltungsverlauf_attraktionen"];
-      const IDS_RECUR = ["wiederkehrende_veranstaltung_erfahrung", "wiederkehrende_veranstaltung_stoerungen"];
-      const IDS_BEHAVIOR = ["besuchendenverhalten_ort_ablauf", "besuchendenverhalten_involvement", "besuchendenverhalten_soziale_gruppen"];
-
-      // ── Validation ────────────────────────────────────────────────────────────
-      function getMissingFields() {
-        return queryAll("select[required], input[required]").filter((el) => {
-          if (el.type === "number") {
-            const n = parseFloat(el.value);
-            return (!Number.isFinite(n) || n <= 0 || !Number.isInteger(n));
-          }
-          return !el.value;
-        });
-      }
-
-      function allRequiredFilled() {
-        return getMissingFields().length === 0;
-      }
-
-      function showMissingModal(missing) {
-        const list = getById("missingList");
-        list.innerHTML = "";
-        missing.forEach(el => {
-          const lbl = document.querySelector(`label[for="${el.id}"]`)?.innerText || el.id;
-          const entry = document.createElement("li");
-          entry.textContent = lbl.replace("*", "").trim();
-          list.appendChild(entry);
-        });
-        new bootstrap.Modal(getById("validationModal")).show();
-      }
-
-      // ── Progress & tab indicators ─────────────────────────────────────────────
-      function updateTabIndicators() {
-        queryAll('#mainTabs button[data-bs-toggle="tab"]').forEach(tab => {
-          const targetId = tab.getAttribute("data-bs-target").replace("#", "");
-          const pane = getById(targetId);
-          if (!pane) return;
-          const required = queryAll("select[required], input[required]", pane);
-          if (required.length === 0) return; // skip donate tab
-          const hasMissing = required.some(el => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
-          tab.classList.toggle("tab-missing", hasMissing);
-          tab.classList.toggle("tab-complete", !hasMissing);
-        });
-      }
-
-      function updateProgress() {
-        const req = queryAll("select[required], input[required]");
-        const missing = getMissingFields();
-        const done = req.length - missing.length;
-        const pct = req.length ? Math.round(done * 100 / req.length) : 0;
-
-        getById("progress_bar").style.width = pct + "%";
-        getById("progress_text").textContent = pct + "%";
-
-        updateNextStepVisibility();
-        updateTabIndicators();
-      }
-
-      // ── Next-step button ──────────────────────────────────────────────────────
-      function updateNextStepVisibility() {
-        const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
-        const activeIndex = tabs.findIndex(tab => tab.classList.contains("active"));
-        // Hide "Next step" only when on the very last tab (Daten spenden)
-        const onLastTab = activeIndex === tabs.length - 1;
-        nextStepBtn.classList.toggle("d-none", onLastTab);
-      }
-
-      nextStepBtn.addEventListener("click", () => {
-        const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
-        const activeIndex = tabs.findIndex(tab => tab.classList.contains("active"));
-
-        const currentPane = document.querySelector(".tab-pane.active");
-        const missingInTab = queryAll("select[required], input[required]", currentPane)
-          .filter((el) => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
-
-        if (missingInTab.length > 0) {
-          showMissingModal(missingInTab);
-          return;
+        // ── Helpers ──────────────────────────────────────────────────────────────
+        function getById(id) {
+          return document.getElementById(id);
         }
 
-        if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
-          new bootstrap.Tab(tabs[activeIndex + 1]).show();
+        function queryAll(selector, root = document) {
+          return Array.from(root.querySelectorAll(selector));
         }
-      });
 
-      // ── Tab navigation guard ──────────────────────────────────────────────────
-      // Block forward navigation unless all fields in every preceding tab are filled.
-      getById("mainTabs").addEventListener("show.bs.tab", (e) => {
-        const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
-        const targetIdx = tabs.indexOf(e.target);
-        const activeIdx = tabs.findIndex(t => t.classList.contains("active"));
+        // ── Factor helpers ────────────────────────────────────────────────────────
+        function getFactor(id) {
+          const val = parseFloat(getById(id)?.value);
+          return Number.isFinite(val) ? val : null;
+        }
 
-        // Only restrict forward navigation
-        if (targetIdx <= activeIdx) return;
+        const multiplyFactors = (ids) =>
+          ids.reduce((acc, id) => acc * (getFactor(id) ?? 1), 1);
+        const addFactors = (ids) =>
+          ids.reduce((acc, id) => acc + (getFactor(id) ?? 0), 0);
 
-        // Check all tabs up to (but not including) the target for missing fields
-        for (let i = 0; i < targetIdx; i++) {
-          const paneId = tabs[i].getAttribute("data-bs-target").replace("#", "");
-          const pane = getById(paneId);
-          if (!pane) continue;
-          const missing = queryAll("select[required], input[required]", pane)
-            .filter(el => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
-          if (missing.length > 0) {
-            e.preventDefault();
-            showMissingModal(missing);
+        // Person count factor: values <= 0 → 1; otherwise log2
+        function calcPersonFactor() {
+          const n = parseFloat(getById('grunddaten_personenzahl').value);
+          return !Number.isFinite(n) || n <= 0 ? 1 : Math.log2(n);
+        }
+
+        // ── Field group IDs ───────────────────────────────────────────────────────
+        const IDS_VENUE = [
+          'veranstaltungsgelaende_flaechenverhaeltnis',
+          'veranstaltungsgelaende_verkehrsstaerke',
+          'veranstaltungsgelaende_stoerungen',
+          'veranstaltungsgelaende_wegfuehrung',
+          'veranstaltungsgelaende_einlass_auslass',
+        ];
+        const IDS_SHAPE = ['gestalt_grundform'];
+        const IDS_COND = [
+          'beschaffenheit_entlastungsflaechen',
+          'beschaffenheit_befestigung',
+          'beschaffenheit_wetterlage',
+        ];
+        const IDS_FLOW = [
+          'veranstaltungsverlauf_einlasskontrolle',
+          'veranstaltungsverlauf_zuablauf',
+          'veranstaltungsverlauf_attraktionen',
+        ];
+        const IDS_RECUR = [
+          'wiederkehrende_veranstaltung_erfahrung',
+          'wiederkehrende_veranstaltung_stoerungen',
+        ];
+        const IDS_BEHAVIOR = [
+          'besuchendenverhalten_ort_ablauf',
+          'besuchendenverhalten_involvement',
+          'besuchendenverhalten_soziale_gruppen',
+        ];
+
+        // ── Validation ────────────────────────────────────────────────────────────
+        function getMissingFields() {
+          return queryAll('select[required], input[required]').filter((el) => {
+            if (el.type === 'number') {
+              const n = parseFloat(el.value);
+              return !Number.isFinite(n) || n <= 0 || !Number.isInteger(n);
+            }
+            return !el.value;
+          });
+        }
+
+        function allRequiredFilled() {
+          return getMissingFields().length === 0;
+        }
+
+        function showMissingModal(missing) {
+          const list = getById('missingList');
+          list.innerHTML = '';
+          missing.forEach((el) => {
+            const lbl =
+              document.querySelector(`label[for="${el.id}"]`)?.innerText ||
+              el.id;
+            const entry = document.createElement('li');
+            entry.textContent = lbl.replace('*', '').trim();
+            list.appendChild(entry);
+          });
+          new bootstrap.Modal(getById('validationModal')).show();
+        }
+
+        // ── Progress & tab indicators ─────────────────────────────────────────────
+        function updateTabIndicators() {
+          queryAll('#mainTabs button[data-bs-toggle="tab"]').forEach((tab) => {
+            const targetId = tab
+              .getAttribute('data-bs-target')
+              .replace('#', '');
+            const pane = getById(targetId);
+            if (!pane) return;
+            const required = queryAll(
+              'select[required], input[required]',
+              pane,
+            );
+            if (required.length === 0) return; // skip donate tab
+            const hasMissing = required.some(
+              (el) =>
+                !el.value ||
+                (el.type === 'number' &&
+                  (parseFloat(el.value) <= 0 ||
+                    !Number.isInteger(parseFloat(el.value)))),
+            );
+            tab.classList.toggle('tab-missing', hasMissing);
+            tab.classList.toggle('tab-complete', !hasMissing);
+          });
+        }
+
+        function updateProgress() {
+          const req = queryAll('select[required], input[required]');
+          const missing = getMissingFields();
+          const done = req.length - missing.length;
+          const pct = req.length ? Math.round((done * 100) / req.length) : 0;
+
+          getById('progress_bar').style.width = pct + '%';
+          getById('progress_text').textContent = pct + '%';
+
+          updateNextStepVisibility();
+          updateTabIndicators();
+        }
+
+        // ── Next-step button ──────────────────────────────────────────────────────
+        function updateNextStepVisibility() {
+          const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+          const activeIndex = tabs.findIndex((tab) =>
+            tab.classList.contains('active'),
+          );
+          // Hide "Next step" only when on the very last tab (Daten spenden)
+          const onLastTab = activeIndex === tabs.length - 1;
+          nextStepBtn.classList.toggle('d-none', onLastTab);
+        }
+
+        nextStepBtn.addEventListener('click', () => {
+          const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+          const activeIndex = tabs.findIndex((tab) =>
+            tab.classList.contains('active'),
+          );
+
+          const currentPane = document.querySelector('.tab-pane.active');
+          const missingInTab = queryAll(
+            'select[required], input[required]',
+            currentPane,
+          ).filter(
+            (el) =>
+              !el.value ||
+              (el.type === 'number' &&
+                (parseFloat(el.value) <= 0 ||
+                  !Number.isInteger(parseFloat(el.value)))),
+          );
+
+          if (missingInTab.length > 0) {
+            showMissingModal(missingInTab);
             return;
           }
-        }
-      });
 
-      getById("mainTabs").addEventListener("shown.bs.tab", () => {
-        updateNextStepVisibility();
-      });
-
-      // ── Field change handler ──────────────────────────────────────────────────
-      form.addEventListener("change", (e) => {
-        if (e.target.tagName === "SELECT" || e.target.type === "number") {
-          const v = e.target.value;
-          e.target.classList.remove("is-valid", "is-invalid");
-          if (e.target.type === "number") {
-            const n = parseFloat(v);
-            e.target.classList.add(n > 0 && Number.isInteger(n) ? "is-valid" : "is-invalid");
-          } else {
-            e.target.classList.add(v ? "is-valid" : "is-invalid");
+          if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
+            new bootstrap.Tab(tabs[activeIndex + 1]).show();
           }
-          updateProgress();
-        }
-      });
-
-      // ── Reset ─────────────────────────────────────────────────────────────────
-      form.addEventListener("reset", (e) => {
-        if (!confirm("Möchten Sie das Formular zurücksetzen?")) {
-          e.preventDefault();
-          return;
-        }
-        queryAll("select,input").forEach(el => el.classList.remove("is-valid", "is-invalid"));
-        nextStepBtn.classList.remove("d-none");
-        setTimeout(updateProgress, 0);
-      });
-
-      // ── Submit → forward JSON to LimeSurvey ───────────────────────────────────
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const data = {};
-        data.personenzahl = getById("grunddaten_personenzahl").value || "";
-
-        queryAll("select").forEach(sel => {
-          data[sel.id] = sel.value;
         });
 
-        // Compute result for submission (not displayed to user)
-        const left = calcPersonFactor() * multiplyFactors(IDS_VENUE) * multiplyFactors(IDS_SHAPE) * multiplyFactors(IDS_COND) * multiplyFactors(IDS_FLOW);
-        const right = addFactors(IDS_RECUR) * multiplyFactors(IDS_BEHAVIOR);
-        data.ergebnis = (left + right).toFixed(2);
+        // ── Tab navigation guard ──────────────────────────────────────────────────
+        // Block forward navigation unless all fields in every preceding tab are filled.
+        getById('mainTabs').addEventListener('show.bs.tab', (e) => {
+          const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+          const targetIdx = tabs.indexOf(e.target);
+          const activeIdx = tabs.findIndex((t) =>
+            t.classList.contains('active'),
+          );
 
-        const json = encodeURIComponent(JSON.stringify(data));
-        const url = "https://freiburg.limesurvey.net/577923?lang=de&G01Q01=" + json;
-        window.location.href = url;
-      });
+          // Only restrict forward navigation
+          if (targetIdx <= activeIdx) return;
 
-      // ── Init ──────────────────────────────────────────────────────────────────
-      queryAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
-      updateProgress();
+          // Check all tabs up to (but not including) the target for missing fields
+          for (let i = 0; i < targetIdx; i++) {
+            const paneId = tabs[i]
+              .getAttribute('data-bs-target')
+              .replace('#', '');
+            const pane = getById(paneId);
+            if (!pane) continue;
+            const missing = queryAll(
+              'select[required], input[required]',
+              pane,
+            ).filter(
+              (el) =>
+                !el.value ||
+                (el.type === 'number' &&
+                  (parseFloat(el.value) <= 0 ||
+                    !Number.isInteger(parseFloat(el.value)))),
+            );
+            if (missing.length > 0) {
+              e.preventDefault();
+              showMissingModal(missing);
+              return;
+            }
+          }
+        });
 
-    })();
-  </script>
+        getById('mainTabs').addEventListener('shown.bs.tab', () => {
+          updateNextStepVisibility();
+        });
 
-</body>
+        // ── Field change handler ──────────────────────────────────────────────────
+        form.addEventListener('change', (e) => {
+          if (e.target.tagName === 'SELECT' || e.target.type === 'number') {
+            const v = e.target.value;
+            e.target.classList.remove('is-valid', 'is-invalid');
+            if (e.target.type === 'number') {
+              const n = parseFloat(v);
+              e.target.classList.add(
+                n > 0 && Number.isInteger(n) ? 'is-valid' : 'is-invalid',
+              );
+            } else {
+              e.target.classList.add(v ? 'is-valid' : 'is-invalid');
+            }
+            updateProgress();
+          }
+        });
 
+        // ── Reset ─────────────────────────────────────────────────────────────────
+        form.addEventListener('reset', (e) => {
+          if (!confirm('Möchten Sie das Formular zurücksetzen?')) {
+            e.preventDefault();
+            return;
+          }
+          queryAll('select,input').forEach((el) =>
+            el.classList.remove('is-valid', 'is-invalid'),
+          );
+          nextStepBtn.classList.remove('d-none');
+          setTimeout(updateProgress, 0);
+        });
+
+        // ── Submit → forward JSON to LimeSurvey ───────────────────────────────────
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const data = {};
+          data.personenzahl = getById('grunddaten_personenzahl').value || '';
+
+          queryAll('select').forEach((sel) => {
+            data[sel.id] = sel.value;
+          });
+
+          // Compute result for submission (not displayed to user)
+          const left =
+            calcPersonFactor() *
+            multiplyFactors(IDS_VENUE) *
+            multiplyFactors(IDS_SHAPE) *
+            multiplyFactors(IDS_COND) *
+            multiplyFactors(IDS_FLOW);
+          const right = addFactors(IDS_RECUR) * multiplyFactors(IDS_BEHAVIOR);
+          data.ergebnis = (left + right).toFixed(2);
+
+          const json = encodeURIComponent(JSON.stringify(data));
+          const url =
+            'https://freiburg.limesurvey.net/577923?lang=de&G01Q01=' + json;
+          window.location.href = url;
+        });
+
+        // ── Init ──────────────────────────────────────────────────────────────────
+        queryAll('[data-bs-toggle="tooltip"]').forEach(
+          (el) => new bootstrap.Tooltip(el),
+        );
+        updateProgress();
+      })();
+    </script>
+  </body>
 </html>
