@@ -1,5 +1,11 @@
 {
+  "name": "scenic",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
+    "test": "playwright test tests/",
+    "test:ui": "playwright test --ui tests/",
+    "test:headed": "playwright test --headed tests/",
     "format": "prettier --write .",
     "format:check": "prettier --check \"**/*.{js,html,css}\"",
     "prepare": "husky"
@@ -8,6 +14,8 @@
     "*.{js,html,css}": "prettier --write"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "serve": "^14.2.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3"
