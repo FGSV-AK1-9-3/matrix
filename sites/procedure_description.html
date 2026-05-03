@@ -1,505 +1,734 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>Verfahrensbeschreibung - SCENIC</title>
     <!-- Bootstrap 5 CSS -->
-    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet"/>
+    <link
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      rel="stylesheet"
+    />
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
-    <link href="../custom.css" rel="stylesheet"/>
-</head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../custom.css" rel="stylesheet" />
+  </head>
 
-<body>
-<script src="../navbar.js"></script>
+  <body>
+    <script src="../navbar.js"></script>
 
-<div class="container py-5">
+    <div class="container py-5">
+      <h1>Beschreibung des Verfahrens</h1>
 
-    <h1>Beschreibung des Verfahrens</h1>
+      <!-- ── BESUCHERZAHL ──────────────────────────────────────────── -->
+      <h2 class="mt-4">Besucherzahl (Basiswert)</h2>
+      <p>
+        Vergleichbar mit den Punktbewertungsverfahren wird auch bei SCENIC mit
+        Eingabe der erwarteten Besucherzahl begonnen. Dabei sollte bei Eingabe
+        die maximale Anzahl der anwesenden Besuchenden berücksichtigt werden.
+        Dieser Wert kann insbesondere bei mehrtägigen Veranstaltungen von der
+        durchschnittlichen Besucherzahl abweichen. In Anlehnung an die
+        Personenverkehrsstärke soll also von der höchsten erwarteten
+        Personenzahl auf dem Veranstaltungsgelände ausgegangen werden. Die Skala
+        berechnet automatisch Zwischenwerte zwischen den unterschiedlichen
+        Skalenstufen:
+      </p>
 
-    <!-- ── BESUCHERZAHL ──────────────────────────────────────────── -->
-    <h2 class="mt-4">Besucherzahl (Basiswert)</h2>
-    <p>Vergleichbar mit den Punktbewertungsverfahren wird auch bei SCENIC mit Eingabe der erwarteten Besucherzahl
-        begonnen. Dabei sollte bei Eingabe die maximale Anzahl der anwesenden Besuchenden berücksichtigt werden.
-        Dieser Wert kann insbesondere bei mehrtägigen Veranstaltungen von der durchschnittlichen Besucherzahl
-        abweichen. In Anlehnung an die Personenverkehrsstärke soll also von der höchsten erwarteten Personenzahl
-        auf dem Veranstaltungsgelände ausgegangen werden. Die Skala berechnet automatisch Zwischenwerte zwischen
-        den unterschiedlichen Skalenstufen:</p>
-
-    <table class="table table-bordered table-striped table-sm">
+      <table class="table table-bordered table-striped table-sm">
         <thead class="table-dark">
-        <tr>
+          <tr>
             <th>Anzahl Besuchende</th>
             <th class="text-center">Minimaler Punktwert</th>
             <th class="text-center">Maximaler Punktwert</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
-        <tr>
+          <tr>
             <td>1.500 – 5.000</td>
             <td class="text-center">1</td>
             <td class="text-center">5</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>5.000 – 15.000</td>
             <td class="text-center">5</td>
             <td class="text-center">10</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>15.000 – 50.000</td>
             <td class="text-center">10</td>
             <td class="text-center">20</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>50.000 – 150.000</td>
             <td class="text-center">20</td>
             <td class="text-center">30</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>150.000 – 250.000</td>
             <td class="text-center">30</td>
             <td class="text-center">40</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>250.000 – ≥ 500.000</td>
             <td class="text-center">40</td>
             <td class="text-center">50</td>
-        </tr>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── VERANSTALTUNGSGELÄNDE ─────────────────────────────────── -->
-    <h2 class="mt-5">Veranstaltungsgelände</h2>
-    <p>Nachfolgend sind fünf Eigenschaften des Veranstaltungsgeländes zu betrachten, die als Faktoren mit dem
-        Basiswert aus der Besucherzahl multipliziert werden:</p>
-    <ul>
-        <li>Die Personenanzahl in Bezug auf die für die Besuchenden zugängliche Fläche <code>(VGF)</code>,</li>
-        <li>die erwartete Personenverkehrsstärke bei An- und Abreise oder auf Teilbereichen der Publikumsfläche
-            <code>(VGP)</code>,
+      <!-- ── VERANSTALTUNGSGELÄNDE ─────────────────────────────────── -->
+      <h2 class="mt-5">Veranstaltungsgelände</h2>
+      <p>
+        Nachfolgend sind fünf Eigenschaften des Veranstaltungsgeländes zu
+        betrachten, die als Faktoren mit dem Basiswert aus der Besucherzahl
+        multipliziert werden:
+      </p>
+      <ul>
+        <li>
+          Die Personenanzahl in Bezug auf die für die Besuchenden zugängliche
+          Fläche <code>(VGF)</code>,
         </li>
-        <li>die Möglichkeit der Störungen auf Flucht- und Rettungswegen <code>(VGS)</code>,</li>
-        <li>die Wegführung auf dem Veranstaltungsgelände <code>(VGB)</code> und</li>
+        <li>
+          die erwartete Personenverkehrsstärke bei An- und Abreise oder auf
+          Teilbereichen der Publikumsfläche <code>(VGP)</code>,
+        </li>
+        <li>
+          die Möglichkeit der Störungen auf Flucht- und Rettungswegen
+          <code>(VGS)</code>,
+        </li>
+        <li>
+          die Wegführung auf dem Veranstaltungsgelände <code>(VGB)</code> und
+        </li>
         <li>die mögliche Trennung von Ein- und Auslass <code>(VGE)</code>.</li>
-    </ul>
+      </ul>
 
-    <h3 class="mt-4">Fläche <code class="text-primary">VGF</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Fläche <code class="text-primary">VGF</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Die für Besuchenden zugängliche Fläche entspricht der erwarteten Besucherzahl bei 2 Pers./qm.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
-        <tr>
-            <td>Die für Besuchenden zugängliche Fläche ist um mehr als 20 % größer als die erwartete Besucherzahl bei 2
-                Pers./qm.
+          <tr>
+            <td>
+              Die für Besuchenden zugängliche Fläche entspricht der erwarteten
+              Besucherzahl bei 2 Pers./qm.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-success">Faktor: 0,9</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Die für Besuchenden zugängliche Fläche ist um mehr als 20 % größer
+              als die erwartete Besucherzahl bei 2 Pers./qm.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-success">Faktor: 0,9</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Personenverkehrsstärke <code class="text-primary">VGP</code></h3>
-    <table class="table table-bordered table-sm mb-2">
+      <h3 class="mt-4">
+        Personenverkehrsstärke <code class="text-primary">VGP</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-2">
         <tbody>
-        <tr>
-            <td>Die erwartete spezifische Personenverkehrsstärke (q<sub>s</sub>) auf der Fußwegetappe (An- oder
-                Abreise) oder auf Teilbereichen der Publikumsflächen beträgt ≤ 0,7 Pers./ms.
+          <tr>
+            <td>
+              Die erwartete spezifische Personenverkehrsstärke (q<sub>s</sub>)
+              auf der Fußwegetappe (An- oder Abreise) oder auf Teilbereichen der
+              Publikumsflächen beträgt ≤ 0,7 Pers./ms.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-success">Faktor: 0,9</span></td>
-        </tr>
-        <tr>
-            <td>Die erwartete spezifische Personenverkehrsstärke (q<sub>s</sub>) auf der Fußwegetappe (An- oder
-                Abreise) oder auf Teilbereichen der Publikumsflächen beträgt ≤ 1,3 Pers./ms.
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-success">Faktor: 0,9</span>
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
-        <tr>
-            <td>Die erwartete spezifische Personenverkehrsstärke (q<sub>s</sub>) auf der Fußwegetappe (An- oder
-                Abreise) oder auf Teilbereichen der Publikumsflächen beträgt &gt; 1,3 Pers./ms.
+          </tr>
+          <tr>
+            <td>
+              Die erwartete spezifische Personenverkehrsstärke (q<sub>s</sub>)
+              auf der Fußwegetappe (An- oder Abreise) oder auf Teilbereichen der
+              Publikumsflächen beträgt ≤ 1,3 Pers./ms.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,1</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
             </td>
-        </tr>
+          </tr>
+          <tr>
+            <td>
+              Die erwartete spezifische Personenverkehrsstärke (q<sub>s</sub>)
+              auf der Fußwegetappe (An- oder Abreise) oder auf Teilbereichen der
+              Publikumsflächen beträgt &gt; 1,3 Pers./ms.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,1</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
-    <p class="text-muted small mb-4">Zur Berechnung der Personenverkehrsstärke wird auf die Beispielrechnung im
-        Anhang C des EVC (<a href="#ref1">FGSV, 2022</a>) verwiesen.</p>
+      </table>
+      <p class="text-muted small mb-4">
+        Zur Berechnung der Personenverkehrsstärke wird auf die Beispielrechnung
+        im Anhang C des EVC (<a href="#ref1">FGSV, 2022</a>) verwiesen.
+      </p>
 
-    <h3 class="mt-4">Störungen auf Flucht- und Rettungswegen <code class="text-primary">VGS</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Störungen auf Flucht- und Rettungswegen
+        <code class="text-primary">VGS</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Störungen auf den Flucht- und Rettungswegen z. B. durch Besuchendenströme, parallele Nutzungen
-                oder Änderungen im Veranstaltungsverlauf sind wahrscheinlich.
+          <tr>
+            <td>
+              Störungen auf den Flucht- und Rettungswegen z. B. durch
+              Besuchendenströme, parallele Nutzungen oder Änderungen im
+              Veranstaltungsverlauf sind wahrscheinlich.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
             </td>
-        </tr>
-        <tr>
-            <td>Störungen auf den Flucht- und Rettungswegen sind unwahrscheinlich.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+          </tr>
+          <tr>
+            <td>
+              Störungen auf den Flucht- und Rettungswegen sind unwahrscheinlich.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Wegführung <code class="text-primary">VGB</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Wegführung <code class="text-primary">VGB</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Bauliche Anlagen und/oder topographische Gegebenheiten bedingen eine unübersichtliche Wegführung.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+          <tr>
+            <td>
+              Bauliche Anlagen und/oder topographische Gegebenheiten bedingen
+              eine unübersichtliche Wegführung.
             </td>
-        </tr>
-        <tr>
-            <td>Die baulichen Anlagen und/oder topographischen Gegebenheiten erlauben eine übersichtliche Wegführung.
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+          </tr>
+          <tr>
+            <td>
+              Die baulichen Anlagen und/oder topographischen Gegebenheiten
+              erlauben eine übersichtliche Wegführung.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Trennung von Ein- und Auslass <code class="text-primary">VGE</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Trennung von Ein- und Auslass <code class="text-primary">VGE</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
+          <tr>
             <td>Einlass und Auslass sind räumlich nicht getrennt.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,1</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,1</span>
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Einlass und Auslass sind räumlich getrennt.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── VERANSTALTUNGSVERLAUF ─────────────────────────────────── -->
-    <h2 class="mt-5">Veranstaltungsverlauf</h2>
-    <p>In Bezug auf den Veranstaltungsverlauf werden drei Einflussfaktoren berücksichtigt:</p>
-    <ul>
+      <!-- ── VERANSTALTUNGSVERLAUF ─────────────────────────────────── -->
+      <h2 class="mt-5">Veranstaltungsverlauf</h2>
+      <p>
+        In Bezug auf den Veranstaltungsverlauf werden drei Einflussfaktoren
+        berücksichtigt:
+      </p>
+      <ul>
         <li>Einlasskontrolle <code>(VVK)</code>,</li>
         <li>Verlauf des Einlasses <code>(VVV)</code> und</li>
         <li>die Attraktionen der Veranstaltung <code>(VVA)</code>.</li>
-    </ul>
+      </ul>
 
-    <h3 class="mt-4">Einlasskontrolle <code class="text-primary">VVK</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Einlasskontrolle <code class="text-primary">VVK</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
+          <tr>
             <td>Es erfolgt keine Einlasskontrolle.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-danger">Faktor: 1,3</span></td>
-        </tr>
-        <tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-danger">Faktor: 1,3</span>
+            </td>
+          </tr>
+          <tr>
             <td>Es erfolgt eine Einlasskontrolle.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Verlauf des Einlasses <code class="text-primary">VVV</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Verlauf des Einlasses <code class="text-primary">VVV</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Der Zu- und Ablauf bei Ein- und Auslass erfolgt kontinuierlich.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
-        <tr>
-            <td>Der Zu- und Ablauf bei Ein- und Auslass erfolgt in einem oder mehreren Schüben.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-danger">Faktor: 1,3</span></td>
-        </tr>
+          <tr>
+            <td>
+              Der Zu- und Ablauf bei Ein- und Auslass erfolgt kontinuierlich.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Der Zu- und Ablauf bei Ein- und Auslass erfolgt in einem oder
+              mehreren Schüben.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-danger">Faktor: 1,3</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Attraktionen <code class="text-primary">VVA</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Attraktionen <code class="text-primary">VVA</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
+          <tr>
             <td>Es existieren mehrere Attraktionen bzw. Bühnen.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Es existiert nur eine Attraktion bzw. Bühne.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── GESTALT ────────────────────────────────────────────────── -->
-    <h2 class="mt-5">Gestalt der Veranstaltung <code class="text-primary">G</code></h2>
-    <p>Die Art der Veranstaltung wird durch ihre Gestalt charakterisiert. Die Gestalt meint die räumliche Anordnung
-        von Szenen- und Publikumsfläche auf dem Veranstaltungsgelände.</p>
-    <table class="table table-bordered table-sm mb-4">
+      <!-- ── GESTALT ────────────────────────────────────────────────── -->
+      <h2 class="mt-5">
+        Gestalt der Veranstaltung <code class="text-primary">G</code>
+      </h2>
+      <p>
+        Die Art der Veranstaltung wird durch ihre Gestalt charakterisiert. Die
+        Gestalt meint die räumliche Anordnung von Szenen- und Publikumsfläche
+        auf dem Veranstaltungsgelände.
+      </p>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td><strong>Muster</strong> – Szenenfläche bzw. Attraktion und Publikumsfläche sind getrennt.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
-        <tr>
-            <td><strong>Vieleck</strong> – Mehrere Szenenflächen bzw. Attraktionen mit wechselnden Besucherströmen.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,1</span>
+          <tr>
+            <td>
+              <strong>Muster</strong> – Szenenfläche bzw. Attraktion und
+              Publikumsfläche sind getrennt.
             </td>
-        </tr>
-        <tr>
-            <td><strong>Umzug</strong> – Veränderliche Szenenfläche bzw. Attraktion bei statischer Publikumsfläche.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
             </td>
-        </tr>
-        <tr>
-            <td><strong>Marktplatz</strong> – Keine Trennung von Szenenfläche bzw. Attraktionen und Publikumsfläche.
+          </tr>
+          <tr>
+            <td>
+              <strong>Vieleck</strong> – Mehrere Szenenflächen bzw. Attraktionen
+              mit wechselnden Besucherströmen.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,1</span>
             </td>
-        </tr>
+          </tr>
+          <tr>
+            <td>
+              <strong>Umzug</strong> – Veränderliche Szenenfläche bzw.
+              Attraktion bei statischer Publikumsfläche.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Marktplatz</strong> – Keine Trennung von Szenenfläche bzw.
+              Attraktionen und Publikumsfläche.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── BESCHAFFENHEIT ─────────────────────────────────────────── -->
-    <h2 class="mt-5">Beschaffenheit</h2>
-    <p>Die situativen Faktoren, die sowohl auf den Veranstaltungsverlauf als auch auf das Veranstaltungsgelände
-        wirken, werden mit drei Einflussfaktoren zur Beschaffenheit erfasst:</p>
-    <ul>
-        <li>Möglichkeit zur Einrichtung von Entlastungsflächen <code>(BE)</code>,</li>
+      <!-- ── BESCHAFFENHEIT ─────────────────────────────────────────── -->
+      <h2 class="mt-5">Beschaffenheit</h2>
+      <p>
+        Die situativen Faktoren, die sowohl auf den Veranstaltungsverlauf als
+        auch auf das Veranstaltungsgelände wirken, werden mit drei
+        Einflussfaktoren zur Beschaffenheit erfasst:
+      </p>
+      <ul>
+        <li>
+          Möglichkeit zur Einrichtung von Entlastungsflächen <code>(BE)</code>,
+        </li>
         <li>Bodenbeschaffenheit <code>(BG)</code> und</li>
         <li>Wettereinfluss <code>(BW)</code>.</li>
-    </ul>
+      </ul>
 
-    <h3 class="mt-4">Entlastungsflächen <code class="text-primary">BE</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Entlastungsflächen <code class="text-primary">BE</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Möglichkeit zur Einrichtung von Entlastungsflächen ist vorhanden.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
-        <tr>
+          <tr>
+            <td>
+              Möglichkeit zur Einrichtung von Entlastungsflächen ist vorhanden.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
+          <tr>
             <td>Keine Möglichkeit zur Einrichtung von Entlastungsflächen.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,1</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,1</span>
             </td>
-        </tr>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Bodenbeschaffenheit <code class="text-primary">BG</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Bodenbeschaffenheit <code class="text-primary">BG</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
+          <tr>
             <td>Befestigter Grund mit befahrbaren Wegen.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
-        <tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
+          <tr>
             <td>Kein befestigter Grund mit befahrbaren Wegen.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,1</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,1</span>
             </td>
-        </tr>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Wettereinfluss <code class="text-primary">BW</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Wettereinfluss <code class="text-primary">BW</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Die Wetterlage kann die Nutzbarkeit des Geländes stark beeinflussen.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-danger">Faktor: 1,3</span></td>
-        </tr>
-        <tr>
-            <td>Die Wetterlage beeinflusst die Nutzbarkeit des Geländes nicht.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+          <tr>
+            <td>
+              Die Wetterlage kann die Nutzbarkeit des Geländes stark
+              beeinflussen.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-danger">Faktor: 1,3</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Die Wetterlage beeinflusst die Nutzbarkeit des Geländes nicht.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── ERFAHRUNG ──────────────────────────────────────────────── -->
-    <h2 class="mt-5">Erfahrung</h2>
-    <p>Die Erfahrung der Veranstaltenden und die Orts- und Veranstaltungskenntnisse haben einen wesentlichen
-        Einfluss auf die technisch-organisatorische Planung und Umsetzung sowie auf die Bewegungsgeschwindigkeit
-        der Besuchenden. Da sich diese Erfahrung zum Veranstaltungsverlauf und Ortskenntnisse direkt auf das
-        Besuchendenverhalten auswirken, werden Erfahrung und wiederkehrende Veranstaltung als Punkte hinzuaddiert
-        und mit drei Einflussfaktoren des Besuchendenverhaltens multipliziert.</p>
+      <!-- ── ERFAHRUNG ──────────────────────────────────────────────── -->
+      <h2 class="mt-5">Erfahrung</h2>
+      <p>
+        Die Erfahrung der Veranstaltenden und die Orts- und
+        Veranstaltungskenntnisse haben einen wesentlichen Einfluss auf die
+        technisch-organisatorische Planung und Umsetzung sowie auf die
+        Bewegungsgeschwindigkeit der Besuchenden. Da sich diese Erfahrung zum
+        Veranstaltungsverlauf und Ortskenntnisse direkt auf das
+        Besuchendenverhalten auswirken, werden Erfahrung und wiederkehrende
+        Veranstaltung als Punkte hinzuaddiert und mit drei Einflussfaktoren des
+        Besuchendenverhaltens multipliziert.
+      </p>
 
-    <h3 class="mt-4">Erfahrung der Veranstaltenden <code class="text-primary">E</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Erfahrung der Veranstaltenden <code class="text-primary">E</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <thead class="table-light">
-        <tr>
+          <tr>
             <th>Beschreibung</th>
             <th class="text-end">Zusatzpunkte</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Die Veranstaltung ist wiederkehrend; Veranstaltende, Veranstaltungsort und Veranstaltungsablauf
-                sind gleichbleibend.
+          <tr>
+            <td>
+              Die Veranstaltung ist wiederkehrend; Veranstaltende,
+              Veranstaltungsort und Veranstaltungsablauf sind gleichbleibend.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">+ 1</span></td>
-        </tr>
-        <tr>
-            <td>Die Veranstaltung findet mit dem Veranstaltungsablauf erstmalig an dem Veranstaltungsort statt.
-                Veranstaltende sind mit vergleichbaren Veranstaltungen vertraut.
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">+ 1</span>
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">+ 5</span></td>
-        </tr>
-        <tr>
-            <td>Die Veranstaltung findet erstmalig an dem Veranstaltungsort statt. Veranstaltende sind mit
-                derartigen Veranstaltungen bislang nicht vertraut.
+          </tr>
+          <tr>
+            <td>
+              Die Veranstaltung findet mit dem Veranstaltungsablauf erstmalig an
+              dem Veranstaltungsort statt. Veranstaltende sind mit
+              vergleichbaren Veranstaltungen vertraut.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-danger">+ 10</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">+ 5</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Die Veranstaltung findet erstmalig an dem Veranstaltungsort statt.
+              Veranstaltende sind mit derartigen Veranstaltungen bislang nicht
+              vertraut.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-danger">+ 10</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Wiederkehrende Veranstaltung <code class="text-primary">W</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">
+        Wiederkehrende Veranstaltung <code class="text-primary">W</code>
+      </h3>
+      <table class="table table-bordered table-sm mb-4">
         <thead class="table-light">
-        <tr>
+          <tr>
             <th>Beschreibung</th>
             <th class="text-end">Zusatzpunkte</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Bei früheren Veranstaltungen kam es zu keinen dokumentierten Störungen. Anzahl und Umfang der
-                Einsätze des Sanitätsdienstes, des Sicherheits- und Ordnungsdienstes oder der BOS entsprachen
-                den gängigen Einsatzzahlen.
+          <tr>
+            <td>
+              Bei früheren Veranstaltungen kam es zu keinen dokumentierten
+              Störungen. Anzahl und Umfang der Einsätze des Sanitätsdienstes,
+              des Sicherheits- und Ordnungsdienstes oder der BOS entsprachen den
+              gängigen Einsatzzahlen.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-success">+ 0</span></td>
-        </tr>
-        <tr>
-            <td>Bei früheren Veranstaltungen kam es zu dokumentierten Störungen. Anzahl und Umfang der Einsätze
-                des Sanitätsdienstes, des Sicherheits- und Ordnungsdienstes oder der BOS entsprachen nicht den
-                gängigen Einsatzzahlen.
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-success">+ 0</span>
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">+ 5</span></td>
-        </tr>
+          </tr>
+          <tr>
+            <td>
+              Bei früheren Veranstaltungen kam es zu dokumentierten Störungen.
+              Anzahl und Umfang der Einsätze des Sanitätsdienstes, des
+              Sicherheits- und Ordnungsdienstes oder der BOS entsprachen nicht
+              den gängigen Einsatzzahlen.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">+ 5</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── BESUCHENDENVERHALTEN ───────────────────────────────────── -->
-    <h2 class="mt-5">Besuchendenverhalten</h2>
-    <p>Die Verhaltensfaktoren, auf die sich Ortskenntnis unmittelbar auswirken, werden mit drei Einflussfaktoren
-        zum Besuchendenverhalten erfasst:</p>
-    <ul>
+      <!-- ── BESUCHENDENVERHALTEN ───────────────────────────────────── -->
+      <h2 class="mt-5">Besuchendenverhalten</h2>
+      <p>
+        Die Verhaltensfaktoren, auf die sich Ortskenntnis unmittelbar auswirken,
+        werden mit drei Einflussfaktoren zum Besuchendenverhalten erfasst:
+      </p>
+      <ul>
         <li>Ortskunde <code>(BV)</code>,</li>
         <li>Involvement <code>(I)</code> und</li>
         <li>Soziale Gruppen <code>(G)</code>.</li>
-    </ul>
+      </ul>
 
-    <h3 class="mt-4">Ortskunde <code class="text-primary">BV</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Ortskunde <code class="text-primary">BV</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Die Mehrheit der erwarteten Besuchenden sind ortskundig. Der Veranstaltungsablauf ist den
-                Besuchenden bekannt.
+          <tr>
+            <td>
+              Die Mehrheit der erwarteten Besuchenden sind ortskundig. Der
+              Veranstaltungsablauf ist den Besuchenden bekannt.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-success">Faktor: 0,8</span></td>
-        </tr>
-        <tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-success">Faktor: 0,8</span>
+            </td>
+          </tr>
+          <tr>
             <td>Die Mehrheit der erwarteten Besuchenden sind ortsunkundig.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
             </td>
-        </tr>
-        <tr>
-            <td>Die Mehrheit der erwarteten Besuchenden sind ortskundig. Der Veranstaltungsablauf ist den
-                Besuchenden unbekannt.
+          </tr>
+          <tr>
+            <td>
+              Die Mehrheit der erwarteten Besuchenden sind ortskundig. Der
+              Veranstaltungsablauf ist den Besuchenden unbekannt.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-danger">Faktor: 1,3</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-danger">Faktor: 1,3</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Involvement <code class="text-primary">I</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Involvement <code class="text-primary">I</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Der größere Anteil der erwarteten Besuchenden hat ein hohes Involvement.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+          <tr>
+            <td>
+              Der größere Anteil der erwarteten Besuchenden hat ein hohes
+              Involvement.
             </td>
-        </tr>
-        <tr>
-            <td>Nur ein kleiner Anteil der erwarteten Besuchenden hat ein hohes Involvement.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Nur ein kleiner Anteil der erwarteten Besuchenden hat ein hohes
+              Involvement.
+            </td>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <h3 class="mt-4">Soziale Gruppen <code class="text-primary">G</code></h3>
-    <table class="table table-bordered table-sm mb-4">
+      <h3 class="mt-4">Soziale Gruppen <code class="text-primary">G</code></h3>
+      <table class="table table-bordered table-sm mb-4">
         <tbody>
-        <tr>
-            <td>Besondere soziale Gruppen sind zu erwarten, die die durchschnittliche Bewegungsgeschwindigkeit
-                verändern, wie z. B. Jugendgruppen, Senioren bzw. Familien.
+          <tr>
+            <td>
+              Besondere soziale Gruppen sind zu erwarten, die die
+              durchschnittliche Bewegungsgeschwindigkeit verändern, wie z. B.
+              Jugendgruppen, Senioren bzw. Familien.
             </td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-warning text-dark">Faktor: 1,2</span>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-warning text-dark">Faktor: 1,2</span>
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>Keine besonderen sozialen Gruppen sind zu erwarten.</td>
-            <td class="text-end text-nowrap align-middle"><span class="badge bg-secondary">Faktor: 1,0</span></td>
-        </tr>
+            <td class="text-end text-nowrap align-middle">
+              <span class="badge bg-secondary">Faktor: 1,0</span>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
 
-    <!-- ── LEGENDE ────────────────────────────────────────────────── -->
-    <div class="card p-3 mt-4 mb-5">
+      <!-- ── LEGENDE ────────────────────────────────────────────────── -->
+      <div class="card p-3 mt-4 mb-5">
         <h6 class="mb-2">Legende Faktorwerte</h6>
         <div class="d-flex flex-wrap gap-3 align-items-center">
-            <span><span class="badge bg-success me-1">0,8 / 0,9</span> Faktor verringert den Wert</span>
-            <span><span class="badge bg-secondary me-1">1,0</span> Neutraler Faktor</span>
-            <span><span class="badge bg-warning text-dark me-1">1,1 / 1,2</span> Faktor erhöht den Wert</span>
-            <span><span class="badge bg-danger me-1">1,3</span> Faktor erhöht den Wert stark</span>
-            <span><span class="badge bg-success me-1">+ 0</span><span class="badge bg-secondary me-1">+ 1</span><span
-                    class="badge bg-warning text-dark me-1">+ 5</span><span class="badge bg-danger me-1">+ 10</span> Zusatzpunkte (werden addiert)</span>
+          <span
+            ><span class="badge bg-success me-1">0,8 / 0,9</span> Faktor
+            verringert den Wert</span
+          >
+          <span
+            ><span class="badge bg-secondary me-1">1,0</span> Neutraler
+            Faktor</span
+          >
+          <span
+            ><span class="badge bg-warning text-dark me-1">1,1 / 1,2</span>
+            Faktor erhöht den Wert</span
+          >
+          <span
+            ><span class="badge bg-danger me-1">1,3</span> Faktor erhöht den
+            Wert stark</span
+          >
+          <span
+            ><span class="badge bg-success me-1">+ 0</span
+            ><span class="badge bg-secondary me-1">+ 1</span
+            ><span class="badge bg-warning text-dark me-1">+ 5</span
+            ><span class="badge bg-danger me-1">+ 10</span> Zusatzpunkte (werden
+            addiert)</span
+          >
         </div>
+      </div>
+
+      <!-- ── LITERATUR ──────────────────────────────────────────────── -->
+      <h2>Literatur</h2>
+      <ol>
+        <li id="ref1">
+          FGSV (2022).
+          <i
+            >EVC Empfehlungen zum Verkehrs- und Crowdmanagement für
+            Veranstaltungen. Vorgaben, Standards und Handlungsoptionen zur
+            Berücksichtigung bei der Planung, bei Genehmigungsprozessen und bei
+            der Durchführung von Veranstaltungen.</i
+          >
+          FGSV.
+        </li>
+        <li>
+          Bachmeier, P., Thomann, J. &amp; Vosteen, D. (2015).
+          <i>Veranstaltungssicherheit.</i> KVR.
+        </li>
+        <li>
+          Fekete, A. (2024).
+          <i
+            >Risiko, Katastrophen und Resilienz. Eine Einführung in Methoden,
+            Konzepte und Themen.</i
+          >
+          Springer Spektrum.
+          <a href="https://doi.org/10.1007/978-3-662-68381-1"
+            >https://doi.org/10.1007/978-3-662-68381-1</a
+          >
+        </li>
+        <li>
+          Maurer, K. (2005). Risikobewertung bei Großveranstaltungen. In K.
+          Maurer &amp; H. Peter (Hrsg.),
+          <i>Gefahrenabwehr bei Großveranstaltungen</i> (S. 17–34). Stumpf +
+          Kossendey.
+        </li>
+        <li>
+          Nohl, J. &amp; Thiernecke, H. (1989).
+          <i
+            >Systematik zur Durchführung von Gefährdungsanalysen. Teil 1:
+            Theoretische Grundlagen.</i
+          >
+          Wirtschaftsverlag.
+        </li>
+        <li>
+          Ranke, U. (2023).
+          <i
+            >Naturkatastrophen und Risikomanagement. Geowissenschaften und
+            soziale Verantwortung.</i
+          >
+          Springer Spektrum.
+        </li>
+        <li>
+          Sakschewski, T. &amp; Paul, S. (2020). Typisierung von
+          Veranstaltungen. In Sakschewski, T., Ebner, M., Klode, K. &amp; Paul,
+          S. (Hrsg.), <i>Sicherheitskonzepte für Veranstaltungen</i> (3. Aufl.,
+          S. 8–70). DIN Media.
+        </li>
+        <li>
+          Still, K. G. (o. J.). DIM ICE risk analysis – event meta-model.
+          <a href="https://www.gkstill.com/Support/WhyModel/dimice.html"
+            >https://www.gkstill.com/Support/WhyModel/dimice.html</a
+          >. Zugegriffen: 10.03.2026.
+        </li>
+      </ol>
     </div>
 
-    <!-- ── LITERATUR ──────────────────────────────────────────────── -->
-    <h2>Literatur</h2>
-    <ol>
-        <li id="ref1">
-            FGSV (2022). <i>EVC Empfehlungen zum Verkehrs- und Crowdmanagement für Veranstaltungen. Vorgaben,
-            Standards und Handlungsoptionen zur Berücksichtigung bei der Planung, bei Genehmigungsprozessen und
-            bei der Durchführung von Veranstaltungen.</i> FGSV.
-        </li>
-        <li>
-            Bachmeier, P., Thomann, J. &amp; Vosteen, D. (2015). <i>Veranstaltungssicherheit.</i> KVR.
-        </li>
-        <li>
-            Fekete, A. (2024). <i>Risiko, Katastrophen und Resilienz. Eine Einführung in Methoden, Konzepte und
-            Themen.</i> Springer Spektrum.
-            <a href="https://doi.org/10.1007/978-3-662-68381-1">https://doi.org/10.1007/978-3-662-68381-1</a>
-        </li>
-        <li>
-            Maurer, K. (2005). Risikobewertung bei Großveranstaltungen. In K. Maurer &amp; H. Peter (Hrsg.),
-            <i>Gefahrenabwehr bei Großveranstaltungen</i> (S. 17–34). Stumpf + Kossendey.
-        </li>
-        <li>
-            Nohl, J. &amp; Thiernecke, H. (1989). <i>Systematik zur Durchführung von Gefährdungsanalysen. Teil 1:
-            Theoretische Grundlagen.</i> Wirtschaftsverlag.
-        </li>
-        <li>
-            Ranke, U. (2023). <i>Naturkatastrophen und Risikomanagement. Geowissenschaften und soziale
-            Verantwortung.</i> Springer Spektrum.
-        </li>
-        <li>
-            Sakschewski, T. &amp; Paul, S. (2020). Typisierung von Veranstaltungen. In Sakschewski, T., Ebner, M.,
-            Klode, K. &amp; Paul, S. (Hrsg.), <i>Sicherheitskonzepte für Veranstaltungen</i> (3. Aufl., S. 8–70).
-            DIN Media.
-        </li>
-        <li>
-            Still, K. G. (o. J.). DIM ICE risk analysis – event meta-model.
-            <a href="https://www.gkstill.com/Support/WhyModel/dimice.html">https://www.gkstill.com/Support/WhyModel/dimice.html</a>.
-            Zugegriffen: 10.03.2026.
-        </li>
-    </ol>
-
-</div>
-
-<!-- Bootstrap 5 JS Bundle with Popper -->
-<script crossorigin="anonymous"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
-</body>
-
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script
+      crossorigin="anonymous"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
 </html>
