@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check \"**/*.{js,html,css}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+  "*.{js,html,css}": "prettier --write"
+},
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3"
+  }
+}
