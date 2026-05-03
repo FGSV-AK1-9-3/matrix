@@ -81,29 +81,22 @@
   <form class="mt-4" id="matrixForm">
     <div class="tab-content">
 
-      <!-- GRUNDDATEN -->
-      <div class="tab-pane fade show active" id="tab-grunddaten">
-        <div class="card step-card">
-          <div class="row form-grid">
-            <div class="col-md-6">
-              <label class="form-label" for="grunddaten_veranstaltungsname">Veranstaltungsname</label>
-              <input id="grunddaten_veranstaltungsname" name="grunddaten_veranstaltungsname"
-                     class="form-control"
-                     type="text">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label required" for="grunddaten_personenzahl">
-                Personenzahl
-                <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                      title="Erwartete Anzahl der gleichzeitig maximal anwesenden Personen auf dem Veranstaltungsgelände.">?</span>
-              </label>
-              <input id="grunddaten_personenzahl" name="grunddaten_personenzahl" class="form-control"
-                     type="number"
-                     min="0" value="0" required>
+        <!-- GRUNDDATEN -->
+        <div class="tab-pane fade show active" id="tab-grunddaten">
+          <div class="card step-card">
+            <div class="row form-grid">
+              <div class="col-md-6">
+                <label class="form-label required" for="grunddaten_personenzahl">
+                  Personenzahl
+                  <span class="help-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Erwartete Anzahl der gleichzeitig maximal anwesenden Personen auf dem Veranstaltungsgelände.">?</span>
+                </label>
+                <input id="grunddaten_personenzahl" name="grunddaten_personenzahl" class="form-control" type="number"
+                  min="0" step="1" value="0" required>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
       <!-- VERANSTALTUNGSGELÄNDE -->
       <div class="tab-pane fade" id="tab-gelaende">
@@ -602,16 +595,16 @@
         const IDS_RECUR = ["wiederkehrende_veranstaltung_erfahrung", "wiederkehrende_veranstaltung_stoerungen"];
         const IDS_BEHAVIOR = ["besuchendenverhalten_ort_ablauf", "besuchendenverhalten_involvement", "besuchendenverhalten_soziale_gruppen"];
 
-        // ── Validation ────────────────────────────────────────────────────────────
-        function getMissingFields() {
-            return queryAll("select[required], input[required]").filter((el) => {
-                if (el.type === "number") {
-                    const n = parseFloat(el.value);
-                    return (!Number.isFinite(n) || n <= 0);
-                }
-                return !el.value;
-            });
-        }
+      // ── Validation ────────────────────────────────────────────────────────────
+      function getMissingFields() {
+        return queryAll("select[required], input[required]").filter((el) => {
+          if (el.type === "number") {
+            const n = parseFloat(el.value);
+            return (!Number.isFinite(n) || n <= 0 || !Number.isInteger(n));
+          }
+          return !el.value;
+        });
+      }
 
         function allRequiredFilled() {
             return getMissingFields().length === 0;
@@ -629,19 +622,19 @@
             new bootstrap.Modal(getById("validationModal")).show();
         }
 
-        // ── Progress & tab indicators ─────────────────────────────────────────────
-        function updateTabIndicators() {
-            queryAll('#mainTabs button[data-bs-toggle="tab"]').forEach(tab => {
-                const targetId = tab.getAttribute("data-bs-target").replace("#", "");
-                const pane = getById(targetId);
-                if (!pane) return;
-                const required = queryAll("select[required], input[required]", pane);
-                if (required.length === 0) return; // skip donate tab
-                const hasMissing = required.some(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
-                tab.classList.toggle("tab-missing", hasMissing);
-                tab.classList.toggle("tab-complete", !hasMissing);
-            });
-        }
+      // ── Progress & tab indicators ─────────────────────────────────────────────
+      function updateTabIndicators() {
+        queryAll('#mainTabs button[data-bs-toggle="tab"]').forEach(tab => {
+          const targetId = tab.getAttribute("data-bs-target").replace("#", "");
+          const pane = getById(targetId);
+          if (!pane) return;
+          const required = queryAll("select[required], input[required]", pane);
+          if (required.length === 0) return; // skip donate tab
+          const hasMissing = required.some(el => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
+          tab.classList.toggle("tab-missing", hasMissing);
+          tab.classList.toggle("tab-complete", !hasMissing);
+        });
+      }
 
         function updateProgress() {
             const req = queryAll("select[required], input[required]");
@@ -656,19 +649,22 @@
             updateTabIndicators();
         }
 
-        // ── Next-step button ──────────────────────────────────────────────────────
-        function updateNextStepVisibility() {
-            const complete = allRequiredFilled();
-            nextStepBtn.classList.toggle("d-none", complete);
-        }
+      // ── Next-step button ──────────────────────────────────────────────────────
+      function updateNextStepVisibility() {
+        const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+        const activeIndex = tabs.findIndex(tab => tab.classList.contains("active"));
+        // Hide "Next step" only when on the very last tab (Daten spenden)
+        const onLastTab = activeIndex === tabs.length - 1;
+        nextStepBtn.classList.toggle("d-none", onLastTab);
+      }
 
         nextStepBtn.addEventListener("click", () => {
             const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
             const activeIndex = tabs.findIndex(tab => tab.classList.contains("active"));
 
-            const currentPane = document.querySelector(".tab-pane.active");
-            const missingInTab = queryAll("select[required], input[required]", currentPane)
-                .filter((el) => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
+        const currentPane = document.querySelector(".tab-pane.active");
+        const missingInTab = queryAll("select[required], input[required]", currentPane)
+          .filter((el) => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
 
             if (missingInTab.length > 0) {
                 showMissingModal(missingInTab);
@@ -690,35 +686,39 @@
             // Only restrict forward navigation
             if (targetIdx <= activeIdx) return;
 
-            // Check all tabs up to (but not including) the target for missing fields
-            for (let i = 0; i < targetIdx; i++) {
-                const paneId = tabs[i].getAttribute("data-bs-target").replace("#", "");
-                const pane = getById(paneId);
-                if (!pane) continue;
-                const missing = queryAll("select[required], input[required]", pane)
-                    .filter(el => !el.value || (el.type === "number" && parseFloat(el.value) <= 0));
-                if (missing.length > 0) {
-                    e.preventDefault();
-                    showMissingModal(missing);
-                    return;
-                }
-            }
-        });
+        // Check all tabs up to (but not including) the target for missing fields
+        for (let i = 0; i < targetIdx; i++) {
+          const paneId = tabs[i].getAttribute("data-bs-target").replace("#", "");
+          const pane = getById(paneId);
+          if (!pane) continue;
+          const missing = queryAll("select[required], input[required]", pane)
+            .filter(el => !el.value || (el.type === "number" && (parseFloat(el.value) <= 0 || !Number.isInteger(parseFloat(el.value)))));
+          if (missing.length > 0) {
+            e.preventDefault();
+            showMissingModal(missing);
+            return;
+          }
+        }
+      });
 
-        // ── Field change handler ──────────────────────────────────────────────────
-        form.addEventListener("change", (e) => {
-            if (e.target.tagName === "SELECT" || e.target.type === "number") {
-                const v = e.target.value;
-                e.target.classList.remove("is-valid", "is-invalid");
-                if (e.target.type === "number") {
-                    const n = parseFloat(v);
-                    e.target.classList.add(n > 0 ? "is-valid" : "is-invalid");
-                } else {
-                    e.target.classList.add(v ? "is-valid" : "is-invalid");
-                }
-                updateProgress();
-            }
-        });
+      getById("mainTabs").addEventListener("shown.bs.tab", () => {
+        updateNextStepVisibility();
+      });
+
+      // ── Field change handler ──────────────────────────────────────────────────
+      form.addEventListener("change", (e) => {
+        if (e.target.tagName === "SELECT" || e.target.type === "number") {
+          const v = e.target.value;
+          e.target.classList.remove("is-valid", "is-invalid");
+          if (e.target.type === "number") {
+            const n = parseFloat(v);
+            e.target.classList.add(n > 0 && Number.isInteger(n) ? "is-valid" : "is-invalid");
+          } else {
+            e.target.classList.add(v ? "is-valid" : "is-invalid");
+          }
+          updateProgress();
+        }
+      });
 
         // ── Reset ─────────────────────────────────────────────────────────────────
         form.addEventListener("reset", (e) => {
@@ -735,9 +735,9 @@
         form.addEventListener("submit", (e) => {
             e.preventDefault();
 
-            const lines = [];
-            lines.push("Veranstaltungsname: " + (getById("grunddaten_veranstaltungsname").value || ""));
-            lines.push("Personenzahl: " + (getById("grunddaten_personenzahl").value || ""));
+        const data = {};
+        lines.push("Personenzahl: " + (getById("grunddaten_personenzahl").value || ""));
+
 
             queryAll("select").forEach(sel => {
                 const label = document.querySelector(`label[for="${sel.id}"]`)?.innerText || sel.id;
