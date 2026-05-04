@@ -537,16 +537,24 @@ test.describe('Form submission', () => {
    */
   async function captureSubmitUrl(page) {
     return new Promise((resolve) => {
-      page.route('https://freiburg.limesurvey.net/**', async (route) => {
+      page.route('https://forms.office.com/**', async (route) => {
         resolve(route.request().url());
         await route.abort(); // prevent actually leaving the page
       });
     });
   }
 
-  test('submit redirects to LimeSurvey URL with JSON payload', async ({
-    page,
-  }) => {
+  /**
+   * Extract and decode the compact summary string from the MS Forms URL.
+   * The parameter name is the long token after the last '&'.
+   */
+  function parseSummary(rawUrl) {
+    const decoded = decodeURIComponent(rawUrl);
+    const match = decoded.match(/&[^=]+=(.+)$/);
+    return match ? match[1] : null;
+  }
+
+  test('submit redirects to MS Forms URL', async ({ page }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
     await goToTab(page, '#tab-donate');
@@ -555,12 +563,11 @@ test.describe('Form submission', () => {
     await page.click('#submitBtn');
     const url = await urlPromise;
 
-    expect(url).toContain('freiburg.limesurvey.net');
-    expect(url).toContain('577923');
-    expect(url).toContain('G01Q01=');
+    expect(url).toContain('forms.office.com');
+    expect(url).toContain('ResponsePage.aspx');
   });
 
-  test('submitted URL contains encoded JSON with personenzahl', async ({
+  test('submitted URL contains compact summary with personenzahl', async ({
     page,
   }) => {
     await page.goto('/index.html');
@@ -600,28 +607,39 @@ test.describe('Form submission', () => {
     await page.click('#submitBtn');
     const rawUrl = await urlPromise;
 
-    const url = decodeURIComponent(rawUrl);
-    const jsonMatch = url.match(/G01Q01=(.+)/);
-    expect(jsonMatch).toBeTruthy();
-    const payload = JSON.parse(jsonMatch[1]);
-    expect(payload.personenzahl).toBe('2500');
+    const summary = parseSummary(rawUrl);
+    expect(summary).toBeTruthy();
+    expect(summary).toContain('"personenzahl":2500');
   });
 
-  test('submitted payload contains ergebnis (computed result)', async ({
+  test('submitted summary contains all 17 question fields', async ({
     page,
   }) => {
     await page.goto('/index.html');
     await fillAllFields(page);
     await goToTab(page, '#tab-donate');
-
     const urlPromise = captureSubmitUrl(page);
     await page.click('#submitBtn');
     const rawUrl = await urlPromise;
+    const summary = JSON.parse(`{${parseSummary(rawUrl)}}`);
 
-    const url = decodeURIComponent(rawUrl);
-    const payload = JSON.parse(url.match(/G01Q01=(.+)/)[1]);
-    expect(payload).toHaveProperty('ergebnis');
-    expect(parseFloat(payload.ergebnis)).toBeGreaterThan(0);
+    expect(Object.keys(summary).length).toBeGreaterThanOrEqual(17);
+  });
+
+  test('submitted summary contains computed result (ergebnis)', async ({
+    page,
+  }) => {
+    await page.goto('/index.html');
+    await fillAllFields(page);
+    await goToTab(page, '#tab-donate');
+    const urlPromise = captureSubmitUrl(page);
+    await page.click('#submitBtn');
+    const rawUrl = await urlPromise;
+    const summary = JSON.parse(`{${parseSummary(rawUrl)}}`);
+
+    expect(summary).toHaveProperty('ergebnis');
+    expect(typeof summary.ergebnis).toBe('number');
+    expect(summary.ergebnis).toBeGreaterThan(0);
   });
 });
 

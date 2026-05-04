@@ -1098,15 +1098,16 @@
           setTimeout(updateProgress, 0);
         });
 
-        // ── Submit → forward JSON to LimeSurvey ───────────────────────────────────
+        // ── Submit → forward to MS Forms ──────────────────────────────────────────
         form.addEventListener('submit', (e) => {
           e.preventDefault();
 
           const data = {};
-          data.personenzahl = getById('grunddaten_personenzahl').value || '';
+          data.personenzahl =
+            parseInt(getById('grunddaten_personenzahl').value) || '';
 
           queryAll('select').forEach((sel) => {
-            data[sel.id] = sel.value;
+            data[sel.id] = parseFloat(sel.value) || '';
           });
 
           // Compute result for submission (not displayed to user)
@@ -1117,13 +1118,34 @@
             multiplyFactors(IDS_COND) *
             multiplyFactors(IDS_FLOW);
           const right = addFactors(IDS_RECUR) * multiplyFactors(IDS_BEHAVIOR);
-          data.ergebnis = (left + right).toFixed(2);
+          data.ergebnis = parseFloat(left + right);
 
-          const json = encodeURIComponent(JSON.stringify(data));
+          const json = JSON.stringify(data);
+          const blob = encodeURIComponent(json.substring(1, json.length - 1));
           const url =
-            'https://freiburg.limesurvey.net/577923?lang=de&G01Q01=' + json;
+            'https://forms.office.com/Pages/ResponsePage.aspx?id=E5sbLDyJpUK7wdeh213bVMA9GzBK5AxOihOVY3tf3slUNVpFVUQ2RENBVjlZT0E1UTcyRTdMNEtQUS4u&r3d54742b902a4453b7a025fe7fc6c89f=' +
+            blob;
+          navigator.clipboard.writeText(blob);
           window.location.href = url;
         });
+
+        window.fillRandom = function () {
+          // --- number field ---
+          const num = document.getElementById('grunddaten_personenzahl');
+          if (num) {
+            num.value = Math.floor(Math.random() * 9900) + 100; // 100–10000
+            num.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+
+          // --- all selects: pick a random non-empty option ---
+          document.querySelectorAll('select[required]').forEach((sel) => {
+            const opts = Array.from(sel.options).filter((o) => o.value !== '');
+            if (opts.length) {
+              sel.value = opts[Math.floor(Math.random() * opts.length)].value;
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          });
+        };
 
         // ── Init ──────────────────────────────────────────────────────────────────
         queryAll('[data-bs-toggle="tooltip"]').forEach(
