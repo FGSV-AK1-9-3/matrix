@@ -13,6 +13,7 @@ Abhängigkeiten installieren und den Formatter ausführen:
 
 ```bash
 npm ci
+
 npm run format
 ```
 
@@ -25,5 +26,5 @@ Nach der Installation der Abhängigkeiten muss Chromium einmalig eingerichtet we
 npm ci
 npx playwright install chromium --with-deps
 
-npx playwright test
+npm run test
 ```
