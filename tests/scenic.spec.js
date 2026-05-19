@@ -666,3 +666,63 @@ test.describe('Tooltips', () => {
     }
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 12. Wiederkehr — Historische Störungen conditional behaviour
+// ─────────────────────────────────────────────────────────────────────────────
+
+test.describe('Wiederkehr – Historische Störungen', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/index.html');
+    await fillTabsUpTo(page, '#tab-wiederkehr');
+    await goToTab(page, '#tab-wiederkehr');
+  });
+
+  test('field is disabled and set to 0.0 when erstmalig is selected', async ({
+    page,
+  }) => {
+    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '5.0');
+
+    const stoerungen = page.locator('#wiederkehrende_veranstaltung_stoerungen');
+
+    await expect(stoerungen).toBeDisabled();
+    await expect(stoerungen).toHaveValue('0.0');
+  });
+
+  test('field is enabled and required when wiederkehrend is selected', async ({
+    page,
+  }) => {
+    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '1.0');
+
+    const stoerungen = page.locator('#wiederkehrende_veranstaltung_stoerungen');
+
+    await expect(stoerungen).toBeEnabled();
+    await expect(stoerungen).toHaveAttribute('required', '');
+  });
+
+  test('switching back from erstmalig to wiederkehrend re-enables the field and keeps default value', async ({
+    page,
+  }) => {
+    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '5.0');
+    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '1.0');
+
+    const stoerungen = page.locator('#wiederkehrende_veranstaltung_stoerungen');
+
+    await expect(stoerungen).toBeEnabled();
+    await expect(stoerungen).toHaveValue('0.0');
+  });
+
+  test('progress reaches 100% with erstmalig selected without answering Störungen', async ({
+    page,
+  }) => {
+    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '5.0');
+
+    await goToTab(page, '#tab-verhalten');
+
+    await page.selectOption('#besuchendenverhalten_ort_ablauf', '0.8');
+    await page.selectOption('#besuchendenverhalten_involvement', '1.0');
+    await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
+
+    await expect(page.locator('#progress_text')).toHaveText('100%');
+  });
+});
