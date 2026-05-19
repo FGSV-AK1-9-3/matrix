@@ -1074,6 +1074,29 @@
           updateNextStepVisibility();
         });
 
+        // ── Historische Störungen: Ein-/Ausblenden je nach Erfahrung ─────────────
+        function updateStoerungen() {
+          const erfahrung = getById('wiederkehrende_veranstaltung_erfahrung');
+          const stoerungen = getById('wiederkehrende_veranstaltung_stoerungen');
+
+          const isErstmalig =
+            erfahrung.value === '5.0' || erfahrung.value === '10.0';
+
+          stoerungen.classList.remove('is-valid', 'is-invalid');
+          if (isErstmalig) {
+            stoerungen.value = '0.0';
+            stoerungen.disabled = true;
+          } else {
+            stoerungen.disabled = false;
+          }
+          updateProgress();
+        }
+
+        getById('wiederkehrende_veranstaltung_erfahrung').addEventListener(
+          'change',
+          updateStoerungen,
+        );
+
         // ── Field change handler ──────────────────────────────────────────────────
         form.addEventListener('change', (e) => {
           if (e.target.tagName === 'SELECT' || e.target.type === 'number') {
@@ -1101,7 +1124,10 @@
             el.classList.remove('is-valid', 'is-invalid'),
           );
           nextStepBtn.classList.remove('d-none');
-          setTimeout(updateProgress, 0);
+          setTimeout(() => {
+            updateStoerungen();
+            updateProgress();
+          }, 0);
         });
 
         // ── Submit → forward to MS Forms ──────────────────────────────────────────
