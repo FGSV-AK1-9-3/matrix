@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Simulationen Quiz - SCENIC</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../custom.css" rel="stylesheet" />
+    <style>
+      .quiz-choice {
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .quiz-choice:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+      }
+      .quiz-choice .choice-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        background: var(--brand);
+        color: #fff;
+        font-weight: 700;
+        margin-right: 0.75rem;
+      }
+      .quiz-video-wrapper {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 3px solid transparent;
+        transition: border-color 0.2s ease;
+      }
+      .quiz-video-wrapper.correct {
+        border-color: #198754;
+      }
+      .quiz-video-wrapper.incorrect {
+        border-color: #dc3545;
+      }
+      .quiz-video-wrapper video {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .quiz-video-label {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        background: rgba(13, 51, 89, 0.85);
+        color: #fff;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        z-index: 2;
+      }
+      .quiz-video-wrapper.correct .quiz-video-label {
+        background: #198754;
+      }
+      .quiz-video-wrapper.incorrect .quiz-video-label {
+        background: #dc3545;
+      }
+      .quiz-reveal {
+        margin-top: 1.5rem;
+      }
+      .reveal-btn {
+        margin-top: 1rem;
+      }
+      .quiz-image {
+        max-width: 100%;
+        max-height: 340px;
+        width: auto;
+        margin: 1rem auto 1.5rem;
+        display: block;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+    </style>
+  </head>
+
+  <body>
+    <script src="../navbar.js"></script>
+    <div class="container py-5">
+      <h1>Simulationen Quiz</h1>
+      <p class="lead">
+        Personenstromsimulationen liefern oft Ergebnisse, die der Intuition
+        widersprechen. Anhand von drei Beispielen können Sie selbst prüfen, wie
+        gut sich das Verhalten von Menschenmengen abschätzen lässt – und wo eine
+        Simulation neue Erkenntnisse liefert.
+      </p>
+      <p>
+        Klicken Sie auf die Antwortmöglichkeit, die Sie für richtig halten. Die
+        Simulationsvideos und die Auflösung werden anschließend eingeblendet.
+      </p>
+
+      <!-- ==================== Beispiel I ==================== -->
+      <section class="quiz-question mt-5" data-correct="A">
+        <h2>Beispiel I – Notausgang</h2>
+        <p>
+          Zwei baugleiche Gänge werden geräumt.In einem Fall ist stehen beide
+          Fluchtwege zur Verfügung, im anderen Fall ist der näherliegende
+          Fluchtweg blockiert.
+        </p>
+        <p class="fw-bold">
+          In welchem Fall kommen die Personen schneller aus dem Gang?
+        </p>
+
+        <img
+          src="../resources/simulations-quiz/quiz-1-image.png"
+          alt="Skizze zu Beispiel I"
+          class="quiz-image"
+        />
+
+        <div class="row g-3 quiz-choices">
+          <div class="col-md-6">
+            <div class="card quiz-choice p-3" data-answer="A">
+              <div class="d-flex align-items-center">
+                <span class="choice-badge">A</span>
+                <span>Notausgang <b>geöffnet</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card quiz-choice p-3" data-answer="B">
+              <div class="d-flex align-items-center">
+                <span class="choice-badge">B</span>
+                <span>Notausgang <b>geschlossen</b></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-reveal" hidden>
+          <div class="row g-4 mt-1">
+            <div class="col-12">
+              <div class="quiz-video-wrapper" data-video="A">
+                <span class="quiz-video-label">A – Notausgang geöffnet</span>
+                <video
+                  src="../resources/simulations-quiz/media1.mp4"
+                  controls
+                ></video>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="quiz-video-wrapper" data-video="B">
+                <span class="quiz-video-label">B – Notausgang geschlossen</span>
+                <video
+                  src="../resources/simulations-quiz/media2.mp4"
+                  controls
+                ></video>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-success mt-4">
+            <b>Auflösung:</b> Antwort <b>B</b> ist richtig. Obwohl lt. MVStättVO
+            mehr Fluchtwegsbreite zu einer schnelleren Entfluchtung führt, ist
+            es in diesem Beispiel aufgrund der Anordnung der Fluchtwege nicht
+            so. Durch die geringe Kapazität des nähergelegenen Fluchtwegs gibt
+            es einen Rückstau, der den Gang blockiert und Personen den weiter
+            weg gelegenen, aber hoher Kapazität ausgestattete Fluchtweg gar
+            nicht erreicht werden kann. Bei der Anordnung der Fluchtwege ist
+            also darauf zu achten, dass der Rückstau eines Fluchtwegs nicht
+            einen anderen Fluchtweg blockiert. Um das zu prüfen, eignen sich
+            Simulationen.
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== Beispiel II ==================== -->
+      <section class="quiz-question mt-5" data-correct="B">
+        <h2>Beispiel II – Gangbreite und Personendichte</h2>
+        <p>
+          In der Abbildung ist ein Zuschauerrang in zwei Varianten zu sehen.
+          Links (Zustand <b>IST</b>) hat der Rang eine Kapazität von 1214
+          Personen, mit einer Gangbreite von 1,0m. Rechts (Zustand <b>SOLL</b>)
+          wurde die Kapazität des oberen Bereichs des Ranges erhöht und der Gang
+          im unteren Bereich auf 1,2 m verbreitert.
+        </p>
+        <p class="fw-bold">In welchem Fall sind die Leute schneller draußen?</p>
+
+        <img
+          src="../resources/simulations-quiz/quiz-2-image.png"
+          alt="Skizze zu Beispiel II"
+          class="quiz-image"
+        />
+
+        <div class="row g-3 quiz-choices">
+          <div class="col-md-6">
+            <div class="card quiz-choice p-3" data-answer="A">
+              <div class="d-flex align-items-center">
+                <span class="choice-badge">A</span>
+                <span> <b>IST</b> – 1214 Personen, 1&nbsp;m Gangbreite </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card quiz-choice p-3" data-answer="B">
+              <div class="d-flex align-items-center">
+                <span class="choice-badge">B</span>
+                <span>
+                  <b>SOLL</b> – 1416 Personen, 1,2&nbsp;m Gangbreite
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-reveal" hidden>
+          <div class="row g-4 mt-1">
+            <div class="col-md-6">
+              <div class="quiz-video-wrapper" data-video="A">
+                <span class="quiz-video-label">A – IST (1214 P, 1&nbsp;m)</span>
+                <video
+                  src="../resources/simulations-quiz/media3.mp4"
+                  controls
+                ></video>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="quiz-video-wrapper" data-video="B">
+                <span class="quiz-video-label"
+                  >B – SOLL (1416 P, 1,2&nbsp;m)</span
+                >
+                <video
+                  src="../resources/simulations-quiz/media4.mp4"
+                  controls
+                ></video>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-success mt-4">
+            <b>Auflösung:</b> Antwort <b>B</b> (SOLL) ist richtig. Obwohl im
+            SOLL-Zustand mehr Personen unterwegs sind, sorgt die zusätzliche
+            Gangbreite dafür, dass die maximale Verkehrsstärke höher ausfällt
+            und die Räumung insgesamt schneller abgeschlossen ist. Die 20&nbsp;%
+            größere Breite kompensiert die höhere Personenzahl – ein
+            Zusammenspiel, das per Handrechnung nur schwer abzuschätzen ist und
+            durch die Simulation quantifiziert wird. Die Erhöhung im oberen
+            Bereich des Rangs ist nicht ausschlaggebend für die
+            Gesamtfluchtzeit, da die größten Stauungen im unteren Bereich
+            auftreten.
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== Beispiel III ==================== -->
+      <section class="quiz-question mt-5">
+        <h2>Beispiel III – Einlassschleusen</h2>
+        <p>
+          Bei einer Veranstaltung wird der Einlass über 38 parallele
+          Sicherheitsschleusen abgewickelt. Jede Schleuse benötigt für den
+          Security Check pro Person <b>12 Sekunden</b>.
+        </p>
+        <p class="fw-bold">
+          Wie viele Personen können 38 Schleusen in der Minute passieren?
+        </p>
+
+        <img
+          src="../resources/simulations-quiz/quiz-3-image.png"
+          alt="Skizze zu Beispiel III"
+          class="quiz-image"
+        />
+
+        <div class="card p-4 my-3">
+          <div class="mb-2 text-muted">Handrechnung:</div>
+          <div class="fs-5">
+            38 Schleusen × (60&nbsp;s / 12&nbsp;s Security Check) = 38 Schleusen
+            × 5 Personen/Minute =
+            <b>190 Personen/Minute</b>
+          </div>
+        </div>
+
+        <p>
+          So weit die Theorie. Aber stimmt das auch im tatsächlichen Ablauf? Wir
+          überprüfen die Rechnung mit einer Simulation.
+        </p>
+        <button
+          class="btn btn-primary reveal-btn"
+          id="reveal-sim3"
+          type="button"
+        >
+          <i class="bi bi-play-circle me-1"></i> Simulation anzeigen
+        </button>
+
+        <div id="sim3-result" class="quiz-reveal" hidden>
+          <video
+            src="../resources/simulations-quiz/media5.mp4"
+            controls
+            class="w-100 mt-3"
+            style="border-radius: 12px"
+          ></video>
+          <div class="alert alert-warning mt-3">
+            <b>Die Simulation kommt zu anderen Ergebnissen:</b>
+            <div class="fs-5 mt-1">
+              190 Personen/Minute&nbsp; <b>≠</b> &nbsp;150 Personen/Minute
+            </div>
+            <div class="mt-2">Warum?</div>
+          </div>
+          <button
+            class="btn btn-outline-primary reveal-btn"
+            id="reveal-sim3-expl"
+            type="button"
+          >
+            Auflösung anzeigen
+          </button>
+          <div id="sim3-explanation" hidden>
+            <h3 class="mt-4">Sehen wir uns die Schleusen genauer an</h3>
+            <p><b>Es fehlen die Wechselzeiten.</b></p>
+            <video
+              src="../resources/simulations-quiz/media6.mp4"
+              controls
+              class="w-100"
+              style="border-radius: 12px"
+            ></video>
+            <p class="mt-3">
+              Rechnet man die Wechselzeiten hinzu – also die Zeit, die zwischen
+              zwei Kontrollvorgängen an einer Schleuse für Vor- und Nachrücken
+              benötigt wird – kommt man im Durchschnitt auf eine gesamte
+              Interaktionszeit von ca. <b>15 Sekunden statt 12 Sekunden</b>.
+              Solche Details werden in einfachen Handrechnungen leicht
+              übersehen; die Simulation macht sie sichtbar.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Interaktive A/B Antwortlogik
+      document.querySelectorAll('.quiz-question[data-correct]').forEach((q) => {
+        const correct = q.dataset.correct;
+        const reveal = q.querySelector('.quiz-reveal');
+        q.querySelectorAll('.quiz-choice').forEach((choice) => {
+          choice.addEventListener('click', () => {
+            const picked = choice.dataset.answer;
+            // Choices sperren und markieren
+            q.querySelectorAll('.quiz-choice').forEach((c) => {
+              c.style.pointerEvents = 'none';
+              if (c.dataset.answer === correct) {
+                c.classList.remove('border-primary');
+                c.style.borderColor = '#198754';
+              } else if (c.dataset.answer === picked) {
+                c.style.borderColor = '#dc3545';
+              } else {
+                c.style.opacity = '0.55';
+              }
+            });
+            // Videos einblenden und markieren
+            reveal.hidden = false;
+            reveal.querySelectorAll('.quiz-video-wrapper').forEach((v) => {
+              if (v.dataset.video === correct) v.classList.add('correct');
+              else if (v.dataset.video === picked) v.classList.add('incorrect');
+            });
+            reveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
+      });
+
+      // Beispiel III – Simulation Reveal
+      const revealSim3 = document.getElementById('reveal-sim3');
+      const sim3Result = document.getElementById('sim3-result');
+      revealSim3.addEventListener('click', () => {
+        sim3Result.hidden = false;
+        revealSim3.hidden = true;
+        sim3Result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      const revealExpl = document.getElementById('reveal-sim3-expl');
+      const sim3Explanation = document.getElementById('sim3-explanation');
+      revealExpl.addEventListener('click', () => {
+        sim3Explanation.hidden = false;
+        revealExpl.hidden = true;
+        sim3Explanation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    </script>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script
+      crossorigin="anonymous"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>

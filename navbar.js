@@ -19,6 +19,11 @@
       href: sites + 'procedure_description.html',
       label: 'Verfahren',
     },
+    {
+      id: 'simulations-quiz.html',
+      href: sites + 'simulations-quiz.html',
+      label: 'Quiz',
+    },
   ];
 
   const items = links
