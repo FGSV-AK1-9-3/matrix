@@ -19,6 +19,11 @@
       href: sites + 'procedure_description.html',
       label: 'Verfahren',
     },
+    {
+      id: 'simulation_examples.html',
+      href: sites + 'simulation_examples.html',
+      label: 'Beispiele für Simulationen',
+    },
   ];
 
   const items = links

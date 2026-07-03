@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Dokumentation - SCENIC</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="../custom.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <script src="../navbar.js"></script>
+    <div class="container py-5">
+      <h1>
+        Anwendungsbeispiel für Besuchersimulationen: Warteschlangensysteme
+      </h1>
+      <p>
+        Die grundsätzliche und allgemeine Antwort ist: Simulationen dienen dazu
+        zu bewerten, ob ein vorhandenes, bekanntes Angebot ausreicht, um eine
+        bekannte Nachfrage zu bedienen. „Angebot" ist dabei üblicherweise eine
+        Fläche, ein Querschnitt oder eine Zeit, „Nachfrage" sind Personen –
+        Besucher, Fußgänger, Radfahrer, Autofahrer.
+      </p>
+      <p>
+        Aber ist das nicht trivial? Nehmen wir als einfaches Beispiel eines
+        Angebots eine Kontrollstelle. Wenn eine Kontrolle 60 Sekunden benötigt,
+        dann können in einer Stunde 60 Personen kontrolliert werden. Ist die
+        Nachfrage höher, dann wächst die Warteschlange. Wenn die Nachfrage viel
+        höher ist, dann würde man mehrere Kontrollstellen parallel anbieten. 10
+        Kontrollstellen ermöglichen die Passage von 600 Personen. So weit, so
+        einfach.
+      </p>
+      <p>
+        Solch einfache Berechnungen sind in vielen Fällen sicherlich
+        ausreichend. Realistisch und präzise sind sie allerdings nicht.
+        Beispielsweise
+      </p>
+      <ul>
+        <li>
+          Realistischerweise dauern nicht alle Kontrollvorgänge gleich lange. In
+          manchen Stunden werden deswegen mehr, in anderen weniger als 60
+          Personen kontrolliert werden können.
+        </li>
+        <li>
+          Auch das Herantreten an die Kontrolle benötigt Zeit. Für eine einzelne
+          Kontrolle wird dies wenig sein. Werden Kontrollstellen allerdings
+          kombiniert, können relevante Zeitverluste entstehen.
+        </li>
+        <li>
+          Der Zulauf zu einer Kontrollstelle kann im Zeitverlauf stark
+          schwanken, insbesondere, wenn viele Besucher mit Öffentlichen
+          Verkehrsmitteln anreisen. Zeitweise strömen dann sehr viel mehr
+          Besucher zur Kontrollstelle als dort bedient werden können. Das
+          Angebot ist dann eine Kombination aus der Bearbeitungskapazität und
+          der verfügbaren Wartefläche.
+        </li>
+      </ul>
+      <p>
+        Hinter diesen konkreten Beispielen stehen ganz allgemeine Vorzüge der
+        Simulation gegenüber der natürlichen Arbeitsweise des menschlichen
+        Geistes und damit wie die Simulation zum hilfreichen Werkzeug für Planer
+        werden kann:
+      </p>
+      <ul>
+        <li>
+          Heterogene Verhaltensweisen: für einfache überschlägige Berechnungen
+          muss zwangsläufig davon ausgegangen werden, dass alle Personen gleich
+          sind und sich gleich verhalten, bzw. eine Berechnung ist nur mit
+          Mittelwerten möglich. Für Simulationen machen Heterogenitäten
+          jeglicher Art keinen Unterschied.
+        </li>
+        <li>
+          Zeitlich variierende Vorgänge: für einfache überschlägige Berechnungen
+          muss mit zeitlichen Mittelwerten gerechnet werden. Für Simulationen
+          bedeuten zeitlich variierende Vorgänge keine zusätzliche
+          Herausforderung.
+        </li>
+        <li>
+          Komplexität: während die Auswirkung einer Änderung häufig gut
+          abschätzbar ist, ist eine Kombination mehrerer Herausforderungen und
+          mehrerer Maßnahmen schwieriger zu übersehen. Die Simulation arbeitet
+          hingegen ohne Weiteres die Kombination zahlreicher bekannter Elemente
+          ab.
+        </li>
+      </ul>
+      <p>
+        Kehren wir zurück zum konkreten Beispiel der Warteschlangen an einer
+        Kontrollstelle und beginnen mit der einfachsten Konfiguration, bei der
+        die Servicedauer für alle Personen identisch ist und 60 Sekunden
+        beträgt. 100 Simulationsläufe, bei denen u.a. die Zeitpunkte des
+        Einsetzens der Fußgänger und deren Wunschgeschwindigkeiten variiert
+        werden, ergeben in der Mehrzahl der Fälle eine Kapazität von 59 und in
+        einer Minderzahl eine Kapazität von 58 Personen.
+      </p>
+      <div class="d-flex gap-3 align-items-start">
+        <img src="../resources/simulation/image002.jpg" />
+        <img src="../resources/simulation/image004.png" />
+      </div>
+      <p>
+        Dieses Ergebnis ist erwartbar und ließe sich auch überschlägig aus der
+        Servicedauer und der zusätzlichen Wechselzeit zwischen zwei Besuchern
+        von rund einer Sekunde berechnen. Schon mit dem nächsten Schritt wird
+        die analytische Berechnung der Häufigkeitsverteilung schwieriger,
+        schwierig genug, dass es deutlich einfacher ist ein Simulationsmodell zu
+        erstellen und die Simulationen auszuführen: nimmt man an, dass die
+        Servicezeit nur im Mittel 60 Sekunden beträgt, die einzelnen Vorgänge
+        aber gleichmäßig zwischen 45 und 75 Sekunden verteilt dauern, ergibt
+        sich die folgende Verteilung für die Kapazitäten.
+      </p>
+      <img src="../resources/simulation/image006.png" />
+      <p>
+        Ob dieser Unterschied von Relevanz ist, hängt davon ab, wie das Risiko
+        bewertet wird, dass mit einer Wahrscheinlichkeit von ca. 1% bzw. an
+        einer von 100 Kontrollstellen oder an einem von 100 Tagen nur 56
+        Personen die Kontrollstelle in einer Stunde passieren.
+      </p>
+      <p>
+        Nehmen wir nun an, dass ein Zustrom von rund 600 Personen pro Stunde
+        erwartet wird und planen deswegen mit 10 parallelen Kontrollstellen.
+      </p>
+      <img src="../resources/simulation/image008.png" />
+      <p>
+        Sofort wenn eine Kontrollstelle frei wird, begibt sich die nächste
+        Person aus der zentralen Warteschlange zu dieser. Durch den längeren
+        Zugangsweg entsteht ein größerer Verlust, der von der Simulation
+        quantifiziert wird.
+      </p>
+      <img src="../resources/simulation/image010.png" />
+      <p>
+        Obwohl die Kapazität des Systems nun deutlich unter den naiv erwarteten
+        600/h liegt, wird sie u.U. immer noch überschätzt. Ein hilfreicher und
+        häufig übersehener Nutzen von Simulationen ist, dass sich beim
+        Betrachten der resultierenden Animation das Gefühl einstellt,
+        unrealistisches Verhalten zu beobachten, weil dieser oder jener
+        Verhaltensaspekt bislang nicht berücksichtigt wird. In diesem Fall wäre
+        dies, dass die erste Person in der zentralen Warteschlange sofort
+        startet, wenn eine Kontrollstelle frei wird, während realistischerweise
+        einige Zeit vergeht, selbst wenn hohe Aufmerksamkeit unterstellt wird.
+      </p>
+      <p>
+        Fügt man dieses Zögern hinzu (konkret hier: 50% zögern nicht, einige
+        wenige bis zu 10 Sekunden), fällt die erwartete Kapazität weiter und die
+        Simulationsergebnisse erstrecken sich über einen noch größeren Bereich.
+      </p>
+      <img src="../resources/simulation/image012.png" />
+      <p>
+        Selbstverständlich beschränkt die Arbeit mit Simulationsmodellen sich
+        nicht auf die Reproduktion von Verhaltensaspekten und deren
+        Konsequenzen. Mindestens ebenso bedeutsam ist, die Auswirkung und
+        quantitative Bewertung möglicher Maßnahmen. Eine naheliegende Maßnahme
+        in diesem Beispielfall ist, an den Kontrollstellen mindestens eine
+        weitere Person warten zu lassen. Dies erweist sich – erwartungsgemäß –
+        als nützliche Maßnahme, denn die Kapazität steigt im Vergleich zur
+        vorigen Konfiguration von durchschnittlich 511 auf durchschnittlich 580
+        Personen/h.
+      </p>
+      <img src="../resources/simulation/image014.png" />
+      <img src="../resources/simulation/image016.png" />
+      <img src="../resources/simulation/image018.png" />
+      <p>
+        Dagegen bringt eine Verlegung des Auslasses der zentralen Warteschlange
+        in eine zentrale Position keine signifikante Verbesserung mehr.
+      </p>
+      <img src="../resources/simulation/image020.png" />
+      <img src="../resources/simulation/image022.png" />
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script
+      crossorigin="anonymous"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>
