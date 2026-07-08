@@ -24,7 +24,8 @@
         transition:
           transform 0.15s ease,
           border-color 0.15s ease,
-          box-shadow 0.15s ease;
+          box-shadow 0.15s ease,
+          background-color 0.15s ease;
       }
       .quiz-choice:hover {
         transform: translateY(-2px);
@@ -41,6 +42,24 @@
         color: #fff;
         font-weight: 700;
         margin-right: 0.75rem;
+      }
+      .quiz-choice.answer-correct {
+        border-color: #198754 !important;
+        background-color: #d1e7dd;
+      }
+      .quiz-choice.answer-incorrect {
+        border-color: #dc3545 !important;
+        background-color: #f8d7da;
+      }
+      .quiz-choice .result-icon {
+        margin-left: auto;
+        font-size: 1.4rem;
+      }
+      .quiz-choice .result-icon.bi-check-circle-fill {
+        color: #198754;
+      }
+      .quiz-choice .result-icon.bi-x-circle-fill {
+        color: #dc3545;
       }
       .quiz-video-wrapper {
         position: relative;
@@ -112,10 +131,10 @@
       </p>
 
       <!-- ==================== Beispiel I ==================== -->
-      <section class="quiz-question mt-5" data-correct="A">
+      <section class="quiz-question mt-5" data-correct="B">
         <h2>Beispiel I – Notausgang</h2>
         <p>
-          Zwei baugleiche Gänge werden geräumt.In einem Fall ist stehen beide
+          Zwei baugleiche Gänge werden geräumt. In einem Fall ist stehen beide
           Fluchtwege zur Verfügung, im anderen Fall ist der näherliegende
           Fluchtweg blockiert.
         </p>
@@ -348,21 +367,32 @@
       document.querySelectorAll('.quiz-question[data-correct]').forEach((q) => {
         const correct = q.dataset.correct;
         const reveal = q.querySelector('.quiz-reveal');
+
         q.querySelectorAll('.quiz-choice').forEach((choice) => {
           choice.addEventListener('click', () => {
             const picked = choice.dataset.answer;
-            // Choices sperren und markieren
+            const wasCorrect = picked === correct;
+
+            // Choices sperren und deutlich markieren
             q.querySelectorAll('.quiz-choice').forEach((c) => {
               c.style.pointerEvents = 'none';
+              const row = c.querySelector('.d-flex');
+
               if (c.dataset.answer === correct) {
-                c.classList.remove('border-primary');
-                c.style.borderColor = '#198754';
+                c.classList.add('answer-correct');
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-check-circle-fill result-icon';
+                row.appendChild(icon);
               } else if (c.dataset.answer === picked) {
-                c.style.borderColor = '#dc3545';
+                c.classList.add('answer-incorrect');
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-x-circle-fill result-icon';
+                row.appendChild(icon);
               } else {
-                c.style.opacity = '0.55';
+                c.style.opacity = '0.5';
               }
             });
+
             // Videos einblenden und markieren
             reveal.hidden = false;
             reveal.querySelectorAll('.quiz-video-wrapper').forEach((v) => {
@@ -389,6 +419,45 @@
         sim3Explanation.hidden = false;
         revealExpl.hidden = true;
         sim3Explanation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      function syncVideoGroup(videos) {
+        if (videos.length < 2) return;
+
+        let syncing = false;
+
+        videos.forEach((video) => {
+          const others = videos.filter((v) => v !== video);
+
+          video.addEventListener('play', () => {
+            if (syncing) return;
+            syncing = true;
+            others.forEach((other) => {
+              if (other.paused) {
+                const p = other.play();
+                if (p && p.catch) p.catch(() => {});
+              }
+            });
+            syncing = false;
+          });
+
+          video.addEventListener('pause', () => {
+            // Ein Pause durchs natürliche Videoende soll die anderen nicht stoppen
+            if (syncing || video.ended) return;
+            syncing = true;
+            others.forEach((other) => {
+              if (!other.paused) other.pause();
+            });
+            syncing = false;
+          });
+        });
+      }
+
+      document.querySelectorAll('.quiz-reveal').forEach((reveal) => {
+        const videos = Array.from(
+          reveal.querySelectorAll('.quiz-video-wrapper video'),
+        );
+        syncVideoGroup(videos);
       });
     </script>
 
