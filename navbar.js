@@ -55,8 +55,8 @@ const exampleDropdown = `
   </a>
 
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item${page === 'queue.html' ? ' active' : ''}" href="${sites}queue.html">Queue</a></li>
-    <li><a class="dropdown-item${page === 'evacuation.html' ? ' active' : ''}" href="${sites}evacuation.html">Evakuierung</a></li>
+    <li><a class="dropdown-item${page === 'queue.html' ? ' active' : ''}" href="${sites}queue.html">Warteschlange</a></li>
+    <li><a class="dropdown-item${page === 'evacuation.html' ? ' active' : ''}" href="${sites}evacuation.html">Räumung</a></li>
     <li><a class="dropdown-item${page === 'simulations-quiz.html' ? ' active' : ''}" href="${sites}simulations-quiz.html">Quiz</a></li>
   </ul>
 </li>
