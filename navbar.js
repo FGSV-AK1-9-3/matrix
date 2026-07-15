@@ -20,6 +20,11 @@
       label: 'Verfahren',
     },
     {
+      id: 'simulation_examples.html',
+      href: sites + 'simulation_examples.html',
+      label: 'Beispiele für Simulationen',
+    },
+    {
       id: 'simulations-quiz.html',
       href: sites + 'simulations-quiz.html',
       label: 'Quiz',
