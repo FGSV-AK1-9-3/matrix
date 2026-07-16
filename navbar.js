@@ -7,42 +7,41 @@
   const sites = inSites ? '' : 'sites/';
 
   const links = [
-  {
-    id: 'background.html',
-    href: sites + 'background.html',
-    label: 'Was ist SCENIC?',
-  },
-  {
-    id: 'procedure_description.html',
-    href: sites + 'procedure_description.html',
-    label: 'Wie funktioniert es?',
-  },
-  {
-    id: 'intro.html',
-    href: sites + 'intro.html',
-    label: 'Was ist eine Simulation?',
-  },
-];
+    {
+      id: 'background.html',
+      href: sites + 'background.html',
+      label: 'Was ist SCENIC?',
+    },
+    {
+      id: 'procedure_description.html',
+      href: sites + 'procedure_description.html',
+      label: 'Wie funktioniert es?',
+    },
+    {
+      id: 'intro.html',
+      href: sites + 'intro.html',
+      label: 'Was ist eine Simulation?',
+    },
+  ];
 
-
- const normalItems = links
-  .map(
-    (l) =>
-      `<li class="nav-item">
+  const normalItems = links
+    .map(
+      (l) =>
+        `<li class="nav-item">
         <a class="nav-link${page === l.id ? ' active' : ''}" href="${l.href}">
           ${l.label}
         </a>
       </li>`,
-  )
-  .join('');
+    )
+    .join('');
 
-const exampleActive = [
-  'queue.html',
-  'evacuation.html',
-  'simulations-quiz.html',
-].includes(page);
+  const exampleActive = [
+    'queue.html',
+    'evacuation.html',
+    'simulations-quiz.html',
+  ].includes(page);
 
-const exampleDropdown = `
+  const exampleDropdown = `
 <li class="nav-item dropdown">
   <a
     class="nav-link dropdown-toggle${exampleActive ? ' active' : ''}"
@@ -62,7 +61,7 @@ const exampleDropdown = `
 </li>
 `;
 
-const faqItem = `
+  const faqItem = `
 <li class="nav-item">
   <a class="nav-link${page === 'faq.html' ? ' active' : ''}" href="${sites}faq.html">
     FAQs
@@ -70,9 +69,9 @@ const faqItem = `
 </li>
 `;
 
-const items = normalItems + exampleDropdown + faqItem;
+  const items = normalItems + exampleDropdown + faqItem;
 
-const nav = `<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  const nav = `<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="${root}index.html">
             SCENIC
@@ -98,4 +97,5 @@ const nav = `<nav class="navbar navbar-expand-lg navbar-light bg-light">
     </div>
 </nav>`;
 
-document.currentScript.insertAdjacentHTML('afterend', nav);})();
+  document.currentScript.insertAdjacentHTML('afterend', nav);
+})();
