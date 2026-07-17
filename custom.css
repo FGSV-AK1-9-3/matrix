@@ -219,4 +219,7 @@ figcaption {
   .nav-link {
     margin-bottom: 0.5rem;
   }
+  #mainTabs {
+    display: none;
+  }
 }
