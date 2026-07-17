@@ -180,6 +180,20 @@ figcaption {
     padding: 0 1rem;
   }
 
+  .app-title {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.8rem;
+  }
+
+  .step-card {
+    padding: 1rem;
+  }
+
   .result-hero {
     flex-direction: column;
     padding: 2rem 0;
@@ -187,36 +201,6 @@ figcaption {
 
   .result-box {
     width: 100%;
-    padding: 2rem;
-  }
-
-  .nav-tabs {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav-link {
-    margin-bottom: 0.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .app-title {
-    font-size: 1.75rem;
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
-  }
-
-  .step-card {
-    padding: 1rem;
-  }
-
-  .result-box {
     padding: 1.5rem;
   }
 
@@ -225,14 +209,14 @@ figcaption {
   }
 
   .nav-tabs {
+    flex-direction: column;
+    align-items: flex-start;
     overflow-x: auto;
     flex-wrap: nowrap;
     white-space: nowrap;
   }
-}
 
-@media (max-width: 768px) {
-  .navbar-brand {
-    font-size: 1.8rem;
+  .nav-link {
+    margin-bottom: 0.5rem;
   }
 }

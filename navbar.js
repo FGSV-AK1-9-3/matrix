@@ -13,15 +13,17 @@
       label: 'Was ist SCENIC?',
     },
     {
-      id: 'procedure_description.html',
-      href: sites + 'procedure_description.html',
+      id: 'procedure-description.html',
+      href: sites + 'procedure-description.html',
       label: 'Wie funktioniert es?',
     },
     {
-      id: 'intro.html',
-      href: sites + 'intro.html',
+      id: 'simulation-intro.html',
+      href: sites + 'simulation-intro.html',
       label: 'Was ist eine Simulation?',
     },
+
+    ,
   ];
 
   const normalItems = links
@@ -54,8 +56,8 @@
   </a>
 
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item${page === 'queue.html' ? ' active' : ''}" href="${sites}queue.html">Warteschlange</a></li>
-    <li><a class="dropdown-item${page === 'evacuation.html' ? ' active' : ''}" href="${sites}evacuation.html">Räumung</a></li>
+  <li><a class="dropdown-item${page === 'examples-queue.html' ? ' active' : ''}" href="${sites}examples-queue.html">Warteschlange</a></li>
+    <li><a class="dropdown-item${page === 'examples-evacuation.html' ? ' active' : ''}" href="${sites}examples-evacuation.html">Räumung</a></li>
     <li><a class="dropdown-item${page === 'simulations-quiz.html' ? ' active' : ''}" href="${sites}simulations-quiz.html">Quiz</a></li>
   </ul>
 </li>
