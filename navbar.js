@@ -38,8 +38,8 @@
     .join('');
 
   const exampleActive = [
-    'queue.html',
-    'evacuation.html',
+    'examples-queue.html',
+    'examples-evacuation.html',
     'simulations-quiz.html',
   ].includes(page);
 
