@@ -810,6 +810,14 @@
 
         <!-- Buttons unter dem Formular -->
         <div class="d-flex gap-2 mt-3">
+          <button
+            class="btn btn-outline-secondary d-md-none"
+            type="button"
+            id="prevStepBtn"
+          >
+            <i class="bi bi-arrow-left-circle me-1"></i>Zurück
+          </button>
+
           <button class="btn btn-outline-secondary btn-sm" type="reset">
             <i class="bi bi-arrow-counterclockwise me-1"></i>Zurücksetzen
           </button>
@@ -889,6 +897,7 @@
         // ── DOM refs ──────────────────────────────────────────────────────────────
         const form = document.getElementById('matrixForm');
         const nextStepBtn = document.getElementById('nextStepBtn');
+        const prevStepBtn = document.getElementById('prevStepBtn');
 
         // ── Helpers ──────────────────────────────────────────────────────────────
         function getById(id) {
@@ -1031,6 +1040,9 @@
 
           getById('stepProgress').style.width =
             `${((activeIndex + 1) / totalSteps) * 100}%`;
+          if (prevStepBtn) {
+            prevStepBtn.disabled = activeIndex === 0;
+          }
         }
 
         // ── Next-step button ──────────────────────────────────────────────────────
@@ -1069,6 +1081,18 @@
 
           if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
             new bootstrap.Tab(tabs[activeIndex + 1]).show();
+          }
+        });
+
+        prevStepBtn?.addEventListener('click', () => {
+          const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+
+          const activeIndex = tabs.findIndex((tab) =>
+            tab.classList.contains('active'),
+          );
+
+          if (activeIndex > 0) {
+            new bootstrap.Tab(tabs[activeIndex - 1]).show();
           }
         });
 
