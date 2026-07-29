@@ -37,22 +37,6 @@
         angezeigt.
       </p>
 
-      <!-- Fortschritt -->
-      <div class="mb-3">
-        <div class="d-flex justify-content-between small mb-1">
-          <span class="text-muted">Fortschritt</span>
-          <span class="text-muted" id="progress_text">0%</span>
-        </div>
-        <div class="progress">
-          <div
-            class="progress-bar bg-primary"
-            role="progressbar"
-            id="progress_bar"
-            style="width: 0%"
-          ></div>
-        </div>
-      </div>
-
       <!-- Tabs mit Icons -->
       <ul class="nav nav-tabs mt-4" id="mainTabs" role="tablist">
         <li class="nav-item">
@@ -137,20 +121,13 @@
         </li>
       </ul>
 
-      <div id="mobileStepper" class="d-md-none mb-4">
+      <div id="mobileStepper" class="mb-4">
         <div class="small text-muted mb-2">
           Schritt <span id="stepCurrent">1</span> von
           <span id="stepTotal">8</span>
         </div>
 
-        <div class="progress">
-          <div
-            id="stepProgress"
-            class="progress-bar"
-            role="progressbar"
-            style="width: 12%"
-          ></div>
-        </div>
+        <div id="wizardSteps" class="wizard-steps mb-3"></div>
 
         <h5 class="mt-3 mb-0" id="stepTitle">Grunddaten</h5>
       </div>
@@ -811,7 +788,7 @@
         <!-- Buttons unter dem Formular -->
         <div class="d-flex gap-2 mt-3">
           <button
-            class="btn btn-outline-secondary d-md-none"
+            class="btn btn-outline-secondary"
             type="button"
             id="prevStepBtn"
           >
@@ -1014,9 +991,6 @@
           const done = req.length - missing.length;
           const pct = req.length ? Math.round((done * 100) / req.length) : 0;
 
-          getById('progress_bar').style.width = pct + '%';
-          getById('progress_text').textContent = pct + '%';
-
           updateNextStepVisibility();
           updateTabIndicators();
         }
@@ -1033,13 +1007,30 @@
 
           const totalSteps = tabs.length;
 
+          const wizardSteps = getById('wizardSteps');
+
+          wizardSteps.innerHTML = tabs
+            .map((_, index) => {
+              const state =
+                index < activeIndex
+                  ? 'completed'
+                  : index === activeIndex
+                    ? 'active'
+                    : 'upcoming';
+
+              return `
+  <span class="wizard-step ${state}">
+    ${index < activeIndex ? '✓' : ''}
+  </span>
+`;
+            })
+            .join('');
+
           getById('stepCurrent').textContent = activeIndex + 1;
           getById('stepTotal').textContent = totalSteps;
 
           getById('stepTitle').textContent = tabs[activeIndex].innerText.trim();
 
-          getById('stepProgress').style.width =
-            `${((activeIndex + 1) / totalSteps) * 100}%`;
           if (prevStepBtn) {
             prevStepBtn.disabled = activeIndex === 0;
           }
