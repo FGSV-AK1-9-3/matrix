@@ -23,7 +23,7 @@
     <script src="../navbar.js"></script>
     <div class="container py-5">
       <h1>Einführung Simulationen</h1>
-      <p>
+      <p class="lead">
         Ziel dieses Dokuments ist es, ein Grundverständnis für Simulationen zu
         vermitteln, damit das SCENIC-Verfahren zielgerichtet eingesetzt werden
         kann. Im Folgenden wird erläutert, was eine Simulation ist und welche
@@ -35,7 +35,7 @@
       <h2>Zusammenfassung</h2>
       <p>
         Personenstromsimulationen sind eine Methode, um die Bewegung von
-        Menschen (z.B. zur Bewertung von Vorgaben des Brandschutzes und zur
+        Menschen (z. B. zur Bewertung von Vorgaben des Brandschutzes und zur
         Planung von Veranstaltungen) in einer räumlichen Umgebung zu
         analysieren. Sie können dazu eingesetzt werden, Schutzziele zu
         überprüfen z. B. über Leistungskriterien, wie in der DIN 18009-2
@@ -76,14 +76,17 @@
         nützliche und plausible Ergebnisse zu liefern.
       </p>
       <h2>Allgemeine Definition von Simulationen</h2>
+      <p>Unter Simulation versteht man laut VDI:</p>
+      <blockquote class="definition-quote">
+        „Nachbildung eines dynamischen Prozesses in einem System mithilfe eines
+        experimentierfähigen Modells, um zu Erkenntnissen zu gelangen, die auf
+        die Wirklichkeit übertragbar sind“.
+        <a href="#ref2" class="footnote">[2]</a>
+      </blockquote>
       <p>
-        Unter Simulation versteht man laut VDI: „Nachbildung eines dynamischen
-        Prozesses in einem System mithilfe eines experimentierfähigen Modells,
-        um zu Erkenntnissen zu gelangen, die auf die Wirklichkeit übertragbar
-        sind”. <a href="#ref2" class="footnote">[2]</a> Das bedeutet, dass eine
-        Simulation die für die Fragestellung relevanten Prozesse möglichst
-        realitätsnah abbilden soll. Simulationen ersetzen nicht die Realität,
-        sondern ermöglichen Rückschlüsse auf die Realität.
+        Das bedeutet, dass eine Simulation die für die Fragestellung relevanten
+        Prozesse möglichst realitätsnah abbilden soll. Simulationen ersetzen
+        nicht die Realität, sondern ermöglichen Rückschlüsse auf die Realität.
       </p>
       <p>
         Der Einsatz von Simulationen zur Untersuchung von Personenströmen, oder
@@ -106,13 +109,19 @@
         Bedingungen analysiert werden. Abbildung 1 zeigt ein Beispiel für die
         Visualisierung einer Simulation.
       </p>
-      <img src="../resources/intro/image_3.png" />
-      <figcaption>
-        <b>Abbildung 1:</b> Beispiel für eine Simulation: Jeder blaue Punkt
-        entspricht einer simulierten Person.
-        <a href="#ref3" class="footnote">[3]</a>
-      </figcaption>
+      <figure class="content-figure">
+        <img
+          src="../resources/intro/image_3.png"
+          alt="Visualisierung einer Personenstromsimulation mit blauen Punkten für simulierte Personen"
+        />
+        <figcaption>
+          <b>Abbildung 1:</b> Beispiel für eine Simulation: Jeder blaue Punkt
+          entspricht einer simulierten Person.
+          <a href="#ref3" class="footnote">[3]</a>
+        </figcaption>
+      </figure>
       <h2>Grundlagenwissen</h2>
+      <h3>Makroskopische und mikroskopische Modelle</h3>
       <p>
         Mit Personenstromsimulationen wird die Dynamik von Menschenmengen
         abgebildet. Es wird zwischen makroskopischen und mikroskopischen
@@ -128,6 +137,25 @@
         Interaktionen mit umgebenden Personen und mit der „baulichen“ Umgebung
         (Wände, Hindernisse, etc.).
       </p>
+      <div class="compare-cards">
+        <div class="compare-card">
+          <h4><i class="bi bi-calculator"></i> Makroskopische Modelle</h4>
+          <p>
+            Handrechenverfahren, die mit Durchschnittswerten rechnen. Ohne
+            Softwareunterstützung nutzbar, z. B. für überschlägige
+            Räumungszeiten oder Personenverkehrsstärken.
+          </p>
+        </div>
+        <div class="compare-card">
+          <h4><i class="bi bi-cpu"></i> Mikroskopische Modelle</h4>
+          <p>
+            Softwaregestützte Berechnung der Bewegung jeder einzelnen Person,
+            einschließlich ihrer Wechselwirkung mit anderen Personen und der
+            baulichen Umgebung.
+          </p>
+        </div>
+      </div>
+      <h3>Normen und ihre Übertragbarkeit auf Veranstaltungen</h3>
       <p>
         Der Einsatz von mikroskopischen Personenstromsimulationen im
         Räumungskontext ist im Brandschutz ein weit verbreiteter Ansatz zur
@@ -142,6 +170,7 @@
         andere Wegwahl zu verschiedenen Zielbereichen unter Berücksichtigung des
         Anreisemittels betrachtet werden.
       </p>
+      <h3>Fragestellungen konkret formulieren</h3>
       <p>
         Bei der Untersuchung von Veranstaltungsszenarien ist zu beachten, dass
         mit einer Simulation nicht die Veranstaltung oder Versammlung betrachtet
@@ -178,6 +207,7 @@
         reisen die Personen an? Wie viele Personen suchen den vorderen
         Bühnenbereich wie lange vor dem Main Act auf?
       </p>
+      <h3>Vom Veranstaltungsszenario zum Simulationsszenario</h3>
       <p>
         Es reicht also nicht, die Fragestellung zu formulieren, sondern es muss
         - wie auch bei der Erstellung von Veranstaltungsszenarien innerhalb des
@@ -191,16 +221,22 @@
         diese Rahmenbedingungen in vereinfachte Faktoren übersetzt werden, die
         im Modell eindeutig abgebildet werden können (z. B. kann ein matschiger
         Boden im Veranstaltungsszenario durch eine reduzierte Geschwindigkeit in
-        das Simulationsszenario "übersetzt" werden). Dieser Vorgang erfordert
+        das Simulationsszenario „übersetzt“ werden). Dieser Vorgang erfordert
         sowohl Veranstaltungs- als auch Modellierungswissen.
       </p>
-      <img src="../resources/intro/image_2.png" />
-      <figcaption>
-        <b>Abbildung 2:</b> Schematische Illustration der Abstraktion, die durch
-        das Übersetzen der Realität in ein simulierbares System erfolgt
-        (angelehnt an Benjamin Schröder (Vortrag RiMEA).
-        <a href="#ref6" class="footnote">[6]</a>
-      </figcaption>
+      <figure class="content-figure">
+        <img
+          src="../resources/intro/image_2.png"
+          alt="Schematische Illustration der Abstraktion von der Veranstaltungsrealität in ein simulierbares Modell"
+        />
+        <figcaption>
+          <b>Abbildung 2:</b> Schematische Illustration der Abstraktion, die
+          durch das Übersetzen der Realität in ein simulierbares System erfolgt
+          (angelehnt an Benjamin Schröder (Vortrag RiMEA).
+          <a href="#ref6" class="footnote">[6]</a>
+        </figcaption>
+      </figure>
+      <h3>Grenzen vereinfachter Modelle</h3>
       <p>
         Simulationsmodelle sind vereinfachte Darstellungen der Realität, was
         bedeutet, dass man mit ihnen nur prüfen kann, ob die in der
@@ -220,12 +256,18 @@
       <p>
         Für das Verständnis von Personenströmen sind die Begriffe der
         Verkehrsstärke und Kapazität grundlegend. Im EVC ist folgende Definition
-        zu finden (Anhang D, Seite 156): „Die Kapazität einer Verkehrsanlage ist
-        als größte Verkehrsstärke definiert, die ein Verkehrsstrom bei gegebenen
-        Bedingungen erreichen kann.“ Zur Bemessung der Verkehrsqualität auf
-        Fußwegetappen und zur Abschätzung von (zeitlichen und räumlichen)
-        Überlastungen kommen Handrechenverfahren (=makroskopischen Modelle) zum
-        Einsatz (siehe auch EVC, Anhang C und E), wie z. B.:
+        zu finden (Anhang D, Seite 156):
+      </p>
+      <blockquote class="definition-quote">
+        „Die Kapazität einer Verkehrsanlage ist als größte Verkehrsstärke
+        definiert, die ein Verkehrsstrom bei gegebenen Bedingungen erreichen
+        kann.“
+      </blockquote>
+      <p>
+        Zur Bemessung der Verkehrsqualität auf Fußwegetappen und zur Abschätzung
+        von (zeitlichen und räumlichen) Überlastungen kommen Handrechenverfahren
+        (=makroskopischen Modelle) zum Einsatz (siehe auch EVC, Anhang C und E),
+        wie z. B.:
       </p>
       <ul>
         <li>
@@ -285,12 +327,17 @@
         sinkt und es entsteht ein Stau. Für weiterführende Informationen wird
         auf die EVC, insbesondere Anhang D, verwiesen.
       </p>
-      <img src="../resources/intro/image_1.png" />
-      <figcaption>
-        <b>Abbildung 3:</b> Schematische Darstellung des Fundamentaldiagramms
-        mit verschiedenen Verkehrszuständen.
-        <a href="#ref7" class="footnote">[7]</a>
-      </figcaption>
+      <figure class="content-figure">
+        <img
+          src="../resources/intro/image_1.png"
+          alt="Fundamentaldiagramm mit Verkehrszuständen: Zusammenhang zwischen Personendichte und Bewegungsfluss"
+        />
+        <figcaption>
+          <b>Abbildung 3:</b> Schematische Darstellung des Fundamentaldiagramms
+          mit verschiedenen Verkehrszuständen.
+          <a href="#ref7" class="footnote">[7]</a>
+        </figcaption>
+      </figure>
       <p>
         Die konkrete Ausprägung des Fundamentaldiagramms für Fußgänger ist das
         Ergebnis jahrzehntelanger Forschung im Bereich der Fußgängerdynamik.
@@ -319,13 +366,24 @@
         Staus vor Engstellen oder die Bahnenbildung im Zweirichtungsverkehr
         (siehe Abbildung 4).
       </p>
-      <img src="../resources/intro/image_5.png" />
-      <img src="../resources/intro/image_4.png" />
-      <figcaption>
-        <b>Abbildung 4:</b> Aufnahmen von Fußgängerexperimenten, die die Bildung
-        von Stauungen vor Engstellen (links) und Bahnen in einem bidirektionalen
-        Strom (rechts) zeigen. <a href="#ref8" class="footnote">[8]</a>
-      </figcaption>
+      <figure class="content-figure">
+        <div class="fig-row">
+          <img
+            src="../resources/intro/image_5.png"
+            alt="Fußgängerexperiment: Stauungsbildung vor einer Engstelle"
+          />
+          <img
+            src="../resources/intro/image_4.png"
+            alt="Fußgängerexperiment: Bahnenbildung im bidirektionalen Personenstrom"
+          />
+        </div>
+        <figcaption>
+          <b>Abbildung 4:</b> Aufnahmen von Fußgängerexperimenten, die die
+          Bildung von Stauungen vor Engstellen (links) und Bahnen in einem
+          bidirektionalen Strom (rechts) zeigen.
+          <a href="#ref8" class="footnote">[8]</a>
+        </figcaption>
+      </figure>
       <p>
         Die Verwendung von Standards entbindet Anwendende aber nicht von der
         Pflicht, sich Gedanken über die grundlegenden Annahmen der Bewegung der

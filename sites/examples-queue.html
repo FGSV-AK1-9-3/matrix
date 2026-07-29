@@ -25,11 +25,12 @@
       <h1>
         Anwendungsbeispiel für Besuchersimulationen: Warteschlangensysteme
       </h1>
+      <h2>Warum reichen einfache Berechnungen nicht aus?</h2>
       <p>
         Simulationen dienen grundsätzlich dazu, zu bewerten, ob ein bekanntes
-        Angebot ausreicht, um eine bekannte Nachfrage zu bedienen. "Angebot" ist
+        Angebot ausreicht, um eine bekannte Nachfrage zu bedienen. „Angebot“ ist
         dabei üblicherweise eine Fläche, ein Querschnitt oder eine Zeit,
-        wohingegen "Nachfrage" Personen sind, z. B. Besuchende, Fußgänger:innen,
+        wohingegen „Nachfrage“ Personen sind, z. B. Besuchende, Fußgänger:innen,
         Radfahrende, Autofahrende.
       </p>
       <p>
@@ -65,6 +66,7 @@
           der verfügbaren Wartefläche.
         </li>
       </ul>
+      <h2>Vorteile der Simulation gegenüber Handrechnungen</h2>
       <p>
         Hinter diesen konkreten Beispielen stehen allgemeine Vorzüge der
         Simulation gegenüber überschlägigen Handrechnungen – sie machen die
@@ -92,6 +94,7 @@
           ab.
         </li>
       </ul>
+      <h2>Beispiel: Eine einzelne Kontrollstelle</h2>
       <p>
         Kehren wir zum konkreten Beispiel der Warteschlangen an einer
         Kontrollstelle zurück und beginnen mit der einfachsten Konfiguration,
@@ -101,10 +104,22 @@
         ergeben in der Mehrzahl der Fälle eine Kapazität von 59, in einer
         Minderzahl von 58 Personen pro Stunde.
       </p>
-      <div class="d-flex gap-3 align-items-start">
-        <img src="../resources/simulation/image002.jpg" />
-        <img src="../resources/simulation/image004.png" />
-      </div>
+      <figure class="content-figure">
+        <div class="fig-row">
+          <img
+            src="../resources/simulation/image002.jpg"
+            alt="Simulationsszenario der einzelnen Kontrollstelle"
+          />
+          <img
+            src="../resources/simulation/image004.png"
+            alt="Verteilung der simulierten Kapazität bei konstanter Servicezeit von 60 Sekunden"
+          />
+        </div>
+        <figcaption>
+          <b>Abbildung 1:</b> Simulationsszenario und Kapazitätsverteilung einer
+          einzelnen Kontrollstelle bei konstanter Servicezeit (60 Sekunden).
+        </figcaption>
+      </figure>
       <p>
         Dieses Ergebnis ist erwartbar und ließe sich auch überschlägig aus der
         Servicedauer und der zusätzlichen Wechselzeit zwischen zwei Besuchenden
@@ -116,24 +131,52 @@
         aber gleichmäßig zwischen 45 und 75 Sekunden verteilt dauern, ergibt
         sich die folgende Verteilung für die Kapazitäten.
       </p>
-      <img src="../resources/simulation/image006.png" />
+      <figure class="content-figure">
+        <img
+          src="../resources/simulation/image006.png"
+          alt="Verteilung der simulierten Kapazität bei variabler Servicezeit zwischen 45 und 75 Sekunden"
+        />
+        <figcaption>
+          <b>Abbildung 2:</b> Verteilung der Kapazität bei variabler Servicezeit
+          (gleichverteilt zwischen 45 und 75 Sekunden).
+        </figcaption>
+      </figure>
       <p>
         Ob dieser Unterschied relevant ist, ist eine Frage der Risikobewertung:
         Mit einer Wahrscheinlichkeit von rund 1 % – also an einer von 100
         Kontrollstellen oder an einem von 100 Tagen – passieren nur 56 Personen
         pro Stunde die Kontrollstelle.
       </p>
+      <h2>Beispiel: Zehn Kontrollstellen im Parallelbetrieb</h2>
       <p>
         Nehmen wir nun an, dass ein Zustrom von rund 600 Personen pro Stunde
         erwartet wird. Wir planen deshalb mit 10 parallelen Kontrollstellen.
       </p>
-      <img src="../resources/simulation/image008.png" />
+      <figure class="content-figure">
+        <img
+          src="../resources/simulation/image008.png"
+          alt="Simulationsszenario mit zehn parallelen Kontrollstellen und zentraler Warteschlange"
+        />
+        <figcaption>
+          <b>Abbildung 3:</b> Simulationsszenario mit zehn parallelen
+          Kontrollstellen und zentraler Warteschlange.
+        </figcaption>
+      </figure>
       <p>
         Sobald eine Kontrollstelle frei wird, begibt sich die nächste Person aus
         der zentralen Warteschlange dorthin. Durch den längeren Zugangsweg
         entsteht ein größerer Zeitverlust, den die Simulation quantifiziert
       </p>
-      <img src="../resources/simulation/image010.png" />
+      <figure class="content-figure">
+        <img
+          src="../resources/simulation/image010.png"
+          alt="Verteilung der Kapazität unter Berücksichtigung des Zugangswegs zu den Kontrollstellen"
+        />
+        <figcaption>
+          <b>Abbildung 4:</b> Verteilung der Kapazität unter Berücksichtigung
+          des Zeitverlusts durch den Zugangsweg zu den Kontrollstellen.
+        </figcaption>
+      </figure>
       <p>
         Obwohl die Kapazität des Systems nun deutlich unter den vereinfacht
         erwarteten 600 Personen pro Stunde liegt, wird sie unter Umständen immer
@@ -151,7 +194,17 @@
         wenige bis zu 10 Sekunden), fällt die erwartete Kapazität weiter und die
         Simulationsergebnisse erstrecken sich über einen noch größeren Bereich.
       </p>
-      <img src="../resources/simulation/image012.png" />
+      <figure class="content-figure">
+        <img
+          src="../resources/simulation/image012.png"
+          alt="Verteilung der Kapazität unter zusätzlicher Berücksichtigung von Zögern beim Wechsel der Kontrollstelle"
+        />
+        <figcaption>
+          <b>Abbildung 5:</b> Verteilung der Kapazität unter zusätzlicher
+          Berücksichtigung von Zögern beim Wechsel der Kontrollstelle.
+        </figcaption>
+      </figure>
+      <h2>Wirksame Maßnahmen zur Kapazitätssteigerung</h2>
       <p>
         Selbstverständlich beschränkt sich die Arbeit mit Simulationsmodellen
         nicht auf die Reproduktion von Verhaltensaspekten und deren
@@ -162,15 +215,48 @@
         nützliche Maßnahme, denn die Kapazität steigt im Vergleich zur vorigen
         Konfiguration von durchschnittlich 511 auf 580 Personen pro Stunde.
       </p>
-      <img src="../resources/simulation/image014.png" />
-      <img src="../resources/simulation/image016.png" />
-      <img src="../resources/simulation/image018.png" />
+      <figure class="content-figure">
+        <div class="fig-row">
+          <img
+            src="../resources/simulation/image014.png"
+            alt="Simulationsszenario mit zusätzlicher wartender Person je Kontrollstelle"
+          />
+          <img
+            src="../resources/simulation/image016.png"
+            alt="Verteilung der Kapazität mit zusätzlicher wartender Person je Kontrollstelle"
+          />
+          <img
+            src="../resources/simulation/image018.png"
+            alt="Vergleich der Kapazitätsverteilung vor und nach der Maßnahme"
+          />
+        </div>
+        <figcaption>
+          <b>Abbildung 6:</b> Simulationsszenario und Kapazitätsverteilung mit
+          einer zusätzlichen wartenden Person je Kontrollstelle im Vergleich zur
+          vorigen Konfiguration.
+        </figcaption>
+      </figure>
       <p>
         Dagegen bringt es keine nennenswerte Verbesserung mehr, den Auslass der
         Warteschlange mittig vor den Kontrollstellen zu platzieren.
       </p>
-      <img src="../resources/simulation/image020.png" />
-      <img src="../resources/simulation/image022.png" />
+      <figure class="content-figure">
+        <div class="fig-row">
+          <img
+            src="../resources/simulation/image020.png"
+            alt="Simulationsszenario mit zentral platziertem Warteschlangenauslass"
+          />
+          <img
+            src="../resources/simulation/image022.png"
+            alt="Verteilung der Kapazität bei zentral platziertem Warteschlangenauslass"
+          />
+        </div>
+        <figcaption>
+          <b>Abbildung 7:</b> Simulationsszenario und Kapazitätsverteilung bei
+          zentraler Positionierung des Warteschlangenauslasses vor den
+          Kontrollstellen.
+        </figcaption>
+      </figure>
     </div>
 
     <!-- Bootstrap 5 JS Bundle with Popper -->
