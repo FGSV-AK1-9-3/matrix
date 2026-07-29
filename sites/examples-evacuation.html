@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Räumung eines Veranstaltungsgeländes - SCENIC</title>
     <!-- Bootstrap 5 CSS -->
     <link
       crossorigin="anonymous"
@@ -19,30 +20,472 @@
   </head>
 
   <body>
+    <script src="../navbar.js"></script>
+    <div class="container py-5">
+      <h1>Simulationsbeispiel – Räumung eines Veranstaltungsgeländes</h1>
+      <p>
+        Im Rahmen der Planung und sicherheitstechnischen Bewertung von
+        Veranstaltungen kann die Durchführung von Personenstromsimulationen
+        einen wertvollen Beitrag zur Identifikation potenzieller Engstellen und
+        zur Beurteilung der Leistungsfähigkeit von Flucht- und Rettungswegen
+        leisten. Insbesondere bei Veranstaltungen auf temporär genutzten Flächen
+        oder bei erstmalig bespielten Veranstaltungsgeländen können die Analysen
+        eine Einschätzung der Räumungssituation geben und die Entwicklung
+        weiterer Sicherheitsmaßnahmen unterstützen.
+      </p>
+      <p>Anhand eines fiktiven Veranstaltungsszenarios werden im Folgenden</p>
+      <ul>
+        <li>die notwendigen Eingabedaten für die Simulation,</li>
+        <li>die Interpretation der Simulationsergebnisse sowie</li>
+        <li>
+          mögliche abzuleitende Anpassungen der sicherheitstechnischen Maßnahmen
+          beschrieben.
+        </li>
+      </ul>
+
+      <p>
+        Die beschriebenen Szenarien wurden mit der Forschungssoftware JuPedSim
+        simuliert und sind in der web-basierten Version app.jupedsim.org in der
+        Szenarien-Galerie zu finden.
+      </p>
+
+      <h2>Veranstaltungsszenario</h2>
+      <p>
+        Für das Szenario wurde ein fiktives Volksfest in Hinterdupfing gewählt.
+        Die Veranstaltung findet auf einem eingezäunten, unbefestigten Gelände
+        statt, das an einen See grenzt. Auf dem Gelände sind zwei große
+        Festzelte, mehrere Verkaufsstände sowie kleinere Fahrgeschäfte
+        installiert und es wird Live-Musik von regionalen Bands gespielt. Die
+        Veranstaltung wird in dieser Art auf dem Gelände erstmals durchgeführt,
+        sodass keine Erfahrungswerte hinsichtlich der Geländenutzung und der
+        Bewegung auf dem Gelände durch die Gäste vorliegen. Auch das
+        Räumungsverhalten kann nur angenommen werden.
+      </p>
+      <figure class="content-figure">
+        <img
+          src="../resources/evacuation/Bilder/Hinterdupfing_ChatGPT_beschriftet.png"
+          alt="Skizze des Veranstaltungsgeländes mit Markierung der Notausgänge"
+        />
+        <figcaption>
+          <b>Abbildung 1:</b> Skizze des Veranstaltungsgeländes mit Markierung
+          der Notausgänge.
+        </figcaption>
+      </figure>
+      <p>
+        Da sich das Veranstaltungsgelände in der aktuellen Aufmaßplanung als
+        verwinkelt darstellt, soll eine Räumungssimulation durchgeführt werden,
+        um potenzielle Engstellen und Hindernisse zu detektieren.
+      </p>
+
+      <h4>Räumungszeitpunkt</h4>
+      <p>
+        Zum Zeitpunkt der Räumung gegen 18:00 Uhr ist das Veranstaltungsgelände
+        mit insgesamt rund 1.000 Personen einschließlich Personals mit der
+        maximalen Personenzahl belegt, es befinden sich somit alle erwarteten
+        Besuchenden auf dem Gelände und der Einlass ist beendet. Aufgrund der
+        Live-Musik sowie der Hauptnutzungszeit der gastronomischen Angebote
+        herrscht eine höhere Auslastung einzelner Bereiche, die beiden Festzelte
+        befinden sich in der Maximalbelegung und die Fläche vor den Zelten steht
+        unter Vollauslastung.
+      </p>
+
+      <h2>Fragestellung an die Simulation</h2>
+      <p>
+        Mit der Simulation sollen Bereiche identifiziert werden, in denen
+        aufgrund der örtlichen Gegebenheiten Stauungen oder Kapazitätsengpässe
+        auftreten können. Die Analyse soll insbesondere Aufschluss darüber
+        geben, wie sich die vorhandenen Fluchtwegkapazitäten auf die Entwicklung
+        der Personenströme auf dem Gelände und die Räumungsdauer auswirken.
+      </p>
+
+      <h2>Benötigte Daten für die Simulation</h2>
+      <p>
+        <em>Hinweis:</em> Die in diesem Beispiel dargestellte Simulation stellt
+        ein vereinfachtes Beispiel dar, dessen Ziel die Veranschaulichung der
+        für eine Räumungsanalyse erforderlichen Eingangsparameter, Annahmen und
+        Bewertungsmöglichkeiten ist. Die konkrete Modellierung realer
+        Veranstaltungen kann darüber hinaus weitere Einflussgrößen, wie
+        beispielsweise unterschiedliche Personengruppen, eingeschränkte
+        Mobilität, wetterbedingte Einflüsse, Besucherlenkungsmaßnahmen oder
+        alternative Räumungsstrategien berücksichtigen. Dadurch lassen sich
+        veranstaltungsspezifische Fragestellungen detaillierter untersuchen und
+        die Aussagekraft der Simulation weiter erhöhen.
+      </p>
+
+      <h3>Flächenplan</h3>
+      <p>
+        Grundlage der hier betrachteten Simulation bildet der Flächenplan des
+        Veranstaltungsgeländes mit sämtlichen Auf- und Einbauten, Nutz- und
+        Wegeflächen sowie den (Not-)Ausgängen.
+      </p>
+      <p>Die Notausgänge haben folgende Breiten:</p>
+      <ul>
+        <li>Ausgang 1 mit 1,2 m</li>
+        <li>Ausgang 2 mit 1,5 m</li>
+        <li>Ausgang 3 mit 1,5 m</li>
+        <li>Ausgang 4 mit 5,0 m</li>
+      </ul>
+      <p>Es ergibt sich eine gesamte nutzbare Ausgangsbreite von 9,2 m.</p>
+
+      <h3>Flächenbelegung</h3>
+      <p>
+        Für die verschiedenen Bereiche auf dem Gelände muss angegeben werden,
+        wie viele Personen sich dort zum Zeitpunkt der Räumung befinden.
+      </p>
+      <figure class="content-figure">
+        <img
+          src="../resources/evacuation/Bilder/Startverteilungen.png"
+          alt="Verschiedene Bereiche auf dem Veranstaltungsgelände für welche eine Personenanzahl zum Zeitpunkt der Räumung festgelegt wird"
+        />
+        <figcaption>
+          <b>Abbildung 2:</b> Verschiedene Bereiche auf dem
+          Veranstaltungsgelände, für welche eine Personenanzahl zum Zeitpunkt
+          der Räumung festgelegt wird.
+        </figcaption>
+      </figure>
+      <ul>
+        <li>Verkauf 1 mit 150 Personen</li>
+        <li>Wegfläche hinter den Zelten mit 20 Personen</li>
+        <li>Zelt 1 und 2 mit jeweils 100 Personen</li>
+        <li>Attraktionsfläche vor den Zelten mit 200 Personen</li>
+        <li>Verkauf 2 mit 200 Personen</li>
+        <li>Verkauf 3 mit 250 Personen</li>
+      </ul>
+      <p>
+        Es wird davon ausgegangen, dass sich die Personen in den einzelnen
+        Flächen gleichmäßig verteilen.
+      </p>
+
+      <h3>Wahl der Fluchtwege</h3>
+      <p>
+        Die Personen auf dem Gelände orientieren sich an den nächstgelegenen
+        Ausgängen und wählen jeweils den kürzesten verfügbaren Weg. Maßnahmen
+        zur gezielten Besucherlenkung werden im Basisszenario nicht
+        berücksichtigt.
+      </p>
+
+      <h3>Personeneigenschaften</h3>
+      <p>
+        Für das Szenario wird ein altersmäßig gemischtes Publikum angenommen.
+        Die Gehgeschwindigkeiten werden anhand der in der Fachliteratur häufig
+        verwendeten Parameter nach Weidmann modelliert und eine mittlere freie
+        Gehgeschwindigkeit von 1,34 m/s bei einer Standardabweichung von 0,26
+        m/s zugrunde gelegt. Aufgrund einer flächendeckenden Lautsprecheranlage
+        wird für das Beispiel eine Reaktionszeit von 0 Sekunden angenommen, es
+        bewegen sich also alle Personen unmittelbar nach Auslösung der Räumung
+        in Richtung des nächstgelegenen Ausgangs.
+      </p>
+
+      <h2>Simulationsergebnis</h2>
+      <p>
+        Das Ergebnis der beispielhaften Personenstromsimulation ermöglicht eine
+        erste grobe Bewertung der Räumungsabläufe für die Veranstaltung und
+        liefert Hinweise auf potenzielle Engstellen sowie
+        Optimierungsmöglichkeiten für die weitere Veranstaltungsplanung. Die
+        dargestellten Ergebnisse beziehen sich auf die zuvor beschriebenen
+        beispielhaften Randbedingungen und Annahmen. Sie stellen keine exakte
+        Vorhersage eines potenziellen Räumungsverlaufs dar, sondern dienen der
+        Veranschaulichung möglicher Personenströme und der möglichen
+        Auswirkungen der vorhandenen Infrastruktur.
+      </p>
+      <figure class="content-figure">
+        <video controls preload="metadata">
+          <source
+            src="../resources/evacuation/Videos/Simulationsvideo_Szenario1.mp4"
+            type="video/mp4"
+          />
+          Ihr Browser unterstützt das Video-Tag nicht.
+        </video>
+        <figcaption>
+          <b>Video 1:</b> Visualisierung der Simulation für das Basisszenario.
+        </figcaption>
+      </figure>
+      <p>
+        <em>Hinweis:</em> Leicht variierte Startpositionen (bei gleicher
+        Personenanzahl) führen zu leicht unterschiedlichen
+        Simulationsergebnissen, z. B. ergibt sich für 5 Durchläufe mit
+        verschiedenen Startpositionen eine mittlere Räumungszeit von 230,2
+        Sekunden (16,9 s). Der Einfachheit halber bezieht sich die folgende
+        Ergebnisbewertung ausschließlich auf das im Video gezeigte Szenario.
+      </p>
+      <p>
+        Unter den gewählten Simulationsparametern ergibt sich für die
+        vollständige Räumung des Geländes eine Räumungszeit von etwa 3 Minuten
+        und 40 Sekunden. Dieser Wert ist als Orientierungsgröße zu verstehen und
+        dient insbesondere als Vergleichswert für verschiedene
+        Planungsvarianten. Das tatsächliche Verhalten von Besuchenden kann im
+        Ereignisfall von den in der Simulation getroffenen Annahmen abweichen,
+        beispielsweise aufgrund individueller Entscheidungen, unterschiedlicher
+        Wahrnehmung von Gefahren, nicht geplanten Hindernissen oder
+        organisatorischer Maßnahmen vor Ort.
+      </p>
+      <p>
+        Die Personenströme zeigen eine insgesamt ungleichmäßige Auslastung der
+        vorhandenen Ausgänge. Besonders auffällig ist die vergleichsweise
+        geringe Beanspruchung des östlich gelegenen Ausgangs 4. Dieser Ausgang
+        weist mit einer Breite von 5 m die größte Kapazität auf und wird
+        innerhalb der Simulation bereits nach ca. 55 Sekunden nicht mehr
+        genutzt. Die verbleibenden Personenströme konzentrieren sich
+        anschließend überwiegend auf die anderen Ausgänge. Die Ausgänge 2 und 3
+        sind nach etwa 1 Minute und 40 Sekunden vollständig abgearbeitet,
+        während der Ausgang 1 die längste Auslastungsdauer aufweist und somit
+        die Gesamträumungszeit bestimmt.
+      </p>
+      <p>
+        Als wesentliche Ursache hierfür könnte anhand der Simulation die
+        Aufteilung des Veranstaltungsgeländes und die Wegeführung identifiziert
+        werden. Insbesondere im westlichen Teil des Veranstaltungsgeländes
+        entstehen aufgrund der Anordnung der Aufbauten und somit der engen
+        Wegeführungen Engstellen, welche zu Stauungen führen. Darüber hinaus
+        stellen sich zwischen den beiden Festzelten zusammentreffende
+        Personenströme aus unterschiedlichen Richtungen dar. So zeigt sich ein
+        beeinträchtigter Personenfluss, welcher zu einer Verringerung der
+        Abflussleistung führt im Rahmen der im Szenario dargestellten Strategie
+        der Wahl des kürzesten Weges.
+      </p>
+      <figure class="content-figure">
+        <img
+          src="../resources/evacuation/Bilder/EinfaerbungZiele.png"
+          alt="Einfärbung der Agenten an ihren Startpositionen entsprechend der berechneten Zuordnung auf die Ausgänge"
+        />
+        <figcaption>
+          <b>Abbildung 3:</b> Einfärbung der Agenten an ihren Startpositionen
+          entsprechend der berechneten Zuordnung auf die Ausgänge (rot – Ausgang
+          1, blau – Ausgang 2, grün – Ausgang 3, orange – Ausgang 4).
+        </figcaption>
+      </figure>
+      <p>
+        Zusammengefasst zeigt sich unter der Annahme der Wahl des kürzesten
+        Weges eine Verteilung der Personen auf die einzelnen Ausgänge wie folgt:
+      </p>
+      <ul>
+        <li>Ausgang 1: 310 Personen</li>
+        <li>Ausgang 2: 266 Personen</li>
+        <li>Ausgang 3: 283 Personen</li>
+        <li>Ausgang 4: 161 Personen</li>
+      </ul>
+      <p>
+        Diese Zahlen verdeutlichen, dass in diesem Szenario voraussichtlich der
+        leistungsfähigste Ausgang des Geländes von nur vergleichsweise wenigen
+        Personen genutzt wird, während die kleineren Ausgänge deutlich stärker
+        beansprucht werden.
+      </p>
+      <p>
+        Aus einem solchen Ergebnis lassen sich verschiedene Ansätze für die
+        Weiterentwicklung der Geländeplanung und im zweiten Schritt auch des
+        Räumungs- und Sicherheitskonzeptes ableiten:
+      </p>
+      <ul>
+        <li>
+          So könnte beispielsweise untersucht werden, ob eine veränderte
+          Positionierung der Festzelte, etwa im östlichen Bereich des Geländes,
+          zu einer gleichmäßigeren Verteilung der Personenströme und damit zu
+          einer Entlastung des zentralen Bereichs führt.
+        </li>
+        <li>
+          Ebenso kann geprüft werden, ob die Anordnung einzelner Verkaufsstände
+          oder die Gestaltung der Wegeführung angepasst werden sollte.
+        </li>
+        <li>
+          Die Schließung oder Verbreiterung einzelner schmaler Gassen könnte
+          dazu beitragen, die Entstehung von Engstellen zu reduzieren und die
+          Leistungsfähigkeit der Fluchtwege zu verbessern.
+        </li>
+        <li>
+          Einsatz organisatorischer Maßnahmen zur gezielten Steuerung von
+          Personenströmen: Durch den Einsatz von Räumungshelfenden,
+          Beschilderungen oder Lautsprecherdurchsagen könnten Besuchende aktiv
+          zu weniger ausgelasteten Ausgängen gelenkt werden. Insbesondere eine
+          gezielte Lenkung von Besucherinnen und Besuchern im Bereich der
+          Festzelte hin zum leistungsstarken Ausgang 4 erscheint auf Grundlage
+          der Simulationsergebnisse als sinnvoller Ansatz.
+        </li>
+      </ul>
+      <p>
+        Insgesamt zeigt das Beispiel, wie Personenstromsimulationen dazu
+        beitragen können, die Auswirkungen von Flächenaufteilung, Wegführung und
+        Besucherlenkung bereits in einer frühen Planungsphase sichtbar zu
+        machen. Die identifizierten Engstellen und Belastungsschwerpunkte bilden
+        eine fundierte Grundlage für die Bewertung alternativer
+        Planungsvarianten und die Entwicklung eines belastbaren
+        Räumungskonzeptes.
+      </p>
+
+      <h2>
+        Szenario 2: Optimierung der Wegeführung durch Anpassung von Aufbauten
+        und Schließen von Durchgängen
+      </h2>
+      <p>
+        Aufbauend auf dem ursprünglichen Räumungsszenario wurde in einem zweiten
+        Schritt untersucht, welchen Einfluss gezielte Anpassungen der
+        Flächenplanung auf die Entwicklung der Personenströme haben können. Ziel
+        dieses Szenarios ist es, die im Basisszenario identifizierten Engstellen
+        vor allem auf dem Weg zu Ausgang 1 zu entschärfen, ohne dabei die
+        grundsätzlichen Rahmenbedingungen der Veranstaltung zu verändern.
+      </p>
+      <p>
+        Die wesentlichen Eingangsparameter der Simulation bleiben unverändert
+        und es werden im Szenario 2 zwei planerische Anpassungen vorgenommen.
+        Zum einen wurden Aufbauten im Bereich „Verkauf 2“ verändert, um die
+        nutzbaren Bewegungsflächen zu vergrößern und die Wegeführung zu
+        verbessern. Zum anderen wurden die kleineren Durchgänge gegenüber der
+        beiden Festzelte geschlossen. Diese Maßnahme soll verhindern, dass sich
+        Personenströme aus unterschiedlichen Richtungen im zentralen Bereich des
+        Geländes kreuzen, gegenseitig behindern und Wegungen sehr hohe
+        Füllstände aufweisen.
+      </p>
+
+      <h3>Zielsetzung der Anpassungen</h3>
+      <p>
+        Durch die Neuordnung der Verkaufsflächen werden breitere und besser
+        nutzbare Bewegungsräume geschaffen. Das Schließen kleinerer Wegungen
+        sorgt darüber hinaus dafür, dass Besuchende frühzeitig auf Wegeführungen
+        mit höherer Kapazität gelenkt werden und weniger Kreuzungsbewegungen
+        entstehen. Hierdurch soll ein gleichmäßigerer Abfluss zu den vorhandenen
+        Ausgängen erreicht werden.
+      </p>
+
+      <h3>Ergebnisse der Simulation</h3>
+      <figure class="content-figure">
+        <video controls preload="metadata">
+          <source
+            src="../resources/evacuation/Videos/Simulationsvideo_Szenario2.mp4"
+            type="video/mp4"
+          />
+          Ihr Browser unterstützt das Video-Tag nicht.
+        </video>
+        <figcaption>
+          <b>Video 2:</b> Visualisierung der Simulation für das angepasste
+          Szenario. Hinweis: Die Anpassungen der Aufbauten werden in der
+          Simulation berücksichtigt – allerdings wurde die Hintergrundkarte
+          nicht angepasst.
+        </figcaption>
+      </figure>
+      <p>
+        Die Simulation zeigt, dass bereits vergleichsweise kleine Anpassungen
+        der Flächenplanung spürbare Auswirkungen auf die Dynamik der
+        Personenströme haben können. Die im Basisszenario identifizierten
+        Konfliktpunkte im zentralen Bereich des Geländes werden reduziert.
+        Insbesondere im Umfeld der beiden Festzelte entstehen geordnetere
+        Personenströme mit weniger gegenseitigen Behinderungen.
+      </p>
+      <p>
+        Obwohl sich an Ausgang 1 immer noch die größte Belastung mit der
+        längsten Räumungszeit darstellt, kann aus der Simulation des Szenarios 2
+        abgeleitet werden, dass die räumliche Organisation innerhalb des
+        Geländes zu einer Verbesserung des Personenflusses führen und somit die
+        Grundlage für eine effizientere Nutzung der vorhandenen Fluchtwege
+        bilden kann.
+      </p>
+
+      <h3>Diskussion und Bedeutung für die Veranstaltungsplanung</h3>
+      <p>
+        Der Vergleich der Szenarien 1 und 2 verdeutlicht, dass die
+        Leistungsfähigkeit eines Räumungskonzeptes nicht ausschließlich durch
+        die Anzahl und Breite der Ausgänge bestimmt wird. Ebenso wichtig ist die
+        Gestaltung der Flächen, Wegungen und der Ausgänge. Bereits geringfügige
+        Veränderungen an der Anordnung von Aufbauten oder der Wegeführung können
+        wesentliche Verbesserungen im Räumungsablauf bewirken.
+      </p>
+      <p>
+        Für die praktische Veranstaltungsplanung liefert das Szenario wertvolle
+        Erkenntnisse. Die Untersuchung zeigt, dass Engstellen häufig nicht
+        unmittelbar an den Ausgängen entstehen müssen, sondern innerhalb der
+        Veranstaltungsfläche durch ungünstige Wegeführungen oder sich kreuzende
+        Personenströme zustande kommen können. Durch eine frühzeitige Analyse
+        können ggf. Schwachstellen bereits in der Planungsphase erkannt und
+        gezielt behoben werden.
+      </p>
+
+      <h2>
+        Szenario 3: Anpassung der Flächenplanung bei gleichzeitigem Ausfall
+        eines Ausgangs
+      </h2>
+      <p>
+        Aufbauend auf den oben beschriebenen Szenarien wurde ein drittes
+        Simulationsszenario untersucht, um die Auswirkungen verschiedener
+        planerischer Maßnahmen auf das Räumungsverhalten zu analysieren. Ziel
+        ist es, die zuvor identifizierten Schwachstellen im Rahmen einer Räumung
+        gezielt zu adressieren und die Robustheit des Räumungskonzeptes
+        gegenüber dem Ausfall einzelner Infrastrukturelemente zu bewerten.
+      </p>
+      <p>
+        Für das Szenario 3 wurden die grundlegenden Randbedingungen des
+        Szenarios 2 beibehalten. Es wird zusätzlich der vollständige Ausfall des
+        Ausgangs 1 angenommen.
+      </p>
+
+      <h3>Ergebnisse der Simulation</h3>
+      <figure class="content-figure">
+        <video controls preload="metadata">
+          <source
+            src="../resources/evacuation/Videos/Simulationsvideo_Szenario3.mp4"
+            type="video/mp4"
+          />
+          Ihr Browser unterstützt das Video-Tag nicht.
+        </video>
+        <figcaption>
+          <b>Video 3:</b> Visualisierung der Simulation für das angepasste
+          Szenario mit Ausfall des Notausgangs 1. Hinweis: Auch hier sind die
+          Änderungen der Aufbauten in der Hintergrundkarte nicht zu sehen.
+        </figcaption>
+      </figure>
+      <p>
+        Das Ergebnis dieses Szenarios ist zunächst überraschend: Trotz des
+        vollständigen Wegfalls eines Ausgangs zeigt die Simulation eine
+        Verbesserung des Räumungsablaufs. Die Gesamträumungsdauer reduziert sich
+        deutlich und es wird eine bessere Verteilung der Personen auf die
+        verbleibenden Wegungen und Ausgänge erzielt.
+      </p>
+      <p>
+        Im Basisszenario führte die Orientierung auf den nächstgelegenen Ausgang
+        dazu, dass sich erhebliche Personenmengen auf die schmalen Wege im
+        westlichen Bereich konzentrierten. Ausgang 1 wurde von einer großen
+        Anzahl von Personen angesteuert, obwohl die Zuwegung durch enge Gassen
+        und mehrere Konfliktpunkte geprägt war. Die Leistungsfähigkeit des
+        Ausgangs wurde somit nicht durch dessen Breite, sondern vor allem durch
+        die vorgelagerten Engstellen bzw. zuführenden Wegungen begrenzt.
+      </p>
+      <p>
+        Durch den Wegfall des Ausgangs 1 werden die Besuchenden gezwungen,
+        alternative Routen zu wählen und vermehrt die übrigen Ausgänge zu
+        nutzen. Gleichzeitig sorgen die Anpassungen im Gelände für breitere und
+        konfliktärmere Bewegungsräume. Insgesamt entsteht dadurch ein
+        geordneteres und gleichmäßigeres Räumungsmuster mit weniger
+        gegenseitigen Behinderungen.
+      </p>
+
+      <h3>Diskussion der Ergebnisse</h3>
+      <p>
+        Die Simulation dieses Szenarios zeigt, dass zusätzliche Ausgänge nicht
+        zwangsläufig zu kürzeren Räumungszeiten führen müssen, wenn deren
+        Erreichbarkeit durch Engstellen eingeschränkt wird oder sie ungünstige
+        Personenstromkonflikte erzeugen. Umgekehrt kann eine gezielte Anpassung
+        der Flächenplanung, der Wegeführung und der Besucherlenkung zu einer
+        deutlichen Verbesserung der Räumungsleistung führen – selbst dann, wenn
+        die verfügbare Ausgangskapazität nominell reduziert ist.
+      </p>
+      <p>
+        Für die weitere Planung würde sich daraus ein erheblicher Mehrwert
+        ergeben. Die Simulation macht sichtbar, welche Auswirkungen einzelne
+        Aufbauten, Wegeführungen oder Zugänge auf das Gesamtsystem haben.
+        Dadurch können potenzielle Schwachstellen bereits in der Planungsphase
+        erkannt und unterschiedliche Gestaltungsvarianten miteinander verglichen
+        werden. Insbesondere bei erstmalig genutzten Veranstaltungsgeländen oder
+        komplexen Aufbaukonfigurationen bietet die Personenstromsimulation eine
+        weitere Möglichkeit, Entscheidungen auf datenbasierten Annahmen zu
+        treffen und Räumungskonzepte gezielt zu optimieren. Im vorliegenden
+        Beispiel wurde deutlich, dass nicht die Ausgangskapazität selbst den
+        begrenzenden Faktor darstellte, sondern die interne Organisation der
+        Personenströme auf dem Gelände.
+      </p>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
     <script
       crossorigin="anonymous"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     ></script>
-    <script src="../navbar.js"></script>
-
-    <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card shadow-sm border-0 mt-5">
-            <div class="card-body text-center p-5">
-              <div class="display-1 mb-3">🚧</div>
-
-              <h1 class="mb-3">Inhalt in Vorbereitung</h1>
-
-              <p class="lead text-muted">
-                Dieser Bereich wird derzeit erstellt und in einer zukünftigen
-                Version von SCENIC ergänzt.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </body>
 </html>
