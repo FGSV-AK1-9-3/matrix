@@ -57,8 +57,12 @@ async function fillAllFields(page) {
  * will call e.preventDefault() and the pane will never become active.
  */
 async function goToTab(page, target) {
-  await page.click(`[data-bs-target="${target}"]`);
-  // The pane div gets both "active" and "show" classes (order varies by Bootstrap version).
+  await page.evaluate((tabTarget) => {
+    const btn = document.querySelector(`[data-bs-target="${tabTarget}"]`);
+
+    new bootstrap.Tab(btn).show();
+  }, target);
+
   await page.waitForSelector(`${target}.show.active`);
 }
 
@@ -169,13 +173,11 @@ test.describe('Page load', () => {
     await expect(page.locator('#tab-grunddaten')).toHaveClass(/\bshow\b/);
   });
 
-  test('progress bar starts at 0%', async ({ page }) => {
+  test('stepper starts at step 1 of 8', async ({ page }) => {
     await page.goto('/index.html');
-    await expect(page.locator('#progress_text')).toHaveText('0%');
-    await expect(page.locator('#progress_bar')).toHaveAttribute(
-      'style',
-      /width:\s*0%/,
-    );
+
+    await expect(page.locator('#stepCurrent')).toHaveText('1');
+    await expect(page.locator('#stepTotal')).toHaveText('8');
   });
 
   test('"Nächster Schritt" button is visible on load', async ({ page }) => {
@@ -234,11 +236,13 @@ test.describe('Grunddaten', () => {
     );
   });
 
-  test('progress updates after filling Personenzahl', async ({ page }) => {
+  test('stepper advances after clicking next', async ({ page }) => {
     await page.fill('#grunddaten_personenzahl', '1000');
     await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
-    const text = await page.locator('#progress_text').textContent();
-    expect(parseInt(text)).toBeGreaterThan(0);
+
+    await page.click('#nextStepBtn');
+
+    await expect(page.locator('#stepCurrent')).toHaveText('2');
   });
 });
 
@@ -277,52 +281,46 @@ test.describe('Select field validation feedback', () => {
       page.locator('#veranstaltungsgelaende_flaechenverhaeltnis'),
     ).toHaveClass(/is-invalid/);
   });
-
-  test('progress bar increases after selecting a value', async ({ page }) => {
-    const before = parseInt(await page.locator('#progress_text').textContent());
-    await page.selectOption(
-      '#veranstaltungsgelaende_flaechenverhaeltnis',
-      '0.9',
-    );
-    const after = parseInt(await page.locator('#progress_text').textContent());
-    expect(after).toBeGreaterThan(before);
-  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 4. Progress bar
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.describe('Progress bar', () => {
-  test('reaches 100% when all fields are filled', async ({ page }) => {
+test.describe('Wizard stepper', () => {
+  test('stepper starts at step 1 of 8', async ({ page }) => {
     await page.goto('/index.html');
-    await fillAllFields(page);
-    await expect(page.locator('#progress_text')).toHaveText('100%');
-    await expect(page.locator('#progress_bar')).toHaveAttribute(
-      'style',
-      /width:\s*100%/,
-    );
+
+    await expect(page.locator('#stepCurrent')).toHaveText('1');
+    await expect(page.locator('#stepTotal')).toHaveText('8');
   });
 
-  test('"Nächster Schritt" button hides only when on the last tab', async ({
-    page,
-  }) => {
+  test('previous button is disabled on first step', async ({ page }) => {
     await page.goto('/index.html');
-    await fillAllFields(page);
-    // After fillAllFields we are on tab 7 (Verhalten) — button should still be visible
-    await expect(page.locator('#nextStepBtn')).not.toHaveClass(/d-none/);
-    // Navigating to the donate tab should hide it
-    await goToTab(page, '#tab-donate');
-    await expect(page.locator('#nextStepBtn')).toHaveClass(/d-none/);
+
+    await expect(page.locator('#prevStepBtn')).toBeDisabled();
   });
 
-  test('progress is between 0 and 100 for a partial form', async ({ page }) => {
+  test('stepper advances after clicking next', async ({ page }) => {
     await page.goto('/index.html');
-    await page.fill('#grunddaten_personenzahl', '200');
+
+    await page.fill('#grunddaten_personenzahl', '500');
     await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
-    const text = parseInt(await page.locator('#progress_text').textContent());
-    expect(text).toBeGreaterThan(0);
-    expect(text).toBeLessThan(100);
+
+    await page.click('#nextStepBtn');
+
+    await expect(page.locator('#stepCurrent')).toHaveText('2');
+  });
+
+  test('previous button becomes enabled after advancing', async ({ page }) => {
+    await page.goto('/index.html');
+
+    await page.fill('#grunddaten_personenzahl', '500');
+    await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
+
+    await page.click('#nextStepBtn');
+
+    await expect(page.locator('#prevStepBtn')).toBeEnabled();
   });
 });
 
@@ -379,7 +377,12 @@ test.describe('Tab navigation guard', () => {
   test('clicking a later tab without filling prior tabs shows the modal', async ({
     page,
   }) => {
-    await page.click('[data-bs-target="#tab-gestalt"]');
+    await page.evaluate(() => {
+      const btn = document.querySelector('[data-bs-target="#tab-gestalt"]');
+
+      new bootstrap.Tab(btn).show();
+    });
+
     await expect(page.locator('#validationModal')).toBeVisible();
   });
 
@@ -393,16 +396,26 @@ test.describe('Tab navigation guard', () => {
     await expect(page.locator('#tab-gelaende')).toHaveClass(/\bshow\b/);
 
     // Navigate back to Grunddaten — should not show modal
-    await page.click('[data-bs-target="#tab-grunddaten"]');
+    // Navigate back to Grunddaten — should not show modal
+    await page.evaluate(() => {
+      const btn = document.querySelector('[data-bs-target="#tab-grunddaten"]');
+
+      new bootstrap.Tab(btn).show();
+    });
+
     await expect(page.locator('#validationModal')).toBeHidden();
     await expect(page.locator('#tab-grunddaten')).toHaveClass(/\bshow\b/);
   });
 
   test('can navigate to tab 3 after filling tabs 1 and 2', async ({ page }) => {
     await fillTabsUpTo(page, '#tab-gestalt');
-    // fillTabsUpTo fills field values but doesn't click through tabs,
-    // so we navigate directly — Bootstrap checks field values, not active tab history.
-    await page.click('[data-bs-target="#tab-gestalt"]');
+
+    await page.evaluate(() => {
+      const btn = document.querySelector('[data-bs-target="#tab-gestalt"]');
+
+      new bootstrap.Tab(btn).show();
+    });
+
     await expect(page.locator('#tab-gestalt')).toHaveClass(/\bshow\b/);
   });
 });
@@ -482,14 +495,19 @@ test.describe('Form reset', () => {
     await expect(page.locator('#grunddaten_personenzahl')).toHaveValue('999');
   });
 
-  test('progress resets to 0% after confirmation', async ({ page }) => {
+  test('stepper returns to step 1 after confirmation', async ({ page }) => {
     await page.goto('/index.html');
+
     await page.fill('#grunddaten_personenzahl', '500');
     await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
 
+    await page.click('#nextStepBtn');
+
     page.once('dialog', (dialog) => dialog.accept());
+
     await page.click('button[type="reset"]');
-    await expect(page.locator('#progress_text')).toHaveText('0%');
+
+    await expect(page.locator('#stepCurrent')).toHaveText('1');
   });
 });
 
@@ -710,19 +728,5 @@ test.describe('Wiederkehr – Historische Störungen', () => {
 
     await expect(stoerungen).toBeEnabled();
     await expect(stoerungen).toHaveValue('0.0');
-  });
-
-  test('progress reaches 100% with erstmalig selected without answering Störungen', async ({
-    page,
-  }) => {
-    await page.selectOption('#wiederkehrende_veranstaltung_erfahrung', '5.0');
-
-    await goToTab(page, '#tab-verhalten');
-
-    await page.selectOption('#besuchendenverhalten_ort_ablauf', '0.8');
-    await page.selectOption('#besuchendenverhalten_involvement', '1.0');
-    await page.selectOption('#besuchendenverhalten_soziale_gruppen', '1.0');
-
-    await expect(page.locator('#progress_text')).toHaveText('100%');
   });
 });
