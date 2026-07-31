@@ -377,11 +377,7 @@ test.describe('Tab navigation guard', () => {
   test('clicking a later tab without filling prior tabs shows the modal', async ({
     page,
   }) => {
-    await page.evaluate(() => {
-      const btn = document.querySelector('[data-bs-target="#tab-gestalt"]');
-
-      new bootstrap.Tab(btn).show();
-    });
+    await goToTab(page, '#tab-gestalt');
 
     await expect(page.locator('#validationModal')).toBeVisible();
   });

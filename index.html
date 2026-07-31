@@ -985,12 +985,7 @@
           });
         }
 
-        function updateProgress() {
-          const req = queryAll('select[required], input[required]');
-          const missing = getMissingFields();
-          const done = req.length - missing.length;
-          const pct = req.length ? Math.round((done * 100) / req.length) : 0;
-
+        function updateFormState() {
           updateNextStepVisibility();
           updateTabIndicators();
         }
