@@ -412,9 +412,28 @@ figure.content-figure .fig-row img {
   }
 }
 .wizard-steps {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.wizard-steps::before {
+  content: '';
+
+  position: absolute;
+
+  left: 16px;
+  right: 16px;
+  top: 50%;
+
+  height: 3px;
+
+  background-color: #dee2e6;
+
+  transform: translateY(-50%);
+  z-index: 0;
 }
 
 .wizard-step {
@@ -449,6 +468,28 @@ figure.content-figure .fig-row img {
 .wizard-step.upcoming {
   background-color: white;
   border: 2px solid #dee2e6;
+}
+
+.wizard-step.completed {
+  background-color: #198754;
+  color: white;
+}
+
+.wizard-step.completed::after {
+  background-color: #198754;
+}
+
+.wizard-step.active {
+  background-color: #0d6efd;
+  color: white;
+
+  transform: scale(1.1);
+}
+
+.wizard-step.upcoming {
+  background-color: white;
+  border: 2px solid #dee2e6;
+  color: #6c757d;
 }
 #mainTabs {
   display: none;
