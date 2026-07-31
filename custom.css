@@ -187,6 +187,35 @@ figcaption {
   margin-bottom: 1rem;
 }
 
+.collapsible-heading {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  user-select: none;
+}
+
+.collapsible-heading::before {
+  content: '';
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  border-right: 2px solid var(--brand);
+  border-bottom: 2px solid var(--brand);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-top: -0.2em;
+}
+
+.collapsible-heading.collapsed::before {
+  transform: rotate(-45deg);
+}
+
+.collapsible-heading:hover {
+  color: var(--brand);
+}
+
 .container h2:first-of-type {
   margin-top: 1.5rem;
 }
@@ -204,6 +233,16 @@ figure.content-figure img {
   margin: 0;
   box-shadow: var(--shadow);
   border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+figure.content-figure video {
+  max-width: 720px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
 }
 
 figure.content-figure figcaption {
@@ -307,6 +346,47 @@ figure.content-figure .fig-row img {
   vertical-align: middle;
   padding: 0.55rem 0.6rem;
   font-size: 0.92rem;
+}
+
+.data-table {
+  border-collapse: collapse;
+  min-width: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.data-table caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 0.92rem;
+  color: var(--muted);
+  padding-bottom: 0.5rem;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  text-align: left;
+  vertical-align: middle;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.95rem;
+}
+
+.data-table thead th {
+  background: rgba(13, 110, 253, 0.1);
+  color: var(--text);
+  font-weight: 600;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.data-table tbody th {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .risk-matrix thead th,
