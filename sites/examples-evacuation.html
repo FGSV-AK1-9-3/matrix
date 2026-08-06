@@ -23,7 +23,7 @@
     <script src="../navbar.js"></script>
     <div class="container py-5">
       <h1>Simulationsbeispiel – Räumung eines Veranstaltungsgeländes</h1>
-      <p>
+      <p class="lead">
         Im Rahmen der Planung und sicherheitstechnischen Bewertung von
         Veranstaltungen kann die Durchführung von Personenstromsimulationen
         einen wertvollen Beitrag zur Identifikation potenzieller Engstellen und
@@ -45,7 +45,7 @@
 
       <p>
         Die beschriebenen Szenarien wurden mit der Forschungssoftware JuPedSim
-        simuliert und sind in der web-basierten Version
+        simuliert und sind in der webbasierten Version
         <a
           href="https://app.jupedsim.org"
           target="_blank"
@@ -55,14 +55,18 @@
         in der Szenarien-Galerie zu finden.
       </p>
 
-      <h2
-        class="collapsible-heading"
-        data-bs-toggle="collapse"
-        data-bs-target="#section-veranstaltung"
-        aria-expanded="true"
-        aria-controls="section-veranstaltung"
-      >
-        Veranstaltungsszenario
+      <h2 class="collapsible-heading">
+        <button
+          class="collapsible-heading-btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#section-veranstaltung"
+          aria-expanded="true"
+          aria-controls="section-veranstaltung"
+        >
+          <span>Veranstaltungsszenario</span>
+          <i class="bi bi-chevron-down"></i>
+        </button>
       </h2>
       <div id="section-veranstaltung" class="collapse show">
         <p>
@@ -92,7 +96,7 @@
           werden, um potenzielle Engstellen und Hindernisse zu detektieren.
         </p>
 
-        <h4>Räumungszeitpunkt</h4>
+        <h3>Räumungszeitpunkt</h3>
         <p>
           Zum Zeitpunkt der Räumung gegen 18:00 Uhr ist das
           Veranstaltungsgelände mit insgesamt rund 1.000 Personen einschließlich
@@ -105,7 +109,7 @@
         </p>
 
         <div class="alert alert-primary" role="alert">
-          <h4>Fragestellung an die Simulation</h4>
+          <h3>Fragestellung an die Simulation</h3>
           In welchen Bereichen führen die örtlichen Gegebenheiten zu Stauungen
           oder Kapazitätsengpässen, und wie beeinflussen die
           Fluchtwegkapazitäten die Personenströme und die Räumungsdauer?
@@ -120,32 +124,35 @@
         </p>
       </div>
 
-      <h2
-        class="collapsible-heading"
-        data-bs-toggle="collapse"
-        data-bs-target="#section-daten"
-        aria-expanded="true"
-        aria-controls="section-daten"
-      >
-        Grundszenario
+      <h2 class="collapsible-heading">
+        <button
+          class="collapsible-heading-btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#section-daten"
+          aria-expanded="true"
+          aria-controls="section-daten"
+        >
+          <span>Grundszenario</span>
+          <i class="bi bi-chevron-down"></i>
+        </button>
       </h2>
       <div id="section-daten" class="collapse show">
-        <p class="definition-quote">
-          <em>Hinweis:</em> Die in diesem Beispiel dargestellte Simulation
-          stellt ein vereinfachtes Beispiel dar, dessen Ziel die
-          Veranschaulichung der für eine Räumungsanalyse erforderlichen
-          Eingangsparameter, Annahmen und Bewertungsmöglichkeiten ist. Die
-          konkrete Modellierung realer Veranstaltungen kann darüber hinaus
-          weitere Einflussgrößen, wie beispielsweise unterschiedliche
-          Personengruppen, eingeschränkte Mobilität, wetterbedingte Einflüsse,
-          Besucherlenkungsmaßnahmen oder alternative Räumungsstrategien
-          berücksichtigen. Dadurch lassen sich veranstaltungsspezifische
-          Fragestellungen detaillierter untersuchen und die Aussagekraft der
-          Simulation weiter erhöhen.
+        <p class="hint-box">
+          <b>Hinweis:</b> Die in diesem Beispiel dargestellte Simulation stellt
+          ein vereinfachtes Beispiel dar, dessen Ziel die Veranschaulichung der
+          für eine Räumungsanalyse erforderlichen Eingangsparameter, Annahmen
+          und Bewertungsmöglichkeiten ist. Die konkrete Modellierung realer
+          Veranstaltungen kann darüber hinaus weitere Einflussgrößen, wie
+          beispielsweise unterschiedliche Personengruppen, eingeschränkte
+          Mobilität, wetterbedingte Einflüsse, Besucherlenkungsmaßnahmen oder
+          alternative Räumungsstrategien berücksichtigen. Dadurch lassen sich
+          veranstaltungsspezifische Fragestellungen detaillierter untersuchen
+          und die Aussagekraft der Simulation weiter erhöhen.
         </p>
 
+        <h3>Flächenplan</h3>
         <p>
-          <strong>Flächenplan</strong>
           Grundlage der hier betrachteten Simulation bildet der Flächenplan des
           Veranstaltungsgeländes mit sämtlichen Auf- und Einbauten, Nutz- und
           Wegeflächen sowie den (Not-)Ausgängen.
@@ -181,14 +188,14 @@
               </tr>
               <tr>
                 <th scope="row">Gesamt</th>
-                <th scope="row">9,2 m</th>
+                <td>9,2 m</td>
               </tr>
             </tbody>
           </table>
         </div>
 
+        <h3>Flächenbelegung</h3>
         <p>
-          <strong>Flächenbelegung</strong>
           Für die verschiedenen Bereiche auf dem Gelände muss angegeben werden,
           wie viele Personen sich dort zum Zeitpunkt der Räumung befinden.
         </p>
@@ -234,7 +241,7 @@
               </tr>
               <tr>
                 <th scope="row">Gesamt</th>
-                <th scope="row">1.020</th>
+                <td>1.020</td>
               </tr>
             </tbody>
           </table>
@@ -255,16 +262,16 @@
           </figcaption>
         </figure>
 
+        <h3>Wahl der Fluchtwege</h3>
         <p>
-          <strong>Wahl der Fluchtwege</strong>
           Die Personen auf dem Gelände orientieren sich an den nächstgelegenen
           Ausgängen und wählen jeweils den <b>kürzesten verfügbaren Weg</b>.
           Maßnahmen zur gezielten Besucherlenkung werden im Basisszenario nicht
           berücksichtigt.
         </p>
 
+        <h3>Personeneigenschaften</h3>
         <p>
-          <strong>Personeneigenschaften</strong>
           Für das Szenario wird ein altersmäßig gemischtes Publikum angenommen.
           Die Gehgeschwindigkeiten werden anhand der in der Fachliteratur häufig
           verwendeten Parameter nach Weidmann modelliert und eine mittlere freie
@@ -289,7 +296,7 @@
           der möglichen Auswirkungen der vorhandenen Infrastruktur.
         </p>
         <figure class="content-figure">
-          <video controls preload="metadata" style="width: 100%; height: auto">
+          <video controls preload="metadata">
             <source
               src="../resources/evacuation/Videos/Simulationsvideo_Szenario1.mp4"
               type="video/mp4"
@@ -300,7 +307,7 @@
             <b>Video 1:</b> Visualisierung der Simulation für das Basisszenario.
           </figcaption>
         </figure>
-        <p class="definition-quote">
+        <p class="hint-box">
           <b>Hinweis:</b> Leicht variierte Startpositionen (bei gleicher
           Personenanzahl) führen zu leicht unterschiedlichen
           Simulationsergebnissen, z. B. ergibt sich für 5 Durchläufe mit
@@ -390,7 +397,7 @@
               </tr>
               <tr>
                 <th scope="row">Gesamt</th>
-                <th scope="row">1.020</th>
+                <td>1.020</td>
               </tr>
             </tbody>
           </table>
@@ -428,9 +435,9 @@
             Personenströmen: Durch den Einsatz von Räumungshelfenden,
             Beschilderungen oder Lautsprecherdurchsagen könnten Besuchende aktiv
             zu weniger ausgelasteten Ausgängen gelenkt werden. Insbesondere eine
-            gezielte Lenkung von Besucherinnen und Besuchern im Bereich der
-            Festzelte hin zum leistungsstarken Ausgang 4 erscheint auf Grundlage
-            der Simulationsergebnisse als sinnvoller Ansatz.
+            gezielte Lenkung von Besuchenden im Bereich der Festzelte hin zum
+            leistungsstarken Ausgang 4 erscheint auf Grundlage der
+            Simulationsergebnisse als sinnvoller Ansatz.
           </li>
         </ul>
         <p>
@@ -444,15 +451,21 @@
         </p>
       </div>
 
-      <h2
-        class="collapsible-heading"
-        data-bs-toggle="collapse"
-        data-bs-target="#section-szenario2"
-        aria-expanded="true"
-        aria-controls="section-szenario2"
-      >
-        Szenario 2: Optimierung der Wegeführung durch Anpassung von Aufbauten
-        und Schließen von Durchgängen
+      <h2 class="collapsible-heading">
+        <button
+          class="collapsible-heading-btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#section-szenario2"
+          aria-expanded="true"
+          aria-controls="section-szenario2"
+        >
+          <span
+            >Szenario 2: Optimierung der Wegeführung durch Anpassung von
+            Aufbauten und Schließen von Durchgängen</span
+          >
+          <i class="bi bi-chevron-down"></i>
+        </button>
       </h2>
       <div id="section-szenario2" class="collapse show">
         <p>
@@ -488,7 +501,7 @@
 
         <h3>Ergebnisse der Simulation</h3>
         <figure class="content-figure">
-          <video controls preload="metadata" style="width: 100%; height: auto">
+          <video controls preload="metadata">
             <source
               src="../resources/evacuation/Videos/Simulationsvideo_Szenario2.mp4"
               type="video/mp4"
@@ -540,15 +553,21 @@
         </p>
       </div>
 
-      <h2
-        class="collapsible-heading"
-        data-bs-toggle="collapse"
-        data-bs-target="#section-szenario3"
-        aria-expanded="true"
-        aria-controls="section-szenario3"
-      >
-        Szenario 3: Anpassung der Flächenplanung bei gleichzeitigem Ausfall
-        eines Ausgangs
+      <h2 class="collapsible-heading">
+        <button
+          class="collapsible-heading-btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#section-szenario3"
+          aria-expanded="true"
+          aria-controls="section-szenario3"
+        >
+          <span
+            >Szenario 3: Anpassung der Flächenplanung bei gleichzeitigem Ausfall
+            eines Ausgangs</span
+          >
+          <i class="bi bi-chevron-down"></i>
+        </button>
       </h2>
       <div id="section-szenario3" class="collapse show">
         <p>
@@ -568,7 +587,7 @@
 
         <h3>Ergebnisse der Simulation</h3>
         <figure class="content-figure">
-          <video controls preload="metadata" style="width: 100%; height: auto">
+          <video controls preload="metadata">
             <source
               src="../resources/evacuation/Videos/Simulationsvideo_Szenario3.mp4"
               type="video/mp4"
@@ -607,14 +626,18 @@
         </p>
       </div>
 
-      <h2
-        class="collapsible-heading"
-        data-bs-toggle="collapse"
-        data-bs-target="#section-vergleich"
-        aria-expanded="true"
-        aria-controls="section-vergleich"
-      >
-        Zusammenfassung der Szenarien
+      <h2 class="collapsible-heading">
+        <button
+          class="collapsible-heading-btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#section-vergleich"
+          aria-expanded="true"
+          aria-controls="section-vergleich"
+        >
+          <span>Zusammenfassung der Szenarien</span>
+          <i class="bi bi-chevron-down"></i>
+        </button>
       </h2>
       <div id="section-vergleich" class="collapse show">
         <div class="risk-matrix-wrap">
@@ -677,14 +700,18 @@
         </div>
       </div>
 
-      <h2
-        class="collapsible-heading"
-        data-bs-toggle="collapse"
-        data-bs-target="#diskussion"
-        aria-expanded="true"
-        aria-controls="diskussion"
-      >
-        Diskussion der Ergebnisse
+      <h2 class="collapsible-heading">
+        <button
+          class="collapsible-heading-btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#diskussion"
+          aria-expanded="true"
+          aria-controls="diskussion"
+        >
+          <span>Diskussion der Ergebnisse</span>
+          <i class="bi bi-chevron-down"></i>
+        </button>
       </h2>
       <div id="diskussion" class="collapse show">
         <p>
