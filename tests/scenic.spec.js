@@ -377,7 +377,11 @@ test.describe('Tab navigation guard', () => {
   test('clicking a later tab without filling prior tabs shows the modal', async ({
     page,
   }) => {
-    await goToTab(page, '#tab-gestalt');
+    await page.evaluate(() => {
+      const btn = document.querySelector('[data-bs-target="#tab-gestalt"]');
+
+      new bootstrap.Tab(btn).show();
+    });
 
     await expect(page.locator('#validationModal')).toBeVisible();
   });
@@ -393,11 +397,7 @@ test.describe('Tab navigation guard', () => {
 
     // Navigate back to Grunddaten — should not show modal
     // Navigate back to Grunddaten — should not show modal
-    await page.evaluate(() => {
-      const btn = document.querySelector('[data-bs-target="#tab-grunddaten"]');
-
-      new bootstrap.Tab(btn).show();
-    });
+    await goToTab(page, '#tab-grunddaten');
 
     await expect(page.locator('#validationModal')).toBeHidden();
     await expect(page.locator('#tab-grunddaten')).toHaveClass(/\bshow\b/);
@@ -406,11 +406,7 @@ test.describe('Tab navigation guard', () => {
   test('can navigate to tab 3 after filling tabs 1 and 2', async ({ page }) => {
     await fillTabsUpTo(page, '#tab-gestalt');
 
-    await page.evaluate(() => {
-      const btn = document.querySelector('[data-bs-target="#tab-gestalt"]');
-
-      new bootstrap.Tab(btn).show();
-    });
+    await goToTab(page, '#tab-gestalt');
 
     await expect(page.locator('#tab-gestalt')).toHaveClass(/\bshow\b/);
   });

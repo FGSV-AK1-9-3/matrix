@@ -1139,7 +1139,7 @@
           } else {
             stoerungen.disabled = false;
           }
-          updateProgress();
+          updateFormState();
         }
 
         getById('wiederkehrende_veranstaltung_erfahrung').addEventListener(
@@ -1160,7 +1160,7 @@
             } else {
               e.target.classList.add(v ? 'is-valid' : 'is-invalid');
             }
-            updateProgress();
+            updateFormState();
           }
         });
 
@@ -1176,7 +1176,7 @@
           nextStepBtn.classList.remove('d-none');
           setTimeout(() => {
             updateStoerungen();
-            updateProgress();
+            updateFormState();
 
             const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
 
@@ -1242,7 +1242,7 @@
           (el) => new bootstrap.Tooltip(el),
         );
 
-        updateProgress();
+        updateFormState();
         updateMobileStepper();
       })();
     </script>
