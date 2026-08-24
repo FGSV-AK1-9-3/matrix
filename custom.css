@@ -257,6 +257,16 @@ figure.content-figure .fig-row img {
   color: var(--text);
 }
 
+.hint-box {
+  border-left: 3px solid var(--muted);
+  background: var(--bg);
+  padding: 0.85rem 1.1rem;
+  margin: 1.25rem 0;
+  border-radius: 0 12px 12px 0;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
 .compare-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -373,6 +383,91 @@ figure.content-figure .fig-row img {
   margin-right: 0.35em;
   vertical-align: -0.05em;
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-heading {
+  margin-top: 2.75rem;
+  margin-bottom: 1rem;
+}
+
+.collapsible-heading:first-of-type {
+  margin-top: 1.5rem;
+}
+
+.collapsible-heading-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.collapsible-heading-btn:hover,
+.collapsible-heading-btn:focus-visible {
+  color: var(--brand);
+}
+
+.collapsible-heading-btn i {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.collapsible-heading-btn.collapsed i {
+  transform: rotate(-90deg);
+}
+
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 320px;
+}
+
+.data-table caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 0.92rem;
+  color: var(--muted);
+  padding-bottom: 0.5rem;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  vertical-align: middle;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.92rem;
+  text-align: left;
+}
+
+.data-table thead th {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.data-table tbody th {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td {
+  font-weight: 700;
+  border-top: 2px solid rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {
