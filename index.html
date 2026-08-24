@@ -37,22 +37,6 @@
         angezeigt.
       </p>
 
-      <!-- Fortschritt -->
-      <div class="mb-3">
-        <div class="d-flex justify-content-between small mb-1">
-          <span class="text-muted">Fortschritt</span>
-          <span class="text-muted" id="progress_text">0%</span>
-        </div>
-        <div class="progress">
-          <div
-            class="progress-bar bg-primary"
-            role="progressbar"
-            id="progress_bar"
-            style="width: 0%"
-          ></div>
-        </div>
-      </div>
-
       <!-- Tabs mit Icons -->
       <ul class="nav nav-tabs mt-4" id="mainTabs" role="tablist">
         <li class="nav-item">
@@ -136,6 +120,17 @@
           </button>
         </li>
       </ul>
+
+      <div id="mobileStepper" class="mb-4">
+        <div class="small text-muted mb-2">
+          Schritt <span id="stepCurrent">1</span> von
+          <span id="stepTotal">8</span>
+        </div>
+
+        <div id="wizardSteps" class="wizard-steps mb-3"></div>
+
+        <h5 class="mt-3 mb-0" id="stepTitle">Grunddaten</h5>
+      </div>
 
       <form class="mt-4" id="matrixForm">
         <div class="tab-content">
@@ -792,6 +787,14 @@
 
         <!-- Buttons unter dem Formular -->
         <div class="d-flex gap-2 mt-3">
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="prevStepBtn"
+          >
+            <i class="bi bi-arrow-left-circle me-1"></i>Zurück
+          </button>
+
           <button class="btn btn-outline-secondary btn-sm" type="reset">
             <i class="bi bi-arrow-counterclockwise me-1"></i>Zurücksetzen
           </button>
@@ -871,6 +874,7 @@
         // ── DOM refs ──────────────────────────────────────────────────────────────
         const form = document.getElementById('matrixForm');
         const nextStepBtn = document.getElementById('nextStepBtn');
+        const prevStepBtn = document.getElementById('prevStepBtn');
 
         // ── Helpers ──────────────────────────────────────────────────────────────
         function getById(id) {
@@ -981,17 +985,50 @@
           });
         }
 
-        function updateProgress() {
-          const req = queryAll('select[required], input[required]');
-          const missing = getMissingFields();
-          const done = req.length - missing.length;
-          const pct = req.length ? Math.round((done * 100) / req.length) : 0;
-
-          getById('progress_bar').style.width = pct + '%';
-          getById('progress_text').textContent = pct + '%';
-
+        function updateFormState() {
           updateNextStepVisibility();
           updateTabIndicators();
+        }
+        function updateMobileStepper() {
+          const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+
+          let activeIndex = tabs.findIndex((tab) =>
+            tab.classList.contains('active'),
+          );
+
+          if (activeIndex < 0) {
+            activeIndex = 0;
+          }
+
+          const totalSteps = tabs.length;
+
+          const wizardSteps = getById('wizardSteps');
+
+          wizardSteps.innerHTML = tabs
+            .map((_, index) => {
+              const state =
+                index < activeIndex
+                  ? 'completed'
+                  : index === activeIndex
+                    ? 'active'
+                    : 'upcoming';
+
+              return `
+  <span class="wizard-step ${state}">
+    ${index < activeIndex ? '✓' : index + 1}
+  </span>
+`;
+            })
+            .join('');
+
+          getById('stepCurrent').textContent = activeIndex + 1;
+          getById('stepTotal').textContent = totalSteps;
+
+          getById('stepTitle').textContent = tabs[activeIndex].innerText.trim();
+
+          if (prevStepBtn) {
+            prevStepBtn.disabled = activeIndex === 0;
+          }
         }
 
         // ── Next-step button ──────────────────────────────────────────────────────
@@ -1030,6 +1067,18 @@
 
           if (activeIndex >= 0 && activeIndex < tabs.length - 1) {
             new bootstrap.Tab(tabs[activeIndex + 1]).show();
+          }
+        });
+
+        prevStepBtn?.addEventListener('click', () => {
+          const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+
+          const activeIndex = tabs.findIndex((tab) =>
+            tab.classList.contains('active'),
+          );
+
+          if (activeIndex > 0) {
+            new bootstrap.Tab(tabs[activeIndex - 1]).show();
           }
         });
 
@@ -1072,6 +1121,7 @@
 
         getById('mainTabs').addEventListener('shown.bs.tab', () => {
           updateNextStepVisibility();
+          updateMobileStepper();
         });
 
         // ── Historische Störungen: Ein-/Ausblenden je nach Erfahrung ─────────────
@@ -1089,7 +1139,7 @@
           } else {
             stoerungen.disabled = false;
           }
-          updateProgress();
+          updateFormState();
         }
 
         getById('wiederkehrende_veranstaltung_erfahrung').addEventListener(
@@ -1110,7 +1160,7 @@
             } else {
               e.target.classList.add(v ? 'is-valid' : 'is-invalid');
             }
-            updateProgress();
+            updateFormState();
           }
         });
 
@@ -1126,7 +1176,15 @@
           nextStepBtn.classList.remove('d-none');
           setTimeout(() => {
             updateStoerungen();
-            updateProgress();
+            updateFormState();
+
+            const tabs = queryAll('#mainTabs button[data-bs-toggle="tab"]');
+
+            if (tabs.length > 0) {
+              new bootstrap.Tab(tabs[0]).show();
+            }
+
+            updateMobileStepper();
           }, 0);
         });
 
@@ -1183,7 +1241,9 @@
         queryAll('[data-bs-toggle="tooltip"]').forEach(
           (el) => new bootstrap.Tooltip(el),
         );
-        updateProgress();
+
+        updateFormState();
+        updateMobileStepper();
       })();
     </script>
   </body>
