@@ -116,12 +116,12 @@
           }
           const additive = [0, 1, 5, 10][Math.floor(Math.random() * 4)];
           v.push(parseFloat((cum + additive * pick()).toFixed(2)));
-          sessionStorage.setItem('scenic_current', JSON.stringify({ p, v }));
+          localStorage.setItem('scenic_current', JSON.stringify({ p, v }));
           location.reload();
         };
 
-        // Read current dataset from sessionStorage
-        const currentRaw = sessionStorage.getItem('scenic_current');
+        // Read current dataset from localStorage
+        const currentRaw = localStorage.getItem('scenic_current');
         const currentData = currentRaw ? JSON.parse(currentRaw) : null;
         // // TODO: Remove the button "Testdaten laden" once it is deployed. This button is only for testing purposes
         // if (!currentData) {
