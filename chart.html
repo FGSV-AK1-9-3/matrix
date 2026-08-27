@@ -169,24 +169,24 @@
           }
           const additive = [0, 1, 5, 10][Math.floor(Math.random() * 4)];
           v.push(parseFloat((cum + additive * pick()).toFixed(2)));
-          sessionStorage.setItem('scenic_current', JSON.stringify({ p, v }));
+          localStorage.setItem('scenic_current', JSON.stringify({ p, v }));
           location.reload();
         };
 
-        // Read current dataset from sessionStorage
-        const currentRaw = sessionStorage.getItem('scenic_current');
+        // Read current dataset from localStorage
+        const currentRaw = localStorage.getItem('scenic_current');
         const currentData = currentRaw ? JSON.parse(currentRaw) : null;
-        // TODO: Remove the button "Testdaten laden" once it is deployed. This button is only for testing purposes
-        if (!currentData) {
-          document.getElementById('progressionChart').parentElement.innerHTML =
-            '<p class="text-muted text-center py-5">' +
-            '<i class="bi bi-exclamation-circle me-2"></i>' +
-            'Keine aktuellen Daten vorhanden. Bitte füllen Sie zuerst das ' +
-            '<a href="index.html">Formular</a> aus und klicken Sie auf „Absenden".' +
-            '<br><button class="btn btn-sm btn-outline-primary mt-3" onclick="loadTestData()">' +
-            '<i class="bi bi-lightning me-1"></i>Testdaten laden</button></p>';
-          return;
-        }
+        // // TODO: Remove the button "Testdaten laden" once it is deployed. This button is only for testing purposes
+        // if (!currentData) {
+        //   document.getElementById('progressionChart').parentElement.innerHTML =
+        //     '<p class="text-muted text-center py-5">' +
+        //     '<i class="bi bi-exclamation-circle me-2"></i>' +
+        //     'Keine aktuellen Daten vorhanden. Bitte füllen Sie zuerst das ' +
+        //     '<a href="index.html">Formular</a> aus und klicken Sie auf „Absenden".' +
+        //     '<br><button class="btn btn-sm btn-outline-primary mt-3" onclick="loadTestData()">' +
+        //     '<i class="bi bi-lightning me-1"></i>Testdaten laden</button></p>';
+        //   return;
+        // }
 
         // Fetch historical data and render chart
         fetch('resources/werteverlauf.json')
