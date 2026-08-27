@@ -41,6 +41,59 @@
         ></canvas>
       </div>
 
+      <h2 class="mt-5 mb-2">
+        <i class="bi bi-bar-chart me-2 text-primary"></i>Verteilung der Faktoren
+        zur Veranstaltung
+      </h2>
+      <p class="text-muted mb-4">
+        Das Produkt der Verkehrsgrößen (VG-F: Flächenverhältnis, VG-V:
+        Personenverkehrsstärke, VG-S: Störungen auf Flucht- und Rettungswegen,
+        VG-W: Wegführung, VG-E: Einlass/Auslass, G: Grundform der
+        Veranstaltungsfläche) zeigt, wie stark sich diese Faktoren insgesamt
+        auswirken. Ihr aktueller Wert ist
+        <strong style="color: var(--brand)">farbig hervorgehoben</strong>.
+      </p>
+      <div class="card step-card">
+        <canvas
+          id="distributionChart"
+          style="width: 100%; height: 400px"
+        ></canvas>
+      </div>
+
+      <h2 class="mt-5 mb-2">
+        <i class="bi bi-bar-chart me-2 text-primary"></i>Verteilung der
+        Beschaffenheitsfaktoren
+      </h2>
+      <p class="text-muted mb-4">
+        Das Produkt der Beschaffenheitsfaktoren (B-E: Entlastungsflächen, B-B:
+        Befestigter Grund, B-W: Wetterlage) zeigt, wie stark sich diese
+        insgesamt auswirken. Ihr aktueller Wert ist
+        <strong style="color: var(--brand)">farbig hervorgehoben</strong>.
+      </p>
+      <div class="card step-card">
+        <canvas
+          id="distributionChart2"
+          style="width: 100%; height: 400px"
+        ></canvas>
+      </div>
+
+      <h2 class="mt-5 mb-2">
+        <i class="bi bi-bar-chart me-2 text-primary"></i>Verteilung der
+        Veranstaltungsfaktoren
+      </h2>
+      <p class="text-muted mb-4">
+        Das Produkt der Veranstaltungsfaktoren (V-EK: Einlasskontrolle, V-Z: Zu-
+        und Ablauf bei Ein-/Auslass, V-A: Attraktionen/Bühnen) zeigt, wie stark
+        sich diese insgesamt auswirken. Ihr aktueller Wert ist
+        <strong style="color: var(--brand)">farbig hervorgehoben</strong>.
+      </p>
+      <div class="card step-card">
+        <canvas
+          id="distributionChart3"
+          style="width: 100%; height: 400px"
+        ></canvas>
+      </div>
+
       <div class="d-flex gap-2 mt-4">
         <a href="index.html" class="btn btn-outline-secondary">
           <i class="bi bi-arrow-left me-1"></i>Zurück zum Formular
@@ -140,12 +193,178 @@
           .then((res) => res.json())
           .then((historicalData) => {
             renderChart(historicalData, currentData);
+            renderHistogram(
+              'distributionChart',
+              'VG-F × VG-V × VG-S × VG-W × VG-E × G',
+              historicalData,
+              currentData,
+              0,
+              6,
+            );
+            renderHistogram(
+              'distributionChart2',
+              'B-E × B-B × B-W',
+              historicalData,
+              currentData,
+              6,
+              9,
+            );
+            renderHistogram(
+              'distributionChart3',
+              'V-EK × V-Z × V-A',
+              historicalData,
+              currentData,
+              9,
+              12,
+            );
           })
           .catch((err) => {
             console.error('Failed to load historical data:', err);
             // Render with current data only
             renderChart([], currentData);
+            renderHistogram(
+              'distributionChart',
+              'VG-F × VG-V × VG-S × VG-W × VG-E × G',
+              [],
+              currentData,
+              0,
+              6,
+            );
+            renderHistogram(
+              'distributionChart2',
+              'B-E × B-B × B-W',
+              [],
+              currentData,
+              6,
+              9,
+            );
+            renderHistogram(
+              'distributionChart3',
+              'V-EK × V-Z × V-A',
+              [],
+              currentData,
+              9,
+              12,
+            );
           });
+
+        function renderHistogram(
+          canvasId,
+          xLabel,
+          historicalData,
+          current,
+          startIdx,
+          endIdx,
+        ) {
+          const allProducts = historicalData
+            .map((e) => e.v[endIdx] / e.v[startIdx])
+            .filter((v) => isFinite(v));
+          const currentProduct = current.v[endIdx] / current.v[startIdx];
+          const allValues = [...allProducts, currentProduct];
+
+          // Fixed 0.25 bucket width
+          const BIN_WIDTH = 0.25;
+          const binStart =
+            Math.floor(Math.min(...allValues) / BIN_WIDTH) * BIN_WIDTH;
+          const binEnd =
+            Math.ceil(Math.max(...allValues) / BIN_WIDTH) * BIN_WIDTH;
+          const binCount = Math.round((binEnd - binStart) / BIN_WIDTH) || 1;
+
+          const bins = Array.from({ length: binCount }, (_, i) => ({
+            low: binStart + i * BIN_WIDTH,
+            high: binStart + (i + 1) * BIN_WIDTH,
+            count: 0,
+            isCurrent: false,
+          }));
+
+          allValues.forEach((val) => {
+            let idx = Math.floor((val - binStart) / BIN_WIDTH);
+            if (idx >= binCount) idx = binCount - 1;
+            if (idx < 0) idx = 0;
+            bins[idx].count++;
+          });
+
+          let currentBinIdx = Math.floor(
+            (currentProduct - binStart) / BIN_WIDTH,
+          );
+          if (currentBinIdx >= binCount) currentBinIdx = binCount - 1;
+          if (currentBinIdx < 0) currentBinIdx = 0;
+          bins[currentBinIdx].isCurrent = true;
+
+          const labels = bins.map(
+            (b) => `${b.low.toFixed(2)} – ${b.high.toFixed(2)}`,
+          );
+          const colors = bins.map((b) =>
+            b.isCurrent
+              ? 'rgba(13, 110, 253, 0.85)'
+              : 'rgba(150, 170, 200, 0.5)',
+          );
+          const borderColors = bins.map((b) =>
+            b.isCurrent ? 'rgba(13, 110, 253, 1)' : 'rgba(150, 170, 200, 0.7)',
+          );
+
+          const distCtx = document.getElementById(canvasId).getContext('2d');
+
+          new Chart(distCtx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Häufigkeit',
+                  data: bins.map((b) => b.count),
+                  backgroundColor: colors,
+                  borderColor: borderColors,
+                  borderWidth: 1.5,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    title: (items) => {
+                      const idx = items[0]?.dataIndex;
+                      const bin = bins[idx];
+                      return `Bereich: ${bin.low.toFixed(2)} – ${bin.high.toFixed(2)}`;
+                    },
+                    afterBody: (items) => {
+                      const idx = items[0]?.dataIndex;
+                      if (bins[idx]?.isCurrent) {
+                        return [`Ihr Wert: ${currentProduct.toFixed(2)}`];
+                      }
+                      return [];
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: xLabel,
+                    font: { weight: 'bold' },
+                  },
+                  grid: { color: 'rgba(0, 0, 0, 0.04)' },
+                  ticks: { maxRotation: 45, font: { size: 10 } },
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: 'Häufigkeit',
+                    font: { weight: 'bold' },
+                  },
+                  beginAtZero: true,
+                  ticks: { stepSize: 1 },
+                  grid: { color: 'rgba(0, 0, 0, 0.06)' },
+                },
+              },
+            },
+          });
+        }
 
         function renderChart(historicalData, current) {
           const datasets = [];
@@ -185,7 +404,7 @@
             .getElementById('progressionChart')
             .getContext('2d');
 
-          const chartInstance = new Chart(ctx, {
+          new Chart(ctx, {
             type: 'line',
             data: {
               labels: STEP_LABELS,
