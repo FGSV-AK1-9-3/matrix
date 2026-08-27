@@ -1237,7 +1237,7 @@
           progression.push(parseFloat(result.toFixed(2)));
 
           // Store current dataset for chart.html
-          sessionStorage.setItem(
+          localStorage.setItem(
             'scenic_current',
             JSON.stringify({ p: data.personenzahl, v: progression }),
           );
