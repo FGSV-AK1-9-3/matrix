@@ -4,6 +4,7 @@ export default defineConfig({
   testDir: 'tests/',
   testMatch: 'scenic.spec.js',
   reporter: [['html'], ['list']],
+  timeout: 10000,
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
