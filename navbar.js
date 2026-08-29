@@ -71,7 +71,15 @@
 </li>
 `;
 
-  const items = normalItems + exampleDropdown + faqItem;
+  const aboutItem = `
+<li class="nav-item">
+  <a class="nav-link${page === 'about-us.html' ? ' active' : ''}" href="${sites}about-us.html">
+    Mitwirkende
+  </a>
+</li>
+`;
+
+  const items = normalItems + exampleDropdown + faqItem + aboutItem;
 
   const nav = `<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
