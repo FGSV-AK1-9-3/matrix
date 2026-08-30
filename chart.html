@@ -19,6 +19,96 @@
       rel="stylesheet"
     />
     <link href="custom.css" rel="stylesheet" />
+    <style>
+      .kde-card-body {
+        padding: 1.75rem 1.5rem 1.25rem;
+      }
+
+      .kde-wrap {
+        position: relative;
+      }
+
+      .kde-bubble {
+        position: absolute;
+        top: 0;
+        transform: translateX(-50%);
+        background: var(--brand, #0d6efd);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        line-height: 1;
+        padding: 6px 10px;
+        border-radius: 8px;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(13, 110, 253, 0.35);
+        pointer-events: none;
+      }
+
+      .kde-bubble::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -5px;
+        transform: translateX(-50%);
+        border-width: 5px 5px 0 5px;
+        border-style: solid;
+        border-color: var(--brand, #0d6efd) transparent transparent transparent;
+      }
+
+      .kde-subtext {
+        margin-top: 0.9rem;
+      }
+
+      .factor-legend {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.5rem 1rem;
+        margin: 0.75rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .factor-legend li {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .factor-legend .badge-value {
+        font-weight: 700;
+        min-width: 3.2rem;
+        text-align: center;
+        border-radius: 6px;
+        padding: 0.15rem 0.4rem;
+        font-size: 0.8rem;
+      }
+
+      .badge-reduce {
+        background: #d7ecff;
+        color: #0d6efd;
+      }
+
+      .badge-neutral {
+        background: #eceff3;
+        color: #495057;
+      }
+
+      .badge-increase {
+        background: #ffe6cc;
+        color: #b35c00;
+      }
+
+      .badge-increase-strong {
+        background: #ffd6d6;
+        color: #c0392b;
+      }
+
+      .badge-add {
+        background: #e6d7ff;
+        color: #6f2dbd;
+      }
+    </style>
   </head>
 
   <body>
@@ -26,12 +116,126 @@
 
     <div class="container py-5">
       <h1 class="app-title mb-2">
-        <i class="bi bi-graph-up me-2 text-primary"></i>Werteverlauf
+        <i class="bi bi-graph-up me-2 text-primary"></i> Ergebnis
       </h1>
       <p class="text-muted mb-4">
-        Ihr aktueller Datensatz wird
+        Ihre Daten werden
         <strong style="color: var(--brand)">farbig hervorgehoben</strong>
-        dargestellt. Die übrigen Linien zeigen vorhandene Vergleichsdaten.
+        dargestellt. Die übrigen Linien zeigen vorhandene Daten von
+        Vergleichsveranstaltungen.
+      </p>
+
+      <div class="card step-card mb-4 text-center py-4">
+        <div
+          class="text-muted text-uppercase small mb-1"
+          style="letter-spacing: 0.05em"
+        >
+          Endwert
+        </div>
+        <div
+          class="display-4 fw-bold"
+          style="color: var(--brand, #0d6efd)"
+          id="totalScoreValue"
+        >
+          –
+        </div>
+        <div class="text-muted small mt-1 d-none" id="totalScoreContext"></div>
+      </div>
+
+      <div class="accordion mb-4" id="readingHelpAccordion">
+        <div class="accordion-item">
+          <h3 class="accordion-header mt-0 mb-0">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseFactors"
+              aria-expanded="false"
+              aria-controls="collapseFactors"
+            >
+              <i class="bi bi-info-circle me-2 text-primary"></i>So wird der
+              Endwert berechnet
+            </button>
+          </h3>
+          <div
+            id="collapseFactors"
+            class="accordion-collapse collapse hidden"
+            data-bs-parent="#readingHelpAccordion"
+          >
+            <div class="accordion-body">
+              <p class="mb-2">
+                SCENIC startet mit einem <strong>Basiswert</strong>, der sich
+                aus der erwarteten Besuchendenzahl ergibt. Dieser Wert wird
+                anschließend Schritt für Schritt mit den Einzelfaktoren zu
+                Veranstaltungsgelände (VG-F, VG-V, VG-S, VG-W, VG-E), Grundform
+                der Veranstaltungsfläche (G), Beschaffenheit (B-E, B-B, B-W) und
+                Veranstaltungsverlauf (V-EK, V-Z, V-A) multipliziert. Jeder
+                Faktor beschreibt, ob eine bestimmte Eigenschaft der
+                Veranstaltung das Risiko eher senkt, unverändert lässt oder
+                erhöht:
+              </p>
+              <ul class="factor-legend">
+                <li>
+                  <span class="badge-value badge-reduce">0,8 – 0,9</span>
+                  <span>Faktor senkt den Wert</span>
+                </li>
+                <li>
+                  <span class="badge-value badge-neutral">1,0</span>
+                  <span>neutraler Faktor, keine Auswirkung</span>
+                </li>
+                <li>
+                  <span class="badge-value badge-increase">1,1 – 1,2</span>
+                  <span>Faktor erhöht den Wert</span>
+                </li>
+                <li>
+                  <span class="badge-value badge-increase-strong">1,3</span>
+                  <span>Faktor erhöht den Wert stark</span>
+                </li>
+                <li>
+                  <span class="badge-value badge-add">+1 … +10</span>
+                  <span>Zusatzpunkte (Erfahrung, Wiederkehr)</span>
+                </li>
+              </ul>
+              <p class="mt-3 mb-0 small text-muted">
+                Die genaue Bedeutung jedes einzelnen Faktors sowie die
+                zugehörigen Ausprägungen sind in der
+                <a
+                  href="/sites/procedure-description.html"
+                  target="_blank"
+                  rel="noopener"
+                  >Verfahrensbeschreibung</a
+                >
+                nachzulesen.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="mt-5 mb-2">Zusammensetzung Ihres Ergebnisses</h2>
+
+      <p>
+        Die Grafik zeigt den Werteverlauf der von Ihnen beschriebenen
+        Veranstaltung im Vergleich zu anderen Veranstaltungen. Jeder Punkt
+        entspricht dem
+        <strong>kumulierten Zwischenergebnis</strong>, nachdem der jeweilige
+        Faktor einbezogen wurde. Starke Steigungen sind ein Kennzeichen für sich
+        gegenseitig verstärkende Einflüsse. Ein großer Unterschied zwischen dem
+        Basiswert, der sich aus der Besucherzahl ergibt, und dem Endwert kann
+        ein Kennzeichen für Veranstaltungsprozesse sein, die genauer zu prüfen
+        sind. Eine große Abweichung bedeutet mehr als das 3,5-Fache des
+        Basiswerts.
+      </p>
+      <p>
+        Bei starken Steigungen über die einzelnen Kategorien (Schritte der
+        Eingabe) hinweg und einer großen Abweichung besteht die Gefahr, dass
+        Besucherströme allein auf Basis von Erfahrungswerten nicht mehr
+        beherrscht werden können. Eine Prüfung der Planung oder eine Simulation
+        von Teilen der Veranstaltung ist dann zu empfehlen. Die grün
+        gestrichelte <strong>„Nulllinie“</strong> zeigt, welchen Wert Ihre
+        Veranstaltung bei gleicher Besucherzahl erreichen würde, wenn
+        durchgehend die bestmöglichen, das Risiko am stärksten senkenden
+        Faktorausprägungen vorlägen.
       </p>
 
       <div class="card step-card">
@@ -39,6 +243,98 @@
           id="progressionChart"
           style="width: 100%; height: 500px"
         ></canvas>
+      </div>
+
+      <h2 class="mt-5 mb-2">Ihre gewählten Faktoren</h2>
+
+      <p class="mb-0">
+        Die absoluten Zahlenwerte der Einzelfaktor-Produkte lassen sich schwer
+        einordnen, da sie stark von der Zahl und Ausprägung der jeweils
+        einbezogenen Faktoren abhängen. Aussagekräftiger ist daher der
+        <strong>Vergleich mit anderen, bereits erfassten Veranstaltungen</strong
+        >: Die grafische „Hügel"-Form unten zeigt, wie sich vergleichbare
+        Veranstaltungen entlang dieser Kennzahl verteilen – ein hoher Hügel
+        bedeutet, dass sich dort besonders viele Veranstaltungen ähneln. Die
+        graue gestrichelte Linie markiert den <strong>Median</strong> (den
+        mittleren Wert) aller vergleichbaren Veranstaltungen, die blaue Linie
+        mit der Sprechblase markiert <strong>Ihren Wert</strong>. Ein Pfeil
+        zwischen beiden Linien zeigt, ob und wie weit Ihr Wert nach rechts
+        (höher) oder links (niedriger) vom Median abweicht. Der Text unter der
+        Grafik ordnet diese Abweichung inhaltlich ein.
+      </p>
+
+      <h3 class="mb-2">Einordnung des Veranstaltungsgeländes</h3>
+      <p class="text-muted mb-4">
+        Das Produkt der Verkehrsgrößen (VG-F: Flächenverhältnis, VG-V:
+        Personenverkehrsstärke, VG-S: Störungen auf Flucht- und Rettungswegen,
+        VG-W: Wegführung, VG-E: Einlass/Auslass, G: Grundform der
+        Veranstaltungsfläche) zeigt, wie stark sich diese Faktoren insgesamt
+        auswirken. Die Grafik zeigt, wo Ihre Veranstaltung
+        <strong style="color: var(--brand)">im Vergleich</strong>
+        zu bisherigen Veranstaltungen einzuordnen ist.
+      </p>
+      <div class="card step-card">
+        <div class="kde-card-body">
+          <div class="kde-wrap">
+            <canvas
+              id="distributionChart"
+              style="width: 100%; height: 200px"
+            ></canvas>
+            <div class="kde-bubble" id="distributionChart-bubble"></div>
+          </div>
+          <p
+            class="kde-subtext text-muted small mb-0"
+            id="distributionChart-subtext"
+          ></p>
+        </div>
+      </div>
+
+      <h3 class="mb-2">Einordnung der Beschaffenheitsfaktoren</h3>
+      <p class="text-muted mb-4">
+        Das Produkt der Beschaffenheitsfaktoren (B-E: Entlastungsflächen, B-B:
+        Befestigter Grund, B-W: Wetterlage) zeigt, wie stark sich diese
+        insgesamt auswirken. Die Grafik zeigt, wo Ihre Veranstaltung
+        <strong style="color: var(--brand)">im Vergleich</strong>
+        zu bisherigen Veranstaltungen einzuordnen ist.
+      </p>
+      <div class="card step-card">
+        <div class="kde-card-body">
+          <div class="kde-wrap">
+            <canvas
+              id="distributionChart2"
+              style="width: 100%; height: 200px"
+            ></canvas>
+            <div class="kde-bubble" id="distributionChart2-bubble"></div>
+          </div>
+          <p
+            class="kde-subtext text-muted small mb-0"
+            id="distributionChart2-subtext"
+          ></p>
+        </div>
+      </div>
+
+      <h3 class="mb-2">Einordnung des Veranstaltungsverlaufs</h3>
+      <p class="text-muted mb-4">
+        Das Produkt der Veranstaltungsfaktoren (V-EK: Einlasskontrolle, V-Z: Zu-
+        und Ablauf bei Ein-/Auslass, V-A: Attraktionen/Bühnen) zeigt, wie stark
+        sich diese insgesamt auswirken. Die Grafik zeigt, wo Ihre Veranstaltung
+        <strong style="color: var(--brand)">im Vergleich</strong>
+        zu bisherigen Veranstaltungen einzuordnen ist.
+      </p>
+      <div class="card step-card">
+        <div class="kde-card-body">
+          <div class="kde-wrap">
+            <canvas
+              id="distributionChart3"
+              style="width: 100%; height: 200px"
+            ></canvas>
+            <div class="kde-bubble" id="distributionChart3-bubble"></div>
+          </div>
+          <p
+            class="kde-subtext text-muted small mb-0"
+            id="distributionChart3-subtext"
+          ></p>
+        </div>
       </div>
 
       <div class="d-flex gap-2 mt-4">
@@ -125,13 +421,15 @@
         const currentData = currentRaw ? JSON.parse(currentRaw) : null;
         // TODO: Remove the button "Testdaten laden" once it is deployed. This button is only for testing purposes
         if (!currentData) {
-          document.getElementById('progressionChart').parentElement.innerHTML =
-            '<p class="text-muted text-center py-5">' +
-            '<i class="bi bi-exclamation-circle me-2"></i>' +
-            'Keine aktuellen Daten vorhanden. Bitte füllen Sie zuerst das ' +
-            '<a href="index.html">Formular</a> aus und klicken Sie auf „Absenden".' +
-            '<br><button class="btn btn-sm btn-outline-primary mt-3" onclick="loadTestData()">' +
-            '<i class="bi bi-lightning me-1"></i>Testdaten laden</button></p>';
+          document.querySelectorAll('canvas, #totalScoreValue').forEach((e) => {
+            e.parentElement.innerHTML =
+              '<p class="text-muted text-center py-5">' +
+              '<i class="bi bi-exclamation-circle me-2"></i>' +
+              'Kein Ergebnis aus SCENIC vorhanden. Bitte füllen Sie zuerst das ' +
+              '<a href="index.html">Formular</a> aus und klicken Sie dort auf „Absenden".' +
+              '<br><button class="btn btn-sm btn-outline-secondary mt-3" onclick="loadTestData()">' +
+              '<i class="bi bi-code-slash me-1"></i>Testdaten laden</button></p>';
+          });
           return;
         }
 
@@ -139,13 +437,369 @@
         fetch('resources/werteverlauf.json')
           .then((res) => res.json())
           .then((historicalData) => {
+            renderTotalScore(historicalData, currentData);
             renderChart(historicalData, currentData);
+            renderKDE(
+              'distributionChart',
+              'VG-F × VG-V × VG-S × VG-W × VG-E × G',
+              historicalData,
+              currentData,
+              0,
+              6,
+              'Ihr Veranstaltungsgelände ist in Summe <b>komplexer bzw. anspruchsvoller</b> als bei den meisten Vergleichsveranstaltungen',
+              'Ihr Veranstaltungsgelände ist in Summe <b>einfacher bzw. unkomplizierter</b> als bei den meisten Vergleichsveranstaltungen',
+            );
+            renderKDE(
+              'distributionChart2',
+              'B-E × B-B × B-W',
+              historicalData,
+              currentData,
+              6,
+              9,
+              'die Rahmenbedingungen vor Ort (Ausweichflächen, Untergrund, Wetterabhängigkeit) <b>ungünstiger</b> sind als bei den meisten Vergleichsveranstaltungen',
+              'die Rahmenbedingungen vor Ort (Ausweichflächen, Untergrund, Wetterabhängigkeit) <b>günstiger</b> sind als bei den meisten Vergleichsveranstaltungen',
+            );
+            renderKDE(
+              'distributionChart3',
+              'V-EK × V-Z × V-A',
+              historicalData,
+              currentData,
+              9,
+              12,
+              'der Veranstaltungsverlauf (Einlasskontrolle, Zu-/Ablauf, Attraktionen) <b>anspruchsvoller</b> zu steuern ist als bei den meisten Vergleichsveranstaltungen',
+              'der Veranstaltungsverlauf (Einlasskontrolle, Zu-/Ablauf, Attraktionen) <b>einfacher</b> zu steuern ist als bei den meisten Vergleichsveranstaltungen',
+            );
           })
           .catch((err) => {
             console.error('Failed to load historical data:', err);
             // Render with current data only
+            renderTotalScore([], currentData);
             renderChart([], currentData);
+            renderKDE(
+              'distributionChart',
+              'VG-F × VG-V × VG-S × VG-W × VG-E × G',
+              [],
+              currentData,
+              0,
+              6,
+              'Ihr Veranstaltungsgelände ist in Summe <b>komplexer bzw. anspruchsvoller</b> als bei den meisten Vergleichsveranstaltungen',
+              'Ihr Veranstaltungsgelände ist in Summe <b>einfacher bzw. unkomplizierter</b> als bei den meisten Vergleichsveranstaltungen',
+            );
+            renderKDE(
+              'distributionChart2',
+              'B-E × B-B × B-W',
+              [],
+              currentData,
+              6,
+              9,
+              'die Rahmenbedingungen vor Ort (Ausweichflächen, Untergrund, Wetterabhängigkeit) <b>ungünstiger</b> sind als bei den meisten Vergleichsveranstaltungen',
+              'die Rahmenbedingungen vor Ort (Ausweichflächen, Untergrund, Wetterabhängigkeit) <b>günstiger</b> sind als bei den meisten Vergleichsveranstaltungen',
+            );
+            renderKDE(
+              'distributionChart3',
+              'V-EK × V-Z × V-A',
+              [],
+              currentData,
+              9,
+              12,
+              'der Veranstaltungsverlauf (Einlasskontrolle, Zu-/Ablauf, Attraktionen) <b>anspruchsvoller</b> zu steuern ist als bei den meisten Vergleichsveranstaltungen',
+              'der Veranstaltungsverlauf (Einlasskontrolle, Zu-/Ablauf, Attraktionen) <b>einfacher</b> zu steuern ist als bei den meisten Vergleichsveranstaltungen',
+            );
           });
+
+        // Shows the final cumulative result (Endwert) prominently at the
+        // top of the page, with its rank among all erfassten Veranstaltungen
+        // as context, when historical data is available.
+        function renderTotalScore(historicalData, current) {
+          const endIdx = current.v.length - 1;
+          const totalValue = current.v[endIdx];
+          document.getElementById('totalScoreValue').textContent =
+            totalValue.toFixed(1);
+
+          const historicalEndValues = historicalData
+            .map((e) => e.v[e.v.length - 1])
+            .filter((v) => v != null);
+
+          if (historicalEndValues.length > 0) {
+            const allValues = [...historicalEndValues, totalValue];
+            allValues.sort((a, b) => a - b);
+            const rank = allValues.indexOf(totalValue) + 1;
+            document.getElementById('totalScoreContext').textContent =
+              `Rang ${rank} von ${allValues.length} erfassten Veranstaltungen`;
+          }
+        }
+
+        // Renders a KDE ("hill") plot with Chart.js — the same charting
+        // engine as the progression chart above — so hovering shows an
+        // interactive tooltip, just like the line chart. Additionally
+        // marks the median of comparable events and highlights, with an
+        // arrow, how far and in which direction the current event deviates
+        // from it.
+        function renderKDE(
+          canvasId,
+          xLabel,
+          historicalData,
+          current,
+          startIdx,
+          endIdx,
+          higherMeansText,
+          lowerMeansText,
+        ) {
+          const canvas = document.getElementById(canvasId);
+          const bubble = document.getElementById(`${canvasId}-bubble`);
+          const subtext = document.getElementById(`${canvasId}-subtext`);
+
+          const allProducts = historicalData
+            .map((e) => e.v[endIdx] / e.v[startIdx])
+            .filter((v) => isFinite(v));
+          const currentProduct = current.v[endIdx] / current.v[startIdx];
+          const allValues = [...allProducts, currentProduct];
+          const n = allValues.length;
+
+          if (n < 2) {
+            canvas.parentElement.parentElement.innerHTML =
+              '<p class="text-muted small mb-0">Nicht genügend Vergleichsdaten vorhanden.</p>';
+            return;
+          }
+
+          // Median of the *other*, comparable events (excluding the current
+          // one) — the benchmark we compare the current value against.
+          const median = medianOf(allProducts.length ? allProducts : allValues);
+
+          // Gaussian KDE (Silverman's rule of thumb for the bandwidth)
+          const mean = allValues.reduce((a, b) => a + b, 0) / n;
+          const variance =
+            allValues.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+          const std = Math.sqrt(variance) || 1;
+          const bandwidth = Math.max(1.06 * std * Math.pow(n, -1 / 5), 1e-6);
+
+          const dataMin = Math.min(...allValues);
+          const dataMax = Math.max(...allValues);
+          const pad = bandwidth * 2.5;
+          const domainMin = dataMin - pad;
+          const domainMax = dataMax - dataMin > 0 ? dataMax + pad : dataMax + 1;
+
+          const POINTS = 140;
+          const hillPoints = [];
+          let maxDensity = 0;
+          for (let i = 0; i <= POINTS; i++) {
+            const x = domainMin + ((domainMax - domainMin) * i) / POINTS;
+            let dens = 0;
+            for (const v of allValues) {
+              const u = (x - v) / bandwidth;
+              dens += Math.exp(-0.5 * u * u);
+            }
+            dens /= n * bandwidth * Math.sqrt(2 * Math.PI);
+            hillPoints.push({ x, y: dens });
+            if (dens > maxDensity) maxDensity = dens;
+          }
+
+          // Describe the deviation from the median in plain German
+          bubble.textContent = currentProduct.toFixed(2);
+          const diff = currentProduct - median;
+          const magnitude = Math.abs(diff);
+          let deviationSentence;
+          if (allProducts.length === 0) {
+            deviationSentence = 'Es liegen noch keine Vergleichsdaten vor.';
+          } else if (magnitude < 0.01) {
+            deviationSentence = `Ihr Wert (${currentProduct.toFixed(2)}) entspricht in etwa dem Median (${median.toFixed(2)}) der ${allProducts.length} vergleichbaren Veranstaltungen.`;
+          } else {
+            const dirWord = diff > 0 ? 'über' : 'unter';
+            const pct = median !== 0 ? Math.abs((diff / median) * 100) : null;
+            const pctStr =
+              pct !== null
+                ? ` (${pct.toFixed(0)} % ${dirWord} dem Median)`
+                : '';
+            const interpretation = diff > 0 ? higherMeansText : lowerMeansText;
+            deviationSentence = `Ihr Wert liegt bei <strong>${currentProduct.toFixed(2)}</strong> und damit ${magnitude.toFixed(2)} Punkte ${dirWord} dem Median von ${median.toFixed(2)} der ${allProducts.length} vergleichbaren Veranstaltungen${pctStr}. Das deutet darauf hin, dass ${interpretation}.`;
+          }
+          subtext.innerHTML = deviationSentence;
+
+          // Plugin: draws the flat gray "track", a dashed line marking the
+          // median, a solid blue line marking the current value (in the
+          // same visual language as the median line), and an arrow showing
+          // the deviation between the two. Runs BEFORE the datasets are
+          // drawn so the hill always renders on top and never hides these
+          // reference lines.
+          const referencePlugin = {
+            id: `kdeReference-${canvasId}`,
+            beforeDatasetsDraw(chart) {
+              const { ctx, chartArea, scales } = chart;
+              const y0 = scales.y.getPixelForValue(0);
+              const trackH = 8;
+
+              // Track
+              ctx.save();
+              ctx.fillStyle = '#eceff3';
+              ctx.beginPath();
+              if (ctx.roundRect) {
+                ctx.roundRect(
+                  chartArea.left,
+                  y0 - trackH / 2,
+                  chartArea.width,
+                  trackH,
+                  trackH / 2,
+                );
+              } else {
+                ctx.rect(
+                  chartArea.left,
+                  y0 - trackH / 2,
+                  chartArea.width,
+                  trackH,
+                );
+              }
+              ctx.fill();
+              ctx.restore();
+
+              // Current-value line (solid blue) — the value bubble
+              // above the chart serves as its label.
+              const currentX = scales.x.getPixelForValue(currentProduct);
+              ctx.save();
+              ctx.strokeStyle = 'rgba(13, 110, 253, 0.9)';
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(currentX, chartArea.top + 18);
+              ctx.lineTo(currentX, y0 + trackH / 2 + 4);
+              ctx.stroke();
+              ctx.restore();
+
+              if (allProducts.length === 0) return;
+
+              // Median label + line (dashed, gray)
+              const medianX = scales.x.getPixelForValue(median);
+              ctx.save();
+              ctx.fillStyle = '#6c757d';
+              ctx.font = '11px sans-serif';
+              ctx.textAlign = 'center';
+              ctx.fillText('Median', medianX, chartArea.top + 10);
+              ctx.strokeStyle = '#6c757d';
+              ctx.setLineDash([3, 3]);
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(medianX, chartArea.top + 18);
+              ctx.lineTo(medianX, y0 + trackH / 2 + 4);
+              ctx.stroke();
+              ctx.restore();
+
+              // Deviation arrow between median and the current value
+              if (magnitude >= 0.01) {
+                const arrowY = y0 - 20;
+                const dir = currentX >= medianX ? 1 : -1;
+                // Skip the arrow when the two lines are too close together
+                // to draw legibly (the bubble already shows the exact
+                // value, and the description below states the exact
+                // deviation).
+                if (Math.abs(currentX - medianX) > 24) {
+                  ctx.save();
+                  ctx.strokeStyle = 'rgba(13, 110, 253, 0.85)';
+                  ctx.fillStyle = 'rgba(13, 110, 253, 0.85)';
+                  ctx.lineWidth = 2;
+                  ctx.beginPath();
+                  ctx.moveTo(medianX, arrowY);
+                  ctx.lineTo(currentX, arrowY);
+                  ctx.stroke();
+                  ctx.beginPath();
+                  ctx.moveTo(currentX, arrowY);
+                  ctx.lineTo(currentX - dir * 7, arrowY - 4);
+                  ctx.lineTo(currentX - dir * 7, arrowY + 4);
+                  ctx.closePath();
+                  ctx.fill();
+                  ctx.restore();
+                }
+              }
+            },
+            afterDraw(chart) {
+              // Keep the value bubble horizontally aligned above the blue
+              // line; it sits at the top of the chart, connected visually
+              // to the line running down to the track (same idea as the
+              // "Median" label above the gray line).
+              const { scales } = chart;
+              const xPix = scales.x.getPixelForValue(currentProduct);
+              bubble.style.left = `${(xPix / chart.width) * 100}%`;
+            },
+          };
+
+          new Chart(canvas.getContext('2d'), {
+            type: 'line',
+            data: {
+              datasets: [
+                {
+                  label: 'Verteilung',
+                  data: hillPoints,
+                  borderColor: 'rgba(150, 170, 200, 0.6)',
+                  backgroundColor: 'rgba(150, 170, 200, 0.35)',
+                  borderWidth: 1.5,
+                  pointRadius: 0,
+                  fill: 'origin',
+                  tension: 0.35,
+                  order: 2,
+                },
+                {
+                  label: 'Ihre Veranstaltung',
+                  data: [{ x: currentProduct, y: 0 }],
+                  showLine: false,
+                  pointRadius: 0,
+                  pointHoverRadius: 0,
+                  hitRadius: 25,
+                  order: 1,
+                },
+              ],
+            },
+            plugins: [referencePlugin],
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              layout: { padding: { top: 30, bottom: 0 } },
+              interaction: { mode: 'nearest', intersect: true },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  filter: (item) => item.datasetIndex === 1,
+                  displayColors: false,
+                  callbacks: {
+                    title: () => xLabel,
+                    label: () =>
+                      `Wert: ${currentProduct.toFixed(2)} (Median: ${median.toFixed(2)})`,
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  type: 'linear',
+                  min: domainMin,
+                  max: domainMax,
+                  grid: { display: false },
+                  afterBuildTicks: (axis) => {
+                    axis.ticks = [{ value: domainMin }, { value: domainMax }];
+                  },
+                  ticks: {
+                    color: '#8a94a6',
+                    font: { size: 11 },
+                    callback: (value) =>
+                      value === domainMin
+                        ? dataMin.toFixed(1)
+                        : value === domainMax
+                          ? dataMax.toFixed(1)
+                          : '',
+                  },
+                },
+                y: {
+                  display: false,
+                  min: 0,
+                  max: maxDensity * 1.2,
+                },
+              },
+            },
+          });
+        }
+
+        function medianOf(values) {
+          const sorted = [...values].sort((a, b) => a - b);
+          const mid = Math.floor(sorted.length / 2);
+          return sorted.length % 2 !== 0
+            ? sorted[mid]
+            : (sorted[mid - 1] + sorted[mid]) / 2;
+        }
 
         function renderChart(historicalData, current) {
           const datasets = [];
@@ -161,11 +815,29 @@
               pointRadius: 0,
               pointHoverRadius: 4,
               tension: 0.3,
-              order: 2,
+              order: 3,
             });
           });
 
+          // Nulllinie: cumulative curve if every factor had taken its best
+          // (most risk-reducing) value, given the same Basiswert. Makes the
+          // deviation of the actual curve visible.
+          const nulllinieIdx = datasets.length;
+          datasets.push({
+            label: 'Nulllinie (bestmögliche Faktoren)',
+            data: computeBestCaseCurve(current.v[0]),
+            borderColor: 'rgba(25, 135, 84, 0.9)',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [6, 4],
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            tension: 0.3,
+            order: 2,
+          });
+
           // Current dataset: thick, highlighted line
+          const currentIdx = datasets.length;
           datasets.push({
             label: `Aktuell: ${current.p.toLocaleString('de-DE')} Pers.`,
             data: current.v,
@@ -185,7 +857,7 @@
             .getElementById('progressionChart')
             .getContext('2d');
 
-          const chartInstance = new Chart(ctx, {
+          new Chart(ctx, {
             type: 'line',
             data: {
               labels: STEP_LABELS,
@@ -202,8 +874,10 @@
                 legend: {
                   display: true,
                   labels: {
-                    // Only show legend entry for the current dataset
-                    filter: (item) => item.datasetIndex === datasets.length - 1,
+                    // Show legend entries for the current dataset and the Nulllinie
+                    filter: (item) =>
+                      item.datasetIndex === currentIdx ||
+                      item.datasetIndex === nulllinieIdx,
                     font: { weight: 'bold', size: 13 },
                   },
                 },
@@ -232,9 +906,11 @@
                       const min = Math.min(...allValues);
                       const max = Math.max(...allValues);
                       const median = allValues[Math.floor(total / 2)];
+                      const bestCaseVal = datasets[nulllinieIdx].data[stepIdx];
 
                       return [
                         `Wert: ${currentVal.toFixed(2)}`,
+                        `Nulllinie: ${bestCaseVal.toFixed(2)} (Δ +${(currentVal - bestCaseVal).toFixed(2)})`,
                         '',
                         `Rang: ${rank} von ${total}`,
                         `Min: ${min.toFixed(2)}  |  Median: ${median.toFixed(2)}  |  Max: ${max.toFixed(2)}`,
@@ -242,7 +918,7 @@
                     },
                   },
                   // Only show one tooltip (for the current dataset)
-                  filter: (item) => item.datasetIndex === datasets.length - 1,
+                  filter: (item) => item.datasetIndex === currentIdx,
                 },
               },
               scales: {
@@ -270,6 +946,41 @@
               },
             },
           });
+        }
+
+        // Best-case (most risk-reducing) factor for each step from VG-F
+        // through V-A, per the SCENIC Verfahrensbeschreibung. Multiplying
+        // these onto the same Basiswert gives the lowest value this event
+        // size could realistically reach — the "Nulllinie".
+        const BEST_CASE_FACTORS = [
+          0.9, // VG-F
+          0.9, // VG-V
+          1.0, // VG-S
+          1.0, // VG-W
+          1.0, // VG-E
+          1.0, // G
+          1.0, // B-E
+          1.0, // B-B
+          1.0, // B-W
+          1.0, // V-EK
+          1.0, // V-Z
+          1.0, // V-A
+        ];
+        // Best-case behaviour factors (Ortskunde, Involvement, soziale
+        // Gruppen) and minimal Zusatzpunkte (Erfahrung, Wiederkehr) applied
+        // for the final "Endwert" step.
+        const BEST_CASE_BEHAVIOUR_FACTOR = 0.8;
+        const BEST_CASE_EXTRA_POINTS = 1;
+
+        function computeBestCaseCurve(basiswert) {
+          const curve = [basiswert];
+          let cum = basiswert;
+          BEST_CASE_FACTORS.forEach((f) => {
+            cum *= f;
+            curve.push(cum);
+          });
+          curve.push(cum * BEST_CASE_BEHAVIOUR_FACTOR + BEST_CASE_EXTRA_POINTS);
+          return curve;
         }
       })();
     </script>
