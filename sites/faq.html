@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>FAQ - SCENIC</title>
     <!-- Bootstrap 5 CSS -->
     <link
       crossorigin="anonymous"
@@ -19,30 +20,797 @@
   </head>
 
   <body>
-    <script
-      crossorigin="anonymous"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
     <script src="../navbar.js"></script>
-
     <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card shadow-sm border-0 mt-5">
-            <div class="card-body text-center p-5">
-              <div class="display-1 mb-3">🚧</div>
+      <h1>FAQ SCENIC</h1>
+      <p class="lead">
+        Simulation Check for Events and Infrastructure Complexity
+      </p>
 
-              <h1 class="mb-3">Inhalt in Vorbereitung</h1>
+      <!-- Allgemein -->
+      <h2 class="mt-5">Allgemein</h2>
+      <div class="accordion mb-4" id="faqAllgemein">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq1"
+            >
+              Was ist SCENIC?
+            </button>
+          </h3>
+          <div
+            id="faq1"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              SCENIC steht für „Simulation Check for Events and Infrastructure
+              Complexity". Es ist ein kostenloses, webbasiertes Werkzeug, mit
+              dem sich in wenigen Minuten einschätzen lässt, ob für eine
+              geplante Veranstaltung eine simulationsgestützte Analyse der
+              Besucherströme empfehlenswert ist bzw. einen Mehrwert für die
+              Planung bietet. Das webbasierte Werkzeug wird ergänzt um
+              Informationen zum entwickelten Verfahren und Grundlagenwissen zu
+              Simulationen.
+            </div>
+          </div>
+        </div>
 
-              <p class="lead text-muted">
-                Dieser Bereich wird derzeit erstellt und in einer zukünftigen
-                Version von SCENIC ergänzt.
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq2"
+            >
+              Wer hat SCENIC entwickelt?
+            </button>
+          </h3>
+          <div
+            id="faq2"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              Das Verfahren wurde vom Arbeitskreis 1.9.3
+              <a
+                href="https://www.fgsv.de/netzwerk/gremien/ag-1-verkehrsplanung/19-planung-fuer-und-steuerung-von-menschenmengen/einsatz-von-simulationen-bei-der-planung-fuer-und-steuerung-von-menschenmengen"
+                >&bdquo;Einsatz von Simulationen bei der Planung f&uuml;r und
+                Steuerung von Menschenmengen&ldquo;</a
+              >
+              der FGSV (Forschungsgesellschaft für Straßen- und Verkehrswesen)
+              entwickelt, einem Gremium des Arbeitsausschusses 1.9 „Planung und
+              Steuerung von Menschenmengen". Siehe auch
+              <a href="about-us.html">Mitwirkende</a>.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq3"
+            >
+              Wozu dient SCENIC – und wozu nicht?
+            </button>
+          </h3>
+          <div
+            id="faq3"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              SCENIC bewertet Einflussfaktoren einer Veranstaltung, die sich auf
+              die Bewegungsströme der Besuchenden auswirken, und unterstützt die
+              Entscheidung, ob eine simulationsgestützte Besucherstromanalyse
+              sinnvoll ist. SCENIC ersetzt ausdrücklich weder die Risikoanalyse
+              mit dem Schutzziel Besuchersicherheit noch die
+              Gefährdungsbeurteilung mit dem Schutzziel Beschäftigte und
+              Beteiligte.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq4"
+            >
+              Wie ordnet sich SCENIC gegenüber DIN 18009-2 und RiMEA ein?
+            </button>
+          </h3>
+          <div
+            id="faq4"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              <p>
+                Die
+                <a href="https://www.dinmedia.de/de/norm/din-18009-2/351457817"
+                  >DIN 18009-2</a
+                >DIN 18009-2 behandelt vorrangig Räumungssimulationen im
+                Brandfall in genehmigten baulichen Anlagen.
+                <a href="www.rimea.de">RiMEA</a> legt die Methodik für
+                simulationsgestützte Entfluchtungsanalysen fest (für bauliche
+                Anlagen und Freiflächen) und bildet damit zugleich die Grundlage
+                für die von SCENIC empfohlenen Personenstromsimulationen.
               </p>
+              <p>
+                SCENIC unterstützt im Schritt davor: bei der Entscheidung, ob
+                eine simulationsgestützte Analyse für ein konkretes
+                Veranstaltungsszenario sinnvoll ist. Dabei betrachtet SCENIC
+                neben der Räumung auch Ein-/Auslasssituationen und weitere
+                Ereignisse im Veranstaltungsverlauf und ist für jede Art von
+                Veranstaltung geeignet – insbesondere auch für
+                Open-Air-Veranstaltungen außerhalb einer
+                Versammlungsstättengenehmigung.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq5"
+            >
+              Für wen ist SCENIC gedacht?
+            </button>
+          </h3>
+          <div
+            id="faq5"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              Für Veranstaltende und Fachplanende, die im Vorfeld einer
+              Veranstaltung einschätzen möchten, ob der Aufwand einer
+              Personenstromsimulation gerechtfertigt ist – z.&nbsp;B. im
+              Austausch mit Behörden, Feuerwehr oder Sicherheitsdienstleistern.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq6"
+            >
+              Ist die Nutzung von SCENIC kostenlos?
+            </button>
+          </h3>
+          <div
+            id="faq6"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              Ja, SCENIC ist ein offen zugängliches, browserbasiertes Werkzeug
+              ohne Login oder Kosten.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq7"
+            >
+              Gibt es weiterführende Lernmaterialien zum Thema
+              Personenstromsimulation?
+            </button>
+          </h3>
+          <div
+            id="faq7"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAllgemein"
+          >
+            <div class="accordion-body">
+              Ja, auf der Website finden sich neben einer ausführlichen
+              Einführung in Simulationen (Grundlagen, Möglichkeiten und Grenzen
+              von Simulationen), unter
+              <a href="procedure-description.html">„Wie funktioniert es?"</a>
+              eine Verfahrensbeschreibung mit allen Bewertungsfaktoren sowie
+              unter „Beispiele" u.a. ein interaktives
+              <a href="simulations-quiz.html">„Simulationen-Quiz"</a> mit drei
+              Praxisbeispielen, die zeigen, wie kontraintuitiv
+              Personenstromdynamik sein kann.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bedienung -->
+      <h2 class="mt-5">Bedienung</h2>
+      <div class="accordion mb-4" id="faqBedienung">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq8"
+            >
+              Wie lange dauert das Ausfüllen?
+            </button>
+          </h3>
+          <div
+            id="faq8"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBedienung"
+          >
+            <div class="accordion-body">
+              Das Ausfüllen dauert nur wenige Minuten.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq9"
+            >
+              Muss ich alle Felder ausfüllen?
+            </button>
+          </h3>
+          <div
+            id="faq9"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBedienung"
+          >
+            <div class="accordion-body">
+              Ja, alle Felder sind Pflichtfelder. Fehlen Angaben, weist ein
+              Hinweisfenster („Es fehlen Angaben") auf die noch offenen Punkte
+              hin.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq10"
+            >
+              Was bedeuten die Fortschrittspunkte?
+            </button>
+          </h3>
+          <div
+            id="faq10"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBedienung"
+          >
+            <div class="accordion-body">
+              Die Reihe von Punkten zeigt den Fortschritt der bereits
+              ausgefüllten Pflichtfelder über die 8 Schritte bzw. Kategorien
+              hinweg an. Vollständig bearbeitete Schritte sind mit einem grünen
+              Haken markiert.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq11"
+            >
+              Muss ich die Punkte in einer bestimmten Reihenfolge bearbeiten?
+            </button>
+          </h3>
+          <div
+            id="faq11"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBedienung"
+          >
+            <div class="accordion-body">
+              Ja. Ein Vorwärtssprung zu einem späteren ist erst möglich, wenn
+              alle vorherigen Punkte vollständig ausgefüllt sind. Ein Rücksprung
+              zu bereits bearbeiteten Punkten ist jederzeit möglich.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq12"
+            >
+              Kann ich meine Eingaben zurücksetzen?
+            </button>
+          </h3>
+          <div
+            id="faq12"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBedienung"
+          >
+            <div class="accordion-body">
+              Ja, über die Schaltfläche „Zurücksetzen" – nach einer
+              Sicherheitsabfrage werden alle Eingaben gelöscht.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fachliche Begriffe -->
+      <h2 class="mt-5">Fachliche Begriffe in den Eingabefeldern</h2>
+      <div class="accordion mb-4" id="faqBegriffe">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq13"
+            >
+              Was ist mit „Personenzahl" gemeint?
+            </button>
+          </h3>
+          <div
+            id="faq13"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Die erwartete Anzahl der gleichzeitig maximal anwesenden Personen
+              auf dem Veranstaltungsgelände – bei mehrtägigen Veranstaltungen
+              also der Spitzenwert, nicht der Tagesdurchschnitt.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq14"
+            >
+              Was bedeutet „Flächenverhältnis"?
+            </button>
+          </h3>
+          <div
+            id="faq14"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Das Verhältnis der für Besuchende zugänglichen Fläche zur
+              erwarteten Besucherzahl, bezogen auf eine Referenzdichte von
+              2&nbsp;Personen pro Quadratmeter. Steht mehr als 20&nbsp;%
+              zusätzliche Fläche zur Verfügung, wird das als entlastend
+              gewertet.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq15"
+            >
+              Was ist die „Personenverkehrsstärke (q<sub>s</sub>)"?
+            </button>
+          </h3>
+          <div
+            id="faq15"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Die Verkehrsstärke beschreibt die Anzahl der Personen, die einen
+              Streckenquerschnitt oder Knotenpunkt je Zeiteinheit passieren. Die
+              spezifische Personenverkehrsstärke q<sub>s</sub>
+              (in&nbsp;Pers./m&middot;s) wird auf Fußwegetappen oder
+              Teilbereichen der Publikumsfläche betrachtet; die Berechnung folgt
+              der Beispielrechnung in Anhang&nbsp;C der FGSV-Empfehlungen zum
+              Verkehrs- und Crowdmanagement (EVC, 2022).
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq16"
+            >
+              Was bedeuten die vier Grundformen bei „Gestalt der Veranstaltung"?
+            </button>
+          </h3>
+          <div
+            id="faq16"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Sie beschreiben die räumliche Anordnung von
+              Szenen-/Attraktionsfläche und Publikumsfläche: „Muster" (räumlich
+              getrennt), „Vieleck" (mehrere Attraktionen mit wechselnden
+              Strömen), „Aufzug" (bewegliche Szenenfläche bei statischem
+              Publikum, z.&nbsp;B. Umzug) und „Marktplatz" (keine Trennung von
+              Szenen- und Publikumsfläche).
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq17"
+            >
+              Was sind „Entlastungsflächen"?
+            </button>
+          </h3>
+          <div
+            id="faq17"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Bereiche des Veranstaltungsgeländes oder des angrenzenden
+              Verkehrsraums, die zusätzlichen Platz bieten, um Besuchendenströme
+              im Bedarfsfall gezielt zu entzerren.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq18"
+            >
+              Was bedeutet „Involvement"?
+            </button>
+          </h3>
+          <div
+            id="faq18"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Der Grad, in dem Besuchende die Inhalte der Veranstaltung als die
+              eigenen und das Miteinander als erstrebenswerte Gemeinschaft
+              betrachten – vereinfacht: wie aktiv/emotional beteiligt das
+              Publikum ist (z.&nbsp;B. Konzert vs. Informationsveranstaltung).
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq19"
+            >
+              Warum ist das Feld „Historische Störungen" manchmal deaktiviert?
+            </button>
+          </h3>
+          <div
+            id="faq19"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqBegriffe"
+          >
+            <div class="accordion-body">
+              Es bezieht sich nur auf wiederkehrende Veranstaltungen mit
+              Erfahrungswerten aus der Vergangenheit. Wird bei „Erfahrung der
+              Veranstaltenden" eine Erstveranstaltung angegeben, wird das Feld
+              automatisch auf „keine Störungen" gesetzt und gesperrt, da keine
+              historischen Daten vorliegen können.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daten spenden und Datenschutz -->
+      <h2 class="mt-5">Daten spenden und Datenschutz</h2>
+      <div class="accordion mb-4" id="faqDaten">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq20"
+            >
+              Was passiert, wenn ich auf „Absenden" klicke?
+            </button>
+          </h3>
+          <div
+            id="faq20"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqDaten"
+          >
+            <div class="accordion-body">
+              Die eingegebenen Werte werden an ein Microsoft-Forms-Formular der
+              FGSV/des AK&nbsp;1.9.3 weitergeleitet, das sich in einem neuen
+              Fenster öffnet, damit die Angaben zur wissenschaftlichen
+              Auswertung des Verfahrens gespendet werden können.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq21"
+            >
+              Muss ich meine Daten spenden, um ein Ergebnis zu sehen?
+            </button>
+          </h3>
+          <div
+            id="faq21"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqDaten"
+          >
+            <div class="accordion-body">
+              Ja, das Absenden ist im aktuellen Beta-Stand der letzte Schritt
+              des Formulars; eine Nutzung nur zur eigenen, privaten Einschätzung
+              ohne Übermittlung ist auf der Seite nicht vorgesehen.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq22"
+            >
+              Sind meine Angaben anonym?
+            </button>
+          </h3>
+          <div
+            id="faq22"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqDaten"
+          >
+            <div class="accordion-body">
+              Die Angaben werden anonym zur wissenschaftlichen Auswertung
+              übermittelt. Weiterführende Informationen können auf freiwilliger
+              Basis ergänzt werden.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auswertung und Ergebnis -->
+      <h2 class="mt-5">Auswertung und Ergebnis</h2>
+      <div class="accordion mb-4" id="faqAuswertung">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq23"
+            >
+              Wie wird das Ergebnis berechnet?
+            </button>
+          </h3>
+          <div
+            id="faq23"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAuswertung"
+          >
+            <div class="accordion-body">
+              <p>
+                Der von SCENIC berechnete Ergebniswert ist die Summe aus
+                folgenden Werten:
+              </p>
+              <p>
+                <strong>Summand 1:</strong> Aus der Personenzahl wird ein
+                Basisfaktor gebildet. Dieser wird mit den Faktoren aus
+                Veranstaltungsgelände, Veranstaltungsverlauf, Gestalt der
+                Veranstaltung und Beschaffenheit des Veranstaltungsgeländes
+                multipliziert.
+              </p>
+              <p>
+                <strong>Summand 2:</strong> Getrennt davon werden die
+                Zusatzpunkte (0, 1, 5 oder 10) für die Erfahrung summiert und
+                mit den Faktoren des Besuchendenverhaltens multipliziert.
+              </p>
+              <p>
+                Faktoren unter 1,0 wirken mindernd, Faktoren über 1,0 erhöhend;
+                Faktor 1,0 ist neutral.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq24"
+            >
+              Wird mir am Ende ein Ergebnis oder eine Empfehlung angezeigt?
+            </button>
+          </h3>
+          <div
+            id="faq24"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAuswertung"
+          >
+            <div class="accordion-body">
+              <p>
+                Als Ergebnis wird eine Grafik mit einem Werteverlauf der
+                geprüften Veranstaltung gezeigt, welche den Einfluss der
+                verschiedenen Faktoren bzw. Kategorien auf den Ergebniswert
+                visualisiert. Außerdem ergibt sich ein Mehrwert durch die
+                Einordnung des geprüften Veranstaltungsszenarios im Vergleich zu
+                anderen bisher geprüften Veranstaltungen aus der Datenbank.
+              </p>
+              <p>
+                Die bisherige Datenbasis ist unzureichend, um verlässliche
+                Schwellenwerte für einen Simulationsbedarf abzuleiten. Mit
+                zunehmenden Datenspenden ist es geplant, diesen Ansatz zukünftig
+                erneut zu prüfen.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq25"
+            >
+              Ersetzt ein niedriger SCENIC-Wert die fachliche Prüfung?
+            </button>
+          </h3>
+          <div
+            id="faq25"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqAuswertung"
+          >
+            <div class="accordion-body">
+              Nein. SCENIC ist ein semiquantifiziertes Risikoanalyseverfahren
+              zur Einordnung von Einflussfaktoren, keine Sicherheits- oder
+              Gefährdungsbeurteilung. Es ersetzt weder Rücksprachen mit Behörden
+              noch die fachliche Einschätzung durch Veranstaltungsplanende.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback und Weiterentwicklung -->
+      <h2 class="mt-5">Feedback und Weiterentwicklung</h2>
+      <div class="accordion mb-4" id="faqFeedback">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq26"
+            >
+              Was bedeutet der Status „Beta"?
+            </button>
+          </h3>
+          <div
+            id="faq26"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqFeedback"
+          >
+            <div class="accordion-body">
+              Das Verfahren und das Tool befinden sich noch in Entwicklung;
+              Bewertungsfaktoren, Berechnungslogik und Darstellung des
+              Ergebnisses können sich noch ändern.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq27"
+            >
+              Wie kann ich Fehler melden oder Feedback geben?
+            </button>
+          </h3>
+          <div
+            id="faq27"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqFeedback"
+          >
+            <div class="accordion-body">
+              <p>
+                Über den Link „Feedback geben" im Seitenfuß, der zu einem neuen
+                Issue im GitHub-Repository FGSV-AK1-9-3/matrix führt. Hierzu ist
+                ein GitHub-Account notwendig.
+              </p>
+              <p>Alternativ können Sie die AK-Leitung per Mail kontaktieren.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq28"
+            >
+              Ist der Quellcode einsehbar?
+            </button>
+          </h3>
+          <div
+            id="faq28"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqFeedback"
+          >
+            <div class="accordion-body">
+              Ja, das Tool ist Open Source und öffentlich auf GitHub
+              veröffentlicht.
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <script
+      crossorigin="anonymous"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
   </body>
 </html>
