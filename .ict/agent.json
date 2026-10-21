@@ -1,0 +1,137 @@
+{
+  "agent" : {
+    "categoryId" : "development",
+    "cli" : "claude",
+    "container" : {
+      "enabled" : false,
+      "extraAllowedHosts" : [
+
+      ],
+      "extraMounts" : [
+
+      ],
+      "gitPushCredential" : false,
+      "networkMode" : "open",
+      "publishedPorts" : [
+
+      ],
+      "secretBindings" : [
+
+      ]
+    },
+    "createdDaysAgo" : 2,
+    "createdLabel" : "23. Sept. 2026",
+    "dependencies" : [
+      {
+        "name" : "@playwright\/test",
+        "version" : "^1.60.0"
+      },
+      {
+        "name" : "husky",
+        "version" : "^9.1.7"
+      },
+      {
+        "name" : "lint-staged",
+        "version" : "^17.0.5"
+      },
+      {
+        "name" : "prettier",
+        "version" : "^3.8.3"
+      },
+      {
+        "name" : "serve",
+        "version" : "^14.2.4"
+      }
+    ],
+    "desc" : "FGSV_Scenic hilft, per interaktivem Fragebogen einzuschätzen, ob eine Veranstaltung eine Besucherstromsimulation braucht, und visualisiert das Ergebnis im Vergleich zu historischen Daten.",
+    "displayName" : "SCENIC Simulationscheck",
+    "endpoints" : [
+      {
+        "host" : "localhost"
+      }
+    ],
+    "entraApps" : [
+
+    ],
+    "envVars" : [
+
+    ],
+    "flagged" : false,
+    "git" : {
+      "ahead" : 0,
+      "behind" : 0,
+      "branch" : "main",
+      "changedFiles" : 1,
+      "dirty" : true,
+      "lastCommit" : {
+        "hash" : "2d14680",
+        "message" : "Add test cases for calculation (#41)",
+        "when" : "4 weeks ago"
+      }
+    },
+    "id" : "fgsv-scenic",
+    "keychainRefs" : [
+
+    ],
+    "lastUsedLabel" : "vor 2 Tagen",
+    "lastUsedMinutesAgo" : 3196,
+    "longDesc" : "ZWECK\n· Statisches Web-Tool zur Einschätzung, ob eine Veranstaltung eine Besucherstrom-Simulation benötigt.\n· Führt Nutzer durch einen mehrstufigen Bewertungsfragebogen und berechnet einen gewichteten Score.\n· Ergebnis wird über eine externe MS-Forms-Umfrage gespeichert und anschließend als Diagramm dargestellt.\n\nKATEGORIE\n· Softwareentwicklung\n\nTECHNOLOGIE\n· Reines HTML\/CSS\/JavaScript ohne Build-Schritt oder Backend.\n· Bootstrap 5 und Chart.js werden per CDN eingebunden.\n· Playwright für End-to-End-Tests, Prettier\/Husky\/lint-staged für Codequalität.\n\nVERBINDUNGEN\n· Lokaler Testserver unter localhost.\n· Externer Sprung zu MS Forms zur Datenerfassung (nicht Teil des Repos).\n· Liest historische Vergleichsdaten aus resources\/werteverlauf.json.\n\nSICHERHEIT\n· Kein Backend, keine Datenbank, rein clientseitige Verarbeitung.\n· Zustandsspeicherung erfolgt im Browser via localStorage (scenic_current).\n· Keine Keychain- oder Zugangsdaten erforderlich.\n\nPORTS\n· 3000 (lokaler statischer Testserver via serve\/Playwright)\n\nABHÄNGIGKEITEN\n· @playwright\/test für die E2E-Testsuite.\n· husky und lint-staged für Pre-Commit-Formatierung.\n· prettier zur Codeformatierung, serve als lokaler Static-Server.\n\nSTARTEN\n· npm ci zur Installation der Abhängigkeiten.\n· npx serve . -p 3000 -s zum manuellen Vorschau-Start, danach localhost:3000 öffnen.\n· npm run test bzw. npm run test:ui für die Playwright-Testsuite.",
+    "metaSource" : "CLAUDE.md",
+    "name" : "FGSV_Scenic",
+    "ports" : [
+      "3000"
+    ],
+    "repoURL" : "https:\/\/github.com\/FGSV-AK1-9-3\/matrix.git",
+    "running" : false,
+    "scripts" : [
+      {
+        "command" : "prettier --write .",
+        "name" : "format"
+      },
+      {
+        "command" : "prettier --check \"**\/*.{js,html,css}\"",
+        "name" : "format:check"
+      },
+      {
+        "command" : "husky",
+        "name" : "prepare"
+      },
+      {
+        "command" : "playwright test tests\/",
+        "name" : "test"
+      },
+      {
+        "command" : "playwright test --headed tests\/",
+        "name" : "test:headed"
+      },
+      {
+        "command" : "playwright test --ui tests\/",
+        "name" : "test:ui"
+      }
+    ],
+    "tech" : [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Bootstrap 5",
+      "Chart.js"
+    ],
+    "typ" : "application"
+  },
+  "category" : {
+    "colorHex" : "#d6504f",
+    "id" : "development",
+    "label" : "Softwareentwicklung"
+  },
+  "serverProfiles" : [
+    {
+      "agentId" : "fgsv-scenic",
+      "id" : "a2b76dec-5d6c-4b8a-b5de-2219bb4ce2bc",
+      "label" : "Static Server",
+      "localURL" : "http:\/\/localhost:3000",
+      "port" : "3000",
+      "startCommand" : "npx serve . -p 3000 -s",
+      "workingDirectory" : ""
+    }
+  ]
+}
