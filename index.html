@@ -24,6 +24,20 @@
   </head>
 
   <body>
+    <noscript>
+      <div class="container my-4">
+        <div class="alert alert-warning" role="alert">
+          <h4 class="alert-heading">JavaScript ist deaktiviert</h4>
+          <p class="mb-0">
+            Dies wird benötigt, um Eingaben zu verarbeiten, Berechnungen
+            durchzuführen und Ergebnisse anzuzeigen. Bitte aktivieren Sie
+            JavaScript in Ihrem Browser und laden Sie diese Seite anschließend
+            erneut.
+          </p>
+        </div>
+      </div>
+    </noscript>
+
     <script src="navbar.js"></script>
 
     <div class="container py-5">
@@ -902,6 +916,9 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- Custom multiline dropdowns -->
+    <script src="custom-select.js"></script>
+
     <!-- Script -->
     <script>
       (() => {
@@ -1274,7 +1291,11 @@
           const msFormsUrl =
             'https://forms.office.com/Pages/ResponsePage.aspx?id=E5sbLDyJpUK7wdeh213bVMA9GzBK5AxOihOVY3tf3slUNVpFVUQ2RENBVjlZT0E1UTcyRTdMNEtQUS4u&r3d54742b902a4453b7a025fe7fc6c89f=' +
             blob;
-          navigator.clipboard.writeText(blob);
+          try {
+            navigator.clipboard.writeText(blob);
+          } catch (e) {
+            console.log(e);
+          }
 
           // Navigate to MS Forms (same tab) — after submitting,
           // the thank-you page links back to chart.html

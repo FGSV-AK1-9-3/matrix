@@ -131,6 +131,14 @@
           style="letter-spacing: 0.05em"
         >
           Endwert
+          <span
+            class="help-icon"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-original-title="Der Endwert ist eine rechnerische Kennzahl, für sich allein lässt er keine Aussage über die Sicherheit einer Veranstaltung zu.
+          Aussagekräftig wird er durch den Vergleich mit ähnlichen Veranstaltungen und die Betrachtung der Einflussfaktoren."
+            >?</span
+          >
         </div>
         <div
           class="display-4 fw-bold"
@@ -601,7 +609,7 @@
           let deviationSentence;
           if (allProducts.length === 0) {
             deviationSentence = 'Es liegen noch keine Vergleichsdaten vor.';
-          } else if (magnitude < 0.01) {
+          } else if (magnitude <= 0.01) {
             deviationSentence = `Ihr Wert (${currentProduct.toFixed(2)}) entspricht in etwa dem Median (${median.toFixed(2)}) der ${allProducts.length} vergleichbaren Veranstaltungen.`;
           } else {
             const dirWord = diff > 0 ? 'über' : 'unter';
@@ -983,6 +991,14 @@
           return curve;
         }
       })();
+
+      function queryAll(selector, root = document) {
+        return Array.from(root.querySelectorAll(selector));
+      }
+
+      queryAll('[data-bs-toggle="tooltip"]').forEach(
+        (el) => new bootstrap.Tooltip(el),
+      );
     </script>
   </body>
 </html>

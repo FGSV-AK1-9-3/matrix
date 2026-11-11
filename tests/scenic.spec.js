@@ -442,6 +442,85 @@ test.describe('Select field validation feedback', () => {
   });
 });
 
+test.describe('Custom multiline dropdowns', () => {
+  const ID = 'veranstaltungsgelaende_flaechenverhaeltnis';
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/index.html');
+    await page.fill('#grunddaten_personenzahl', '500');
+    await page.locator('#grunddaten_personenzahl').dispatchEvent('change');
+    await goToTab(page, '#tab-gelaende');
+  });
+
+  const trigger = (page) => page.locator(`.cs:has(#${ID}) .cs-trigger`);
+  const list = (page) => page.locator(`.cs:has(#${ID}) .cs-list`);
+
+  test('every select is replaced by a custom dropdown', async ({ page }) => {
+    const selects = await page.locator('select.form-select').count();
+    await expect(page.locator('.cs-trigger')).toHaveCount(selects);
+  });
+
+  test('full option text is shown, wrapped over several lines', async ({
+    page,
+  }) => {
+    await trigger(page).click();
+    const option = list(page).locator('.cs-option').nth(1);
+    await expect(option).toBeVisible();
+    const box = await option.boundingBox();
+    const lineHeight = await option.evaluate((el) =>
+      parseFloat(getComputedStyle(el).lineHeight),
+    );
+    expect(box.height).toBeGreaterThan(lineHeight * 1.5);
+    const overflow = await option.evaluate(
+      (el) => el.scrollWidth > el.clientWidth,
+    );
+    expect(overflow).toBe(false);
+  });
+
+  test('clicking an option updates the native select and validation', async ({
+    page,
+  }) => {
+    await trigger(page).click();
+    await list(page).locator('.cs-option').nth(2).click();
+
+    await expect(page.locator(`#${ID}`)).toHaveValue('0.9');
+    await expect(page.locator(`#${ID}`)).toHaveClass(/is-valid/);
+    await expect(trigger(page)).toHaveClass(/is-valid/);
+    await expect(trigger(page)).toContainText('mehr als 20 %');
+    await expect(list(page)).toBeHidden();
+  });
+
+  test('keyboard: arrows + Enter select, Escape closes', async ({ page }) => {
+    await trigger(page).focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(list(page)).toBeVisible();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(page.locator(`#${ID}`)).toHaveValue('1.0');
+
+    await page.keyboard.press('ArrowDown');
+    await expect(list(page)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(list(page)).toBeHidden();
+  });
+
+  test('clicking outside closes the dropdown', async ({ page }) => {
+    await trigger(page).click();
+    await expect(list(page)).toBeVisible();
+    await page.locator('h5, h4, h3').first().click();
+    await expect(list(page)).toBeHidden();
+  });
+
+  test('programmatic value changes are reflected in the trigger', async ({
+    page,
+  }) => {
+    await page.evaluate((id) => {
+      document.getElementById(id).value = '0.9';
+    }, ID);
+    await expect(trigger(page)).toContainText('mehr als 20 %');
+  });
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 4. Progress bar
 // ─────────────────────────────────────────────────────────────────────────────
