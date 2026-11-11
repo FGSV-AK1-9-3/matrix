@@ -1095,3 +1095,152 @@ test.describe('Calculation correctness', () => {
     });
   }
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 14. Result page — print button & inputs table (chart.html)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PRINT_CASE = {
+  personenzahl: 80000,
+  flaechenverhaeltnis: 0.9,
+  verkehrsstaerke: 1,
+  stoerungen: 1,
+  wegfuehrung: 1,
+  einlass_auslass: 1,
+  grundform: 1,
+  entlastungsflaechen: 1,
+  befestigung: 1,
+  wetterlage: 1,
+  einlasskontrolle: 1,
+  zuablauf: 1.3,
+  attraktionen: 1,
+  erfahrung: 5, // Historische Störungen is then disabled and set to 0
+  historische_stoerungen: 0,
+  ort_ablauf: 1.2,
+  involvement: 1.2,
+  soziale_gruppen: 1,
+};
+
+/** Fill and submit the form, then open the result page with a stubbed print(). */
+async function openResultPage(page) {
+  await fillCalculationCase(page, PRINT_CASE);
+  await submitAndGetResult(page);
+
+  await page.addInitScript(() => {
+    window.__printCalls = 0;
+    window.print = () => {
+      window.__printCalls += 1;
+    };
+  });
+
+  await page.goto('/chart.html');
+}
+
+/** Row of the inputs table, found by its abbreviation. */
+const tableRow = (page, ref) =>
+  page.locator('#inputsTable tbody tr:not(.group-row)').filter({
+    has: page.locator('td:first-child code', {
+      hasText: new RegExp(`^${ref}$`),
+    }),
+  });
+
+test.describe('Result page – print', () => {
+  test('two "Drucken" buttons in secondary style open the print dialog', async ({
+    page,
+  }) => {
+    await openResultPage(page);
+
+    const buttons = page.getByRole('button', { name: 'Drucken' });
+
+    await expect(buttons).toHaveCount(2);
+
+    for (const button of await buttons.all()) {
+      await button.click();
+    }
+
+    expect(await page.evaluate(() => window.__printCalls)).toBe(2);
+  });
+
+  test('print layout hides buttons and footer and shows the inputs table', async ({
+    page,
+  }) => {
+    await openResultPage(page);
+
+    // On screen
+    await expect(page.locator('#inputsSection')).toBeHidden();
+    await expect(page.locator('footer')).toBeVisible();
+
+    // When printing
+    await page.emulateMedia({ media: 'print' });
+
+    await expect(page.locator('#inputsSection')).toBeVisible();
+    await expect(page.locator('footer')).toBeHidden();
+    await expect(
+      page.locator('button.no-print', { hasText: 'Drucken' }).first(),
+    ).toBeHidden();
+  });
+
+  test('document title becomes a file name while printing', async ({
+    page,
+  }) => {
+    await openResultPage(page);
+
+    const originalTitle = await page.title();
+
+    await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+    await expect(page).toHaveTitle(/^SCENIC-Ergebnis_\d{4}-\d{2}-\d{2}$/);
+
+    await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+    await expect(page).toHaveTitle(originalTitle);
+  });
+
+  test('inputs table lists abbreviation, answer and factor of every input', async ({
+    page,
+  }) => {
+    await openResultPage(page);
+    await page.emulateMedia({ media: 'print' });
+
+    const refs = await page
+      .locator('#inputsTable tbody tr:not(.group-row) td:first-child')
+      .allTextContents();
+
+    expect(refs).toEqual([
+      'Basiswert',
+      'VG-F',
+      'VG-V',
+      'VG-S',
+      'VG-W',
+      'VG-E',
+      'G',
+      'B-E',
+      'B-B',
+      'B-W',
+      'V-EK',
+      'V-Z',
+      'V-A',
+      'E',
+      'W',
+      'BV',
+      'I',
+      'S',
+    ]);
+
+    // [abbreviation, text contained in the answer, factor]
+    const expected = [
+      ['Basiswert', '80.000', ''],
+      ['VG-F', 'mehr als 20 %', '0,9'],
+      ['V-Z', 'Schüben', '1,3'],
+      ['E', 'erstmalig', '+ 5,0'],
+      ['W', 'keinen dokumentierten Störungen', '+ 0,0'],
+      ['BV', 'ortsunkundig', '1,2'],
+      ['S', 'keine besonderen sozialen Gruppen', '1,0'],
+    ];
+
+    for (const [ref, text, factor] of expected) {
+      const row = tableRow(page, ref);
+
+      await expect(row.locator('td').nth(2)).toContainText(text);
+      await expect(row.locator('td').nth(3)).toHaveText(factor);
+    }
+  });
+});

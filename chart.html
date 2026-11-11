@@ -108,6 +108,82 @@
         background: #e6d7ff;
         color: #6f2dbd;
       }
+
+      /* ---------- Print / PDF ---------- */
+      @media print {
+        @page {
+          size: A4;
+          margin: 15mm;
+        }
+
+        html,
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        /* Hide everything that is not part of the result */
+        nav,
+        .navbar,
+        footer,
+        .no-print {
+          display: none !important;
+        }
+
+        .container {
+          max-width: 100% !important;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+
+        /* Always show the explanation of the calculation */
+        .accordion-button::after {
+          display: none;
+        }
+        .accordion-collapse {
+          display: block !important;
+          height: auto !important;
+          visibility: visible !important;
+        }
+
+        /* Keep headings, cards and charts together on one page */
+        .card,
+        .step-card,
+        .kde-card-body {
+          break-inside: avoid;
+          page-break-inside: avoid;
+          box-shadow: none !important;
+        }
+        h1,
+        h2,
+        h3 {
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+        a {
+          color: inherit !important;
+          text-decoration: none !important;
+        }
+
+        /* Inputs table */
+        #inputsSection {
+          break-before: page;
+          page-break-before: always;
+        }
+        #inputsTable {
+          font-size: 0.8rem;
+        }
+        #inputsTable thead {
+          display: table-header-group;
+        }
+        #inputsTable tr {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        #inputsTable .group-row th {
+          background: #eceff3 !important;
+        }
+      }
     </style>
   </head>
 
@@ -115,9 +191,19 @@
     <script src="navbar.js"></script>
 
     <div class="container py-5">
-      <h1 class="app-title mb-2">
-        <i class="bi bi-graph-up me-2 text-primary"></i> Ergebnis
-      </h1>
+      <div class="d-flex justify-content-between align-items-start gap-3">
+        <h1 class="app-title mb-2">
+          <i class="bi bi-graph-up me-2 text-primary"></i> Ergebnis
+        </h1>
+        <button
+          type="button"
+          class="btn btn-secondary no-print"
+          id="printBtnTop"
+          onclick="window.print()"
+        >
+          <i class="bi bi-printer me-1"></i>Drucken
+        </button>
+      </div>
       <p class="text-muted mb-4">
         Ihre Daten werden
         <strong style="color: var(--brand)">farbig hervorgehoben</strong>
@@ -337,10 +423,40 @@
         </div>
       </div>
 
-      <div class="d-flex gap-2 mt-4">
+      <!-- Inputs table: only shown when printing -->
+      <section id="inputsSection" class="d-none mt-5">
+        <h2 class="mb-2">Ihre Eingaben</h2>
+        <p class="text-muted small">
+          Die Angaben, auf denen dieses Ergebnis beruht. Die Kürzel entsprechen
+          der Beschriftung auf der Achse „Berechnungsschritt“. Die Angaben zu
+          Erfahrung, historischen Störungen, Ortskenntnis, Involvement und
+          sozialen Gruppen (E, W, BV, I, S) haben keinen eigenen Punkt im
+          Diagramm, sondern fließen erst im letzten Schritt („Endwert“) ein.
+        </p>
+        <table class="table table-sm align-top" id="inputsTable">
+          <thead>
+            <tr>
+              <th style="width: 11%">Kürzel</th>
+              <th style="width: 26%">Merkmal</th>
+              <th>Ihre Angabe</th>
+              <th class="text-end" style="width: 8%">Faktor</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <div class="d-flex gap-2 mt-4 no-print">
         <a href="index.html" class="btn btn-outline-secondary">
           <i class="bi bi-arrow-left me-1"></i>Zurück zum Formular
         </a>
+        <button
+          type="button"
+          class="btn btn-secondary no-print"
+          onclick="window.print()"
+        >
+          <i class="bi bi-printer me-1"></i>Drucken
+        </button>
       </div>
     </div>
 
@@ -397,6 +513,20 @@
         ];
         const STEP_LABELS = STEPS.map((s) => s.label);
 
+        // Print / PDF: resize the charts to the print layout and use a
+        // meaningful file name (browsers use document.title for the PDF).
+        const originalTitle = document.title;
+        const resizeCharts = () =>
+          Object.values(Chart.instances || {}).forEach((c) => c.resize());
+        window.addEventListener('beforeprint', () => {
+          document.title = `SCENIC-Ergebnis_${new Date().toISOString().slice(0, 10)}`;
+          resizeCharts();
+        });
+        window.addEventListener('afterprint', () => {
+          document.title = originalTitle;
+          resizeCharts();
+        });
+
         // Generate random test data and reload chart
         window.loadTestData = function () {
           const p = Math.floor(Math.random() * 9900) + 100;
@@ -433,6 +563,285 @@
           return;
         }
 
+        // The answers arrive as { field id: chosen factor } (current.data,
+        // the same data that is sent to Microsoft Forms). Question texts,
+        // answer texts and abbreviations are taken from index.html.
+        // Basiswert … V-A are the labels on the x-axis of the progression
+        // chart; E, W, BV, I and S have no point of their own and enter in
+        // the final "Endwert" step.
+        const INPUT_FIELDS = [
+          {
+            id: 'veranstaltungsgelaende_flaechenverhaeltnis',
+            group: 'Veranstaltungsgelände',
+            ref: 'VG-F',
+            label: 'Flächenverhältnis',
+            options: {
+              '1.0':
+                'Die für Besuchende zugängliche Fläche entspricht der erwarteten Besucherzahl bei einer Belegungsdichte von 2 Personen pro Quadratmeter; geordneter Personenfluss.',
+              0.9: 'Die zugängliche Fläche ist um mehr als 20 % größer als die bei 2 Pers./m² erforderliche Fläche; mehr Bewegungsfreiheit, weniger Verdichtung.',
+            },
+          },
+          {
+            id: 'veranstaltungsgelaende_verkehrsstaerke',
+            group: 'Veranstaltungsgelände',
+            ref: 'VG-V',
+            label: 'Personenverkehrsstärke (qs)',
+            options: {
+              0.9: 'Die erwartete spezifische Personenverkehrsstärke (qs) beträgt ≤ 0,7 Pers./ms (z. B. auf An-/Abreisewegen oder Teilflächen). Überwiegend störungsfrei.',
+              '1.0':
+                'Die erwartete spezifische Personenverkehrsstärke (qs) beträgt ≤ 1,3 Pers./ms. Normale bis leicht erhöhte Auslastung.',
+              1.1: 'Die erwartete spezifische Personenverkehrsstärke (qs) überschreitet 1,3 Pers./ms. Temporäre Verdichtungen möglich.',
+            },
+          },
+          {
+            id: 'veranstaltungsgelaende_stoerungen',
+            group: 'Veranstaltungsgelände',
+            ref: 'VG-S',
+            label: 'Störungen auf Flucht‑ und Rettungswegen',
+            options: {
+              1.2: 'Störungen (z. B. gegenläufige Ströme, parallele Nutzungen oder Änderungen im Veranstaltungsverlauf) sind wahrscheinlich.',
+              '1.0':
+                'Störungen auf den Flucht‑ und Rettungswegen sind unwahrscheinlich; die Wegeführung dürfte ohne wesentliche Einschränkungen funktionieren.',
+            },
+          },
+          {
+            id: 'veranstaltungsgelaende_wegfuehrung',
+            group: 'Veranstaltungsgelände',
+            ref: 'VG-W',
+            label: 'Wegführung',
+            options: {
+              1.2: 'Bauliche Anlagen und/oder topographische Gegebenheiten bedingen eine unübersichtliche Wegführung; Orientierung erschwert.',
+              '1.0':
+                'Bauliche Anlagen und/oder topographische Gegebenheiten erlauben eine übersichtliche Wegführung; gute Orientierung.',
+            },
+          },
+          {
+            id: 'veranstaltungsgelaende_einlass_auslass',
+            group: 'Veranstaltungsgelände',
+            ref: 'VG-E',
+            label: 'Einlass / Auslass',
+            options: {
+              '1.0':
+                'Ein‑ und Auslass sind räumlich getrennt; klare Strömungsrichtungen unterstützen einen geordneten Ablauf.',
+              1.1: 'Ein‑ und Auslass sind räumlich nicht getrennt; Begegnungsströme können den Ablauf verlangsamen.',
+            },
+          },
+          {
+            id: 'gestalt_grundform',
+            group: 'Gestalt',
+            ref: 'G',
+            label: 'Grundform der Veranstaltungsfläche',
+            options: {
+              '1.0':
+                'Muster: Szenen‑/Attraktionsfläche und Publikumsfläche sind getrennt; das unterstützt eine geordnete Besucherführung.',
+              1.1: 'Vieleck: mehrere Szenen/Attraktionen mit wechselnden Besucherströmen; komplexere Bewegungsmuster möglich.',
+              1.2: 'Umzug: veränderliche Szenenfläche/Attraktion bei überwiegend statischer Publikumsfläche; Treffpunkte können sich im Verlauf verlagern.',
+              1.3: 'Marktplatz: keine Trennung von Szenen‑/Attraktionsfläche und Publikumsfläche; offene, frei gestaltete Bewegungsflächen.',
+            },
+          },
+          {
+            id: 'beschaffenheit_entlastungsflaechen',
+            group: 'Beschaffenheit',
+            ref: 'B-E',
+            label: 'Möglichkeit zur Einrichtung von Entlastungsflächen',
+            options: {
+              '1.0':
+                'Es bestehen Möglichkeiten zur Einrichtung von Entlastungsflächen; dadurch können Besuchendenströme im Bedarfsfall gezielt entzerrt werden.',
+              1.1: 'Es bestehen keine realistischen Möglichkeiten für Entlastungsflächen; Ausweichräume sind begrenzt.',
+            },
+          },
+          {
+            id: 'beschaffenheit_befestigung',
+            group: 'Beschaffenheit',
+            ref: 'B-B',
+            label: 'Befestigter Grund mit befahrbaren Wegen',
+            options: {
+              '1.0':
+                'Der Untergrund ist befestigt und befahrbar; Logistik und Einsatzfahrzeuge können sich zuverlässig bewegen.',
+              1.1: 'Der Untergrund ist nicht befestigt; Mobilität und Zugänglichkeit können eingeschränkt sein (insbesondere bei Nässe).',
+            },
+          },
+          {
+            id: 'beschaffenheit_wetterlage',
+            group: 'Beschaffenheit',
+            ref: 'B-W',
+            label: 'Wetterlage',
+            options: {
+              1.3: 'Die Wetterlage kann die Nutzbarkeit des Geländes stark beeinflussen (z. B. durch Regen, Wind oder aufgeweichten Boden).',
+              '1.0':
+                'Die Wetterlage beeinflusst die Nutzbarkeit des Geländes nicht in relevantem Maß.',
+            },
+          },
+          {
+            id: 'veranstaltungsverlauf_einlasskontrolle',
+            group: 'Veranstaltungsverlauf',
+            ref: 'V-EK',
+            label: 'Einlasskontrolle',
+            options: {
+              1.3: 'Es erfolgt keine Einlasskontrolle; der Zugang ist frei und unreguliert (schnelleres Einströmen, jedoch weniger Steuerung).',
+              '1.0':
+                'Es erfolgt eine Einlasskontrolle; der Eintritt ist geordnet, zeitweise können Wartezonen entstehen.',
+            },
+          },
+          {
+            id: 'veranstaltungsverlauf_zuablauf',
+            group: 'Veranstaltungsverlauf',
+            ref: 'V-Z',
+            label: 'Zu‑ und Ablauf bei Ein‑/Auslass',
+            options: {
+              '1.0':
+                'Der Zu‑ und Ablauf erfolgt kontinuierlich; gleichmäßige Personenströme sind zu erwarten.',
+              1.3: 'Der Zu‑ und Ablauf erfolgt in einem oder mehreren Schüben; zeitweise Verdichtungen sind möglich.',
+            },
+          },
+          {
+            id: 'veranstaltungsverlauf_attraktionen',
+            group: 'Veranstaltungsverlauf',
+            ref: 'V-A',
+            label: 'Attraktionen / Bühnen',
+            options: {
+              1.2: 'Es existieren mehrere Attraktionen bzw. Bühnen; die Ströme verteilen sich, bleiben aber dynamisch.',
+              '1.0':
+                'Es existiert nur eine Attraktion bzw. Bühne; der Personenfluss konzentriert sich stärker auf einen Bereich.',
+            },
+          },
+          {
+            id: 'wiederkehrende_veranstaltung_erfahrung',
+            group: 'Wiederkehr',
+            ref: 'E',
+            label: 'Erfahrung der Veranstaltenden',
+            additive: true,
+            options: {
+              '1.0':
+                'Die Veranstaltung ist wiederkehrend; Veranstaltende, Veranstaltungsort und Veranstaltungsablauf sind gleichbleibend (Prozesse sind erprobt).',
+              '5.0':
+                'Die Veranstaltung findet mit dem aktuellen Ablauf erstmalig an diesem Ort statt; Veranstaltende verfügen über Erfahrung mit vergleichbaren Veranstaltungen.',
+              '10.0':
+                'Die Veranstaltung findet erstmalig an diesem Ort statt; Veranstaltende verfügen bislang nicht über vergleichbare Erfahrung.',
+            },
+          },
+          {
+            id: 'wiederkehrende_veranstaltung_stoerungen',
+            group: 'Wiederkehr',
+            ref: 'W',
+            label: 'Historische Störungen',
+            additive: true,
+            options: {
+              '0.0':
+                'Bei früheren Veranstaltungen kam es zu keinen dokumentierten Störungen. Anzahl und Umfang der Einsätze entsprachen den gängigen Einsatzzahlen.',
+              '5.0':
+                'Bei früheren Veranstaltungen kam es zu dokumentierten Störungen. Anzahl und Umfang der Einsätze entsprachen nicht den gängigen Einsatzzahlen.',
+            },
+          },
+          {
+            id: 'besuchendenverhalten_ort_ablauf',
+            group: 'Besuchendenverhalten',
+            ref: 'BV',
+            label: 'Ortskenntnis & Ablaufkenntnis',
+            options: {
+              0.8: 'Die Mehrheit der erwarteten Besuchenden ist ortskundig; der Veranstaltungsablauf ist den Besuchenden bekannt.',
+              1.2: 'Die Mehrheit der erwarteten Besuchenden ist ortsunkundig.',
+              1.3: 'Die Mehrheit der erwarteten Besuchenden ist ortskundig; der Veranstaltungsablauf ist den Besuchenden unbekannt.',
+            },
+          },
+          {
+            id: 'besuchendenverhalten_involvement',
+            group: 'Besuchendenverhalten',
+            ref: 'I',
+            label: 'Involvement (Bindung/Engagement)',
+            options: {
+              1.2: 'Ein größerer Anteil der erwarteten Besuchenden hat ein hohes Involvement (aktivere Teilnahme/Bewegung möglich).',
+              '1.0':
+                'Nur ein kleiner Anteil der erwarteten Besuchenden hat ein hohes Involvement; das Gesamtverhalten bleibt eher ruhig.',
+            },
+          },
+          {
+            id: 'besuchendenverhalten_soziale_gruppen',
+            group: 'Besuchendenverhalten',
+            ref: 'S',
+            label: 'Besondere soziale Gruppen',
+            options: {
+              1.2: 'Besondere soziale Gruppen sind zu erwarten, die die durchschnittliche Bewegungsgeschwindigkeit verändern (z. B. Jugendgruppen, Senior:innen, Familien).',
+              '1.0':
+                'Es sind keine besonderen sozialen Gruppen zu erwarten; die durchschnittliche Bewegungsgeschwindigkeit bleibt voraussichtlich normal.',
+            },
+          },
+        ];
+
+        function renderInputsTable(current) {
+          const data = current.data;
+          if (!data || typeof data !== 'object') return;
+
+          const section = document.getElementById('inputsSection');
+          const tbody = section.querySelector('tbody');
+          const fmt = (n, digits) =>
+            n.toLocaleString('de-DE', {
+              minimumFractionDigits: digits,
+              maximumFractionDigits: digits,
+            });
+
+          const addGroup = (name) => {
+            const tr = document.createElement('tr');
+            tr.className = 'group-row';
+            const th = document.createElement('th');
+            th.colSpan = 4;
+            th.textContent = name;
+            tr.appendChild(th);
+            tbody.appendChild(tr);
+          };
+          const addRow = (ref, label, text, factor) => {
+            const tr = document.createElement('tr');
+            [ref, label, text, factor].forEach((value, i) => {
+              const td = document.createElement('td');
+              if (i === 0) {
+                const code = document.createElement('code');
+                code.textContent = value;
+                td.appendChild(code);
+              } else {
+                td.textContent = value;
+              }
+              if (i === 3) td.className = 'text-end';
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          };
+
+          addGroup('Grunddaten');
+          addRow(
+            'Basiswert',
+            'Personenzahl',
+            fmt(Number(data.personenzahl ?? current.p), 0),
+            '',
+          );
+
+          let lastGroup = null;
+          INPUT_FIELDS.forEach((field) => {
+            if (field.group !== lastGroup) {
+              lastGroup = field.group;
+              addGroup(field.group);
+            }
+            // The form stores a factor of 0 as an empty string
+            const value = Number(data[field.id] || 0);
+            const [key, text] =
+              Object.entries(field.options).find(
+                ([k]) => Number(k) === value,
+              ) || [];
+            addRow(
+              field.ref,
+              field.label,
+              text ?? '–',
+              key === undefined
+                ? ''
+                : (field.additive ? '+ ' : '') + fmt(Number(key), 1),
+            );
+          });
+
+          // Visible only in print (d-none on screen, shown via print CSS)
+          section.classList.add('d-print-block');
+        }
+
+        renderInputsTable(currentData);
+
         // Fetch historical data and render chart
         fetch('resources/werteverlauf.json')
           .then((res) => res.json())
@@ -446,8 +855,8 @@
               currentData,
               0,
               6,
-              'Ihr Veranstaltungsgelände ist in Summe <b>komplexer bzw. anspruchsvoller</b> als bei den meisten Vergleichsveranstaltungen',
-              'Ihr Veranstaltungsgelände ist in Summe <b>einfacher bzw. unkomplizierter</b> als bei den meisten Vergleichsveranstaltungen',
+              'Ihr Veranstaltungsgelände in Summe <b>komplexer bzw. anspruchsvoller</b> ist als bei den meisten Vergleichsveranstaltungen',
+              'Ihr Veranstaltungsgelände in Summe <b>einfacher bzw. unkomplizierter</b> ist als bei den meisten Vergleichsveranstaltungen',
             );
             renderKDE(
               'distributionChart2',
@@ -482,8 +891,8 @@
               currentData,
               0,
               6,
-              'Ihr Veranstaltungsgelände ist in Summe <b>komplexer bzw. anspruchsvoller</b> als bei den meisten Vergleichsveranstaltungen',
-              'Ihr Veranstaltungsgelände ist in Summe <b>einfacher bzw. unkomplizierter</b> als bei den meisten Vergleichsveranstaltungen',
+              'Ihr Veranstaltungsgelände in Summe <b>komplexer bzw. anspruchsvoller</b> ist als bei den meisten Vergleichsveranstaltungen',
+              'Ihr Veranstaltungsgelände in Summe <b>einfacher bzw. unkomplizierter</b> ist als bei den meisten Vergleichsveranstaltungen',
             );
             renderKDE(
               'distributionChart2',
