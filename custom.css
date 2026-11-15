@@ -674,9 +674,9 @@ figure.content-figure .fig-row img {
   max-height: 360px;
   overflow-y: auto;
   background: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
 .cs-list[hidden] {
