@@ -25,8 +25,42 @@
     <div class="container py-5">
       <h1>Beschreibung des Verfahrens</h1>
 
+      <h2 class="mt-4" id="formel">Gesamtwert</h2>
+      <p class="lead">
+        Der Gesamtwert ergibt sich aus der Besucherzahl, die mit den Faktoren
+        der Bereiche Veranstaltungsgelände, Gestalt, Beschaffenheit und
+        Veranstaltungsverlauf multipliziert wird. Hinzu addiert wird ein Term
+        aus den Zusatzpunkten zur Erfahrung, der mit den Faktoren des
+        Besuchendenverhaltens multipliziert wird:
+      </p>
+
+      <div class="card p-3 mb-3">
+        <div class="text-center py-2" style="overflow-x: auto">
+          <span class="text-nowrap">
+            <i>Gesamtwert</i> = log<sub>2</sub>(<i>n</i>) &nbsp;×&nbsp;
+            <span class="text-primary">VG-F</span> ·
+            <span class="text-primary">VG-V</span> ·
+            <span class="text-primary">VG-S</span> ·
+            <span class="text-primary">VG-W</span> ·
+            <span class="text-primary">VG-E</span>
+            &nbsp;×&nbsp; <span class="text-primary">G</span> &nbsp;×&nbsp;
+            <span class="text-primary">B-E</span> ·
+            <span class="text-primary">B-B</span> ·
+            <span class="text-primary">B-W</span>
+            &nbsp;×&nbsp; <span class="text-primary">V-EK</span> ·
+            <span class="text-primary">V-Z</span> ·
+            <span class="text-primary">V-A</span>
+            &nbsp;+&nbsp; (<span class="text-primary">E</span> +
+            <span class="text-primary">W</span>) &nbsp;×&nbsp;
+            <span class="text-primary">BV</span> ·
+            <span class="text-primary">I</span> ·
+            <span class="text-primary">S</span>
+          </span>
+        </div>
+      </div>
+
       <!-- ── BESUCHERZAHL ──────────────────────────────────────────── -->
-      <h2 class="mt-4">Besucherzahl (Basiswert)</h2>
+      <h2 class="mt-4">Besucherzahl <code class="text-primary">n</code></h2>
       <p>
         Vergleichbar mit den Punktbewertungsverfahren wird auch bei SCENIC mit
         Eingabe der erwarteten Besucherzahl begonnen. Dabei sollte bei Eingabe
