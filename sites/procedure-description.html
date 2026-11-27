@@ -27,46 +27,503 @@
 
       <h2 class="mt-4" id="formel">Gesamtwert</h2>
       <p class="lead">
-        Der Gesamtwert ergibt sich aus der Besucherzahl, die mit den Faktoren
+        Der Gesamtwert ergibt sich aus der Besuchendenzahl, die mit den Faktoren
         der Bereiche Veranstaltungsgelände, Gestalt, Beschaffenheit und
         Veranstaltungsverlauf multipliziert wird. Hinzu addiert wird ein Term
         aus den Zusatzpunkten zur Erfahrung, der mit den Faktoren des
         Besuchendenverhaltens multipliziert wird:
       </p>
 
-      <div class="card p-3 mb-3">
-        <div class="text-center py-2" style="overflow-x: auto">
-          <span class="text-nowrap">
-            <i>Gesamtwert</i> = log<sub>2</sub>(<i>n</i>) &nbsp;×&nbsp;
-            <span class="text-primary">VG-F</span> ·
-            <span class="text-primary">VG-V</span> ·
-            <span class="text-primary">VG-S</span> ·
-            <span class="text-primary">VG-W</span> ·
-            <span class="text-primary">VG-E</span>
-            &nbsp;×&nbsp; <span class="text-primary">G</span> &nbsp;×&nbsp;
-            <span class="text-primary">B-E</span> ·
-            <span class="text-primary">B-B</span> ·
-            <span class="text-primary">B-W</span>
-            &nbsp;×&nbsp; <span class="text-primary">V-EK</span> ·
-            <span class="text-primary">V-Z</span> ·
-            <span class="text-primary">V-A</span>
-            &nbsp;+&nbsp; (<span class="text-primary">E</span> +
-            <span class="text-primary">W</span>) &nbsp;×&nbsp;
-            <span class="text-primary">BV</span> ·
-            <span class="text-primary">I</span> ·
-            <span class="text-primary">S</span>
-          </span>
-        </div>
+      <div class="card p-3 mb-3" style="overflow-x: auto">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 690 305"
+          style="
+            max-width: 100%;
+            height: auto;
+            min-width: 580px;
+            font-family:
+              system-ui,
+              -apple-system,
+              sans-serif;
+            font-size: 8.5px;
+          "
+        >
+          <style>
+            .svg-link {
+              cursor: pointer;
+              font-size: 10px;
+              font-weight: bold;
+              text-decoration: none;
+            }
+            .svg-link:hover text {
+              fill: #0a58ca;
+            }
+            .svg-product {
+              font-size: 10px;
+              font-weight: bold;
+              fill: #0a58ca;
+            }
+          </style>
+
+          <defs>
+            <!-- Operator-Circle large (r=11, ×) – usage: <use href="#op-x-lg" x="cx-11" y="cy-11"/> -->
+            <symbol
+              id="op-x-lg"
+              viewBox="-11 -11 22 22"
+              width="22"
+              height="22"
+              overflow="visible"
+            >
+              <circle r="11" fill="white" stroke="#555" stroke-width="1.2" />
+              <text
+                text-anchor="middle"
+                y="5"
+                style="font-size: 14px"
+                fill="#333"
+              >
+                ×
+              </text>
+            </symbol>
+            <!-- Operator-Circle small (r=10, ×) – usage: <use href="#op-x-sm" x="cx-10" y="cy-10"/> -->
+            <symbol
+              id="op-x-sm"
+              viewBox="-10 -10 20 20"
+              width="20"
+              height="20"
+              overflow="visible"
+            >
+              <circle r="10" fill="white" stroke="#555" stroke-width="1.2" />
+              <text
+                text-anchor="middle"
+                y="5"
+                style="font-size: 13px"
+                fill="#333"
+              >
+                ×
+              </text>
+            </symbol>
+            <!-- Operator-Circle small (r=10, +) – usage: <use href="#op-plus-sm" x="cx-10" y="cy-10"/> -->
+            <symbol
+              id="op-plus-sm"
+              viewBox="-10 -10 20 20"
+              width="20"
+              height="20"
+              overflow="visible"
+            >
+              <circle r="10" fill="white" stroke="#555" stroke-width="1.2" />
+              <text
+                text-anchor="middle"
+                y="5"
+                style="font-size: 13px"
+                fill="#333"
+              >
+                +
+              </text>
+            </symbol>
+            <!-- Inline multiplier without circle – usage: <use href="#op-x-txt" x="cx" y="cy"/> -->
+            <symbol id="op-x-txt" overflow="visible">
+              <text
+                text-anchor="middle"
+                dominant-baseline="central"
+                style="font-size: 11px"
+                fill="#0d6efd"
+              >
+                ×
+              </text>
+            </symbol>
+          </defs>
+
+          <!-- Outer container -->
+          <rect
+            x="3"
+            y="14"
+            width="684"
+            height="288"
+            rx="6"
+            fill="white"
+            stroke="#555"
+            stroke-width="1.5"
+          />
+          <!-- Title (masks part of top border) -->
+          <rect x="278" y="8" width="134" height="13" fill="white" />
+          <text
+            x="345"
+            y="19"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="bold"
+            fill="#333"
+          >
+            Berechnung
+          </text>
+
+          <!-- ── PERSONENZAHL (P) ── -->
+          <a href="#n" class="svg-link">
+            <rect
+              x="8"
+              y="123"
+              width="85"
+              height="56"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="50"
+              y="147"
+              text-anchor="middle"
+              font-size="10"
+              font-weight="bold"
+              fill="#333"
+            >
+              Besuchendenzahl
+            </text>
+            <text
+              x="49"
+              y="162"
+              text-anchor="middle"
+              font-size="10"
+              fill="#333"
+            >
+              (n)
+            </text>
+          </a>
+
+          <!-- × : P → group -->
+          <use href="#op-x-lg" x="94" y="140" />
+
+          <!-- ── VG / G / B GROUP (dashed boundary) ── -->
+          <rect
+            x="119"
+            y="22"
+            width="204"
+            height="264"
+            rx="6"
+            fill="none"
+            stroke="#aaa"
+            stroke-width="1.2"
+            stroke-dasharray="5,3"
+          />
+
+          <!-- VG outer box -->
+          <a href="#vg" class="svg-link">
+            <rect
+              x="125"
+              y="27"
+              width="192"
+              height="80"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="221"
+              y="43"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Veranstaltungsgelände (VG)
+            </text>
+          </a>
+          <!-- VG inner box -->
+          <rect
+            x="130"
+            y="50"
+            width="182"
+            height="50"
+            rx="3"
+            fill="#eef3ff"
+            stroke="#adc5f7"
+            stroke-width="1"
+          />
+          <!-- VG factors line 1 -->
+          <a href="#vg-f" class="svg-link">
+            <text x="160" y="65" text-anchor="middle" fill="#0d6efd">VG-F</text>
+          </a>
+          <use href="#op-x-txt" x="190" y="61" />
+          <a href="#vg-v" class="svg-link">
+            <text x="221" y="65" text-anchor="middle" fill="#0d6efd">VG-V</text>
+          </a>
+          <use href="#op-x-txt" x="252" y="61" />
+          <a href="#vg-s" class="svg-link">
+            <text x="282" y="65" text-anchor="middle" fill="#0d6efd">VG-S</text>
+          </a>
+          <!-- VG factors line 2 -->
+          <a href="#vg-w" class="svg-link">
+            <text x="191" y="80" text-anchor="middle" fill="#0d6efd">VG-W</text>
+          </a>
+          <use href="#op-x-txt" x="221" y="76" />
+          <a href="#vg-e" class="svg-link">
+            <text x="251" y="80" text-anchor="middle" fill="#0d6efd">VG-E</text>
+          </a>
+
+          <!-- × VG → G  (centered in gap: VG bottom 107 … G top 131 → mid 119) -->
+          <use href="#op-x-sm" x="211" y="109" />
+
+          <!-- G box -->
+          <a href="#gestalt" class="svg-link">
+            <rect
+              x="143"
+              y="131"
+              width="156"
+              height="30"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="221"
+              y="151"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Gestalt (G)
+            </text>
+          </a>
+
+          <!-- × G → B  (centered in gap: G bottom 161 … B top 185 → mid 173) -->
+          <use href="#op-x-sm" x="211" y="163" />
+
+          <!-- B outer box -->
+          <a href="#beschaffenheit" class="svg-link">
+            <rect
+              x="125"
+              y="185"
+              width="192"
+              height="68"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="221"
+              y="201"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Beschaffenheit (B)
+            </text>
+          </a>
+          <!-- B inner box -->
+          <rect
+            x="130"
+            y="208"
+            width="182"
+            height="38"
+            rx="3"
+            fill="#eef3ff"
+            stroke="#adc5f7"
+            stroke-width="1"
+          />
+          <a href="#b-e" class="svg-link">
+            <text x="160" y="232" text-anchor="middle" fill="#0d6efd">B-E</text>
+          </a>
+          <use href="#op-x-txt" x="190" y="228" />
+          <a href="#b-b" class="svg-link">
+            <text x="221" y="232" text-anchor="middle" fill="#0d6efd">B-B</text>
+          </a>
+          <use href="#op-x-txt" x="252" y="228" />
+          <a href="#b-w" class="svg-link">
+            <text x="282" y="232" text-anchor="middle" fill="#0d6efd">B-W</text>
+          </a>
+
+          <!-- ── × : group → VV ── -->
+          <use href="#op-x-lg" x="326" y="140" />
+
+          <!-- ── VERANSTALTUNGSVERLAUF (VV) ── -->
+          <a href="#vv" class="svg-link">
+            <rect
+              x="352"
+              y="106"
+              width="150"
+              height="90"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="427"
+              y="124"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Veranstaltungs-
+            </text>
+            <text
+              x="427"
+              y="138"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              verlauf (VV)
+            </text>
+          </a>
+          <!-- VV inner box -->
+          <rect
+            x="357"
+            y="146"
+            width="140"
+            height="43"
+            rx="3"
+            fill="#eef3ff"
+            stroke="#adc5f7"
+            stroke-width="1"
+          />
+          <a href="#v-ek" class="svg-link">
+            <text x="371" y="171" text-anchor="middle" fill="#0d6efd">
+              V-EK
+            </text>
+          </a>
+          <use href="#op-x-txt" x="399" y="167" />
+          <a href="#v-z" class="svg-link">
+            <text x="427" y="171" text-anchor="middle" fill="#0d6efd">V-Z</text>
+          </a>
+          <use href="#op-x-txt" x="455" y="167" />
+          <a href="#v-a" class="svg-link">
+            <text x="483" y="171" text-anchor="middle" fill="#0d6efd">V-A</text>
+          </a>
+
+          <!-- ── MAIN + ── -->
+          <text
+            x="514"
+            y="162"
+            text-anchor="middle"
+            font-size="22"
+            font-weight="bold"
+            fill="#333"
+          >
+            +
+          </text>
+
+          <!-- ── ERFAHRUNG (E) ── -->
+          <a href="#e" class="svg-link">
+            <rect
+              x="525"
+              y="46"
+              width="135"
+              height="38"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="592"
+              y="70"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Erfahrung (E)
+            </text>
+          </a>
+
+          <!-- + : E → W  (centered in gap: E bottom 84 … W top 108 → mid 96) -->
+          <use href="#op-plus-sm" x="582" y="86" />
+
+          <!-- ── WIEDERKEHREND (W) ── -->
+          <a href="#w" class="svg-link">
+            <rect
+              x="525"
+              y="108"
+              width="135"
+              height="38"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="592"
+              y="132"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Wiederkehrend (W)
+            </text>
+          </a>
+
+          <!-- × : W → BV  (centered in gap: W bottom 146 … BV top 170 → mid 158) -->
+          <use href="#op-x-sm" x="582" y="148" />
+
+          <!-- ── BESUCHENDENVERHALTEN (BV) ── -->
+          <a href="#besuchendenverhalten" class="svg-link">
+            <rect
+              x="521"
+              y="170"
+              width="143"
+              height="90"
+              rx="4"
+              fill="white"
+              stroke="#555"
+              stroke-width="1.2"
+            />
+            <text
+              x="592"
+              y="189"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              Besuchenden-
+            </text>
+            <text
+              x="592"
+              y="203"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#333"
+            >
+              verhalten (BV)
+            </text>
+          </a>
+          <!-- BV inner box -->
+          <rect
+            x="526"
+            y="211"
+            width="133"
+            height="42"
+            rx="3"
+            fill="#eef3ff"
+            stroke="#adc5f7"
+            stroke-width="1"
+          />
+          <a href="#bv" class="svg-link">
+            <text x="548" y="237" text-anchor="middle" fill="#0d6efd">BV</text>
+          </a>
+          <use href="#op-x-txt" x="570" y="233" />
+          <a href="#i" class="svg-link">
+            <text x="592" y="237" text-anchor="middle" fill="#0d6efd">I</text>
+          </a>
+          <use href="#op-x-txt" x="614" y="233" />
+          <a href="#s" class="svg-link">
+            <text x="637" y="237" text-anchor="middle" fill="#0d6efd">S</text>
+          </a>
+        </svg>
       </div>
 
-      <!-- ── BESUCHERZAHL ──────────────────────────────────────────── -->
-      <h2 class="mt-4">Besucherzahl <code class="text-primary">n</code></h2>
+      <!-- ── BESUCHENDENZAHL ──────────────────────────────────────────── -->
+      <h2 class="mt-4" id="n">
+        Besuchendenzahl <code class="text-primary">n</code>
+      </h2>
       <p>
         Vergleichbar mit den Punktbewertungsverfahren wird auch bei SCENIC mit
-        Eingabe der erwarteten Besucherzahl begonnen. Dabei sollte bei Eingabe
-        die maximale Anzahl der gleichzeitig anwesenden Besuchenden
+        Eingabe der erwarteten Besuchendenzahl begonnen. Dabei sollte bei
+        Eingabe die maximale Anzahl der gleichzeitig anwesenden Besuchenden
         berücksichtigt werden. Dieser Wert kann insbesondere bei mehrtägigen
-        Veranstaltungen von der durchschnittlichen Besucherzahl abweichen. In
+        Veranstaltungen von der durchschnittlichen Besuchendenzahl abweichen. In
         Anlehnung an die Personenverkehrsstärke soll also von der höchsten
         erwarteten (gleichzeitig anwesenden) Personenzahl auf dem
         Veranstaltungsgelände ausgegangen werden. Die Personenzahl wird auf eine
@@ -85,10 +542,10 @@
       </div>
 
       <!-- ── VERANSTALTUNGSGELÄNDE ─────────────────────────────────── -->
-      <h2 class="mt-5">Veranstaltungsgelände</h2>
+      <h2 class="mt-5" id="vg">Veranstaltungsgelände</h2>
       <p>
         Nachfolgend sind fünf Eigenschaften des Veranstaltungsgeländes zu
-        betrachten, die als Faktoren mit dem Basiswert aus der Besucherzahl
+        betrachten, die als Faktoren mit dem Basiswert aus der Besuchendenzahl
         multipliziert werden:
       </p>
       <ul>
@@ -110,13 +567,15 @@
         <li>die mögliche Trennung von Ein- und Auslass <code>(VG-E)</code>.</li>
       </ul>
 
-      <h3 class="mt-4">Fläche <code class="text-primary">VG-F</code></h3>
+      <h3 class="mt-4" id="vg-f">
+        Fläche <code class="text-primary">VG-F</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
             <td>
               Die für Besuchende zugängliche Fläche entspricht der erwarteten
-              Besucherzahl bei 2 Pers./qm.
+              Besuchendenzahl bei 2 Pers./qm.
             </td>
             <td class="text-end text-nowrap align-middle">
               <span class="badge bg-secondary">Faktor: 1,0</span>
@@ -125,7 +584,7 @@
           <tr>
             <td>
               Die für Besuchende zugängliche Fläche ist um mehr als 20 % größer
-              als die erwartete Besucherzahl bei 2 Pers./qm.
+              als die erwartete Besuchendenzahl bei 2 Pers./qm.
             </td>
             <td class="text-end text-nowrap align-middle">
               <span class="badge bg-success">Faktor: 0,9</span>
@@ -134,7 +593,7 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="vg-v">
         Personenverkehrsstärke <code class="text-primary">VG-V</code>
       </h3>
       <table class="table table-bordered table-sm mb-2">
@@ -176,7 +635,7 @@
         im Anhang C des EVC (<a href="#ref1">FGSV, 2022</a>) verwiesen.
       </p>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="vg-s">
         Störungen auf Flucht- und Rettungswegen
         <code class="text-primary">VG-S</code>
       </h3>
@@ -203,7 +662,9 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">Wegführung <code class="text-primary">VG-W</code></h3>
+      <h3 class="mt-4" id="vg-w">
+        Wegführung <code class="text-primary">VG-W</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
@@ -227,7 +688,7 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="vg-e">
         Trennung von Ein- und Auslass <code class="text-primary">VG-E</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -248,7 +709,7 @@
       </table>
 
       <!-- ── VERANSTALTUNGSVERLAUF ─────────────────────────────────── -->
-      <h2 class="mt-5">Veranstaltungsverlauf</h2>
+      <h2 class="mt-5" id="vv">Veranstaltungsverlauf</h2>
       <p>
         In Bezug auf den Veranstaltungsverlauf werden drei Einflussfaktoren
         berücksichtigt:
@@ -259,7 +720,7 @@
         <li>die Attraktionen der Veranstaltung <code>(V-A)</code>.</li>
       </ul>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="v-ek">
         Einlasskontrolle <code class="text-primary">V-EK</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -279,7 +740,7 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="v-z">
         Verlauf des Einlasses <code class="text-primary">V-Z</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -304,7 +765,9 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">Attraktionen <code class="text-primary">V-A</code></h3>
+      <h3 class="mt-4" id="v-a">
+        Attraktionen <code class="text-primary">V-A</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
@@ -323,7 +786,7 @@
       </table>
 
       <!-- ── GESTALT ────────────────────────────────────────────────── -->
-      <h2 class="mt-5">
+      <h2 class="mt-5" id="gestalt">
         Gestalt der Veranstaltung <code class="text-primary">G</code>
       </h2>
       <p>
@@ -345,7 +808,7 @@
           <tr>
             <td>
               <strong>Vieleck</strong> – Mehrere Szenenflächen bzw. Attraktionen
-              mit wechselnden Besucherströmen.
+              mit wechselnden Besuchendenströmen.
             </td>
             <td class="text-end text-nowrap align-middle">
               <span class="badge bg-warning text-dark">Faktor: 1,1</span>
@@ -373,7 +836,7 @@
       </table>
 
       <!-- ── BESCHAFFENHEIT ─────────────────────────────────────────── -->
-      <h2 class="mt-5">Beschaffenheit</h2>
+      <h2 class="mt-5" id="beschaffenheit">Beschaffenheit</h2>
       <p>
         Die situativen Faktoren, die sowohl auf den Veranstaltungsverlauf als
         auch auf das Veranstaltungsgelände wirken, werden mit drei
@@ -387,7 +850,7 @@
         <li>Wettereinfluss <code>(B-W)</code>.</li>
       </ul>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="b-e">
         Entlastungsflächen <code class="text-primary">B-E</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -409,7 +872,7 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="b-b">
         Bodenbeschaffenheit <code class="text-primary">B-B</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -429,7 +892,9 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">Wettereinfluss <code class="text-primary">B-W</code></h3>
+      <h3 class="mt-4" id="b-w">
+        Wettereinfluss <code class="text-primary">B-W</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
@@ -453,7 +918,7 @@
       </table>
 
       <!-- ── ERFAHRUNG ──────────────────────────────────────────────── -->
-      <h2 class="mt-5">Erfahrung</h2>
+      <h2 class="mt-5" id="erfahrung">Erfahrung</h2>
       <p>
         Die Erfahrung der Veranstaltenden und die Orts- und
         Veranstaltungskenntnisse haben einen wesentlichen Einfluss auf die
@@ -465,7 +930,7 @@
         Besuchendenverhaltens multipliziert.
       </p>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="e">
         Erfahrung der Veranstaltenden <code class="text-primary">E</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -508,7 +973,7 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">
+      <h3 class="mt-4" id="w">
         Wiederkehrende Veranstaltung <code class="text-primary">W</code>
       </h3>
       <table class="table table-bordered table-sm mb-4">
@@ -545,7 +1010,7 @@
       </table>
 
       <!-- ── BESUCHENDENVERHALTEN ───────────────────────────────────── -->
-      <h2 class="mt-5">Besuchendenverhalten</h2>
+      <h2 class="mt-5" id="besuchendenverhalten">Besuchendenverhalten</h2>
       <p>
         Die Verhaltensfaktoren, auf die sich Ortskenntnis unmittelbar auswirken,
         werden mit drei Einflussfaktoren zum Besuchendenverhalten erfasst:
@@ -556,7 +1021,9 @@
         <li>Soziale Gruppen <code>(S)</code>.</li>
       </ul>
 
-      <h3 class="mt-4">Ortskunde <code class="text-primary">BV</code></h3>
+      <h3 class="mt-4" id="bv">
+        Ortskunde <code class="text-primary">BV</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
@@ -586,7 +1053,9 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">Involvement <code class="text-primary">I</code></h3>
+      <h3 class="mt-4" id="i">
+        Involvement <code class="text-primary">I</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
@@ -610,7 +1079,9 @@
         </tbody>
       </table>
 
-      <h3 class="mt-4">Soziale Gruppen <code class="text-primary">S</code></h3>
+      <h3 class="mt-4" id="s">
+        Soziale Gruppen <code class="text-primary">S</code>
+      </h3>
       <table class="table table-bordered table-sm mb-4">
         <tbody>
           <tr>
@@ -782,6 +1253,21 @@
           },
         });
       })();
+    </script>
+    <script>
+      document
+        .querySelectorAll('h2[id]:not([id="formel"]), h3[id]')
+        .forEach(function (h) {
+          var a = document.createElement('a');
+          a.href = '#formel';
+          a.title = 'Zurück zur Formelübersicht';
+          a.className =
+            'ms-3 fw-normal text-secondary text-decoration-none align-middle';
+          a.style.fontSize = '0.8rem';
+          a.innerHTML =
+            '<i class="bi bi-arrow-up-short"></i> zurück zur Formel';
+          h.appendChild(a);
+        });
     </script>
   </body>
 </html>
