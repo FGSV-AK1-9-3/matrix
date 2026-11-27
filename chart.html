@@ -447,7 +447,7 @@
                 Faktoren insgesamt auswirken. Die Grafik zeigt, wo Ihre
                 Veranstaltung
                 <strong style="color: var(--brand)">im Vergleich</strong>
-                zu bisherigen Veranstaltungen einzuordnen ist.
+                zu bisherig im Tool erfassten Veranstaltungen einzuordnen ist.
               </p>
               <div class="card step-card">
                 <div class="kde-card-body">
@@ -472,7 +472,7 @@
                 zeigt, wie stark sich diese insgesamt auswirken. Die Grafik
                 zeigt, wo Ihre Veranstaltung
                 <strong style="color: var(--brand)">im Vergleich</strong>
-                zu bisherigen Veranstaltungen einzuordnen ist.
+                zu bisher im Tool erfassten Veranstaltungen einzuordnen ist.
               </p>
               <div class="card step-card">
                 <div class="kde-card-body">
@@ -500,7 +500,7 @@
                 zeigt, wie stark sich diese insgesamt auswirken. Die Grafik
                 zeigt, wo Ihre Veranstaltung
                 <strong style="color: var(--brand)">im Vergleich</strong>
-                zu bisherigen Veranstaltungen einzuordnen ist.
+                zu bisher im Tool erfassten Veranstaltungen einzuordnen ist.
               </p>
               <div class="card step-card">
                 <div class="kde-card-body">
@@ -1355,7 +1355,7 @@
           // Current dataset: thick, highlighted line
           const currentIdx = datasets.length;
           datasets.push({
-            label: `Aktuell: ${current.p.toLocaleString('de-DE')} Pers.`,
+            label: `Aktueller Datensatz`,
             data: current.v,
             borderColor: 'rgba(13, 110, 253, 1)',
             backgroundColor: 'rgba(13, 110, 253, 0.1)',
@@ -1390,11 +1390,40 @@
                 legend: {
                   display: true,
                   labels: {
-                    // Show legend entries for the current dataset and the Nulllinie
-                    filter: (item) =>
-                      item.datasetIndex === currentIdx ||
-                      item.datasetIndex === nulllinieIdx,
                     font: { weight: 'bold', size: 13 },
+                    usePointStyle: true,
+                    generateLabels: (chart) => {
+                      const defaults =
+                        Chart.defaults.plugins.legend.labels.generateLabels(
+                          chart,
+                        );
+                      // Keep only the current dataset and Nulllinie entries, force line style
+                      const filtered = defaults
+                        .filter(
+                          (item) =>
+                            item.datasetIndex === currentIdx ||
+                            item.datasetIndex === nulllinieIdx,
+                        )
+                        .map((item) => ({
+                          ...item,
+                          pointStyle: 'line',
+                          lineWidth: 2,
+                          ...(item.datasetIndex === currentIdx && {
+                            strokeStyle: 'rgba(13, 110, 253, 1)',
+                          }),
+                        }));
+                      // Prepend a single synthetic entry for all grey historical datasets
+                      filtered.unshift({
+                        text: 'Bisher erfasste Veranstaltungen',
+                        strokeStyle: 'rgba(150, 170, 200, 0.6)',
+                        fillStyle: 'rgba(150, 170, 200, 0.6)',
+                        lineWidth: 2,
+                        pointStyle: 'line',
+                        hidden: false,
+                        datasetIndex: -1,
+                      });
+                      return filtered;
+                    },
                   },
                 },
                 tooltip: {
