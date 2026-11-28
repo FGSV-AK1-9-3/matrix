@@ -53,8 +53,10 @@ A Husky pre-commit hook runs `lint-staged`, which formats staged `*.{js,html,css
 Pushes to `main` deploy the entire repo as-is to GitHub Pages (`.github/workflows/static.yml`) — there's no build step, so whatever is committed is what's served. `format.yml` and `playwright.yml` run on every PR and push to `main` and must pass (Prettier check + full Playwright suite in Chromium).
 
 <!-- shared-agents:start -->
+
 ## Shared Agents & Skills (workspace rules)
+
 The workspace-wide rules live in `../CLAUDE.md` (root of `/Users/rheid/Development/Agents`) and are loaded automatically by Claude Code. They contain the table of all sibling agents (folder, hand-over topic, constraint), the shared skills (`../AI_Shared_Skills_Library/SKILL.md`, `ict-api-gateway`, `send-email`/`mail-agent`), the `CONTEXT.md` convention, the port register and the Node.js rules.
 
-Hard rule: **never** use another agent's folder, scripts, credentials or files on your own initiative. If a task fits a sibling agent better, ask first: *"This fits `<Agent>` (<reason>). Should I hand it over?"* Only after explicit confirmation read that agent's `CLAUDE.md`/`AGENTS.md` in full, work inside its folder under its rules, report back and return to your own role. One confirmation covers one task.
+Hard rule: **never** use another agent's folder, scripts, credentials or files on your own initiative. If a task fits a sibling agent better, ask first: _"This fits `<Agent>` (<reason>). Should I hand it over?"_ Only after explicit confirmation read that agent's `CLAUDE.md`/`AGENTS.md` in full, work inside its folder under its rules, report back and return to your own role. One confirmation covers one task.
 <!-- shared-agents:end -->
